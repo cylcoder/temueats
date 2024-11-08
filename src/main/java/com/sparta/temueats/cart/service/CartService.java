@@ -37,7 +37,7 @@ public class CartService {
         // todo 임시 데이터
         // isPresentCart = true;
         if (isPresentMenu) {
-                // 이미 같은 메뉴가 있다는 예외
+            // 이미 같은 메뉴가 있다는 예외
             throw new CustomApiException("이미 해당 메뉴가 장바구니에 존재합니다.");
         }
 
