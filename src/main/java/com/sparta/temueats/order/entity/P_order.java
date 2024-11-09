@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Sort;
 
 import java.util.UUID;
 
@@ -12,14 +11,13 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Table(name = "P_ORDER")
-public class P_Order {
+public class P_order {
 
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID orderId;
 
     @Column(nullable = false)
-    @GeneratedValue(generator = "UUID")
     private UUID orderUId;
 
     @Column(nullable = false)
