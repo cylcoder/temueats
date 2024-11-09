@@ -32,6 +32,9 @@ dependencies {
 
     // 로깅 추가
     implementation 'org.projectlombok:lombok'
+
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
