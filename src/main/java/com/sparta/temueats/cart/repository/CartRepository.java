@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface CartRepository extends JpaRepository<P_cart, UUID> {
 
     @Query("select c from P_cart c where c.userId = :userId")
-    Optional<P_cart> findByUserId(@Param("userId") UUID userId);
+    Optional<P_cart> findByUserId(@Param("userId") Long userId);
 
 //    @Query("select c from P_cart c where c.menuId = :menuId")
 //    Optional<P_cart> findByMenuId(@Param("menuId") UUID menuId);

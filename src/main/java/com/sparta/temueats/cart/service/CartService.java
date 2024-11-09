@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CartService {
     // todo 더미 데이터 싹 수정
-    static final UUID USER_ID = UUID.fromString("2e68dd52-bf77-4851-a7ae-2db844df2813"); // 임시
+    static final Long USER_ID = 1L;
     static final UUID PRE_STORE_ID1 = UUID.randomUUID();
     static final UUID PRE_STORE_ID2 = UUID.randomUUID();
 
@@ -35,7 +35,7 @@ public class CartService {
         // boolean isPresentMenu = cartRepository.findByMenuId(MENU_ID).isPresent();
         boolean isPresentMenu = false;
         // todo 임시 데이터
-        // isPresentCart = true;
+        // boolean isPresentMenu = true;
         if (isPresentMenu) {
             // 이미 같은 메뉴가 있다는 예외
             throw new CustomApiException("이미 해당 메뉴가 장바구니에 존재합니다.");

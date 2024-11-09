@@ -33,9 +33,8 @@ public class P_cart {
 //    @JoinColumn(name = "user_id")
 //    private P_user user;
 
-    @Column(name = "user_id", nullable = false, columnDefinition = "CHAR(36)")
-    @Convert(converter = uuidStringConverter.class)
-    private UUID userId;
+    @Column(name = "user_id")
+    private Long userId;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "menu_id")
@@ -45,7 +44,7 @@ public class P_cart {
     private P_order order;
 
 
-    public P_cart(CartRequestDto cartRequestDto, UUID userId) {
+    public P_cart(CartRequestDto cartRequestDto, Long userId) {
         this.quantity = cartRequestDto.getQuantity();
         this.paidYn = false;
         this.userId = userId;
