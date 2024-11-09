@@ -2,7 +2,6 @@ package com.sparta.temueats.cart.entity;
 
 import com.sparta.temueats.cart.dto.CartRequestDto;
 import com.sparta.temueats.order.entity.P_order;
-import com.sparta.temueats.util.uuidStringConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
