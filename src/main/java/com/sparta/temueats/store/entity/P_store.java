@@ -2,15 +2,20 @@ package com.sparta.temueats.store.entity;
 
 import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.menu.entity.Category;
+import com.sparta.temueats.store.dto.StoreUpdateDto;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.geo.Point;
 
 import java.util.UUID;
 
 @Entity(name = "P_STORE")
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class P_store extends BaseEntity {
 
@@ -52,5 +57,9 @@ public class P_store extends BaseEntity {
 
     @Column(length = 50, nullable = false)
     private String address;
+
+    public void update(StoreUpdateDto storeUpdateDto) {
+        state = storeUpdateDto.getStoreState();
+    }
 
 }

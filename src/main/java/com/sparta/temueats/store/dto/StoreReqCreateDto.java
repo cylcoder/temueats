@@ -18,7 +18,7 @@ import org.springframework.data.geo.Point;
 @AllArgsConstructor
 @Data
 @Builder
-public class StoreReqDto {
+public class StoreReqCreateDto {
 
     @NotBlank(message = "가게 이름은 필수입니다.")
     @Size(min = 2, max = 50, message = "가게 이름은 2자 이상 50자 이하로 입력해주세요.")
@@ -50,7 +50,7 @@ public class StoreReqDto {
     @Size(max = 50, message = "주소는 최대 50자입니다.")
     private String address;
 
-    public StoreReqDto(P_storeReq storeReq) {
+    public StoreReqCreateDto(P_storeReq storeReq) {
         this.name = storeReq.getName();
         this.image = storeReq.getImage();
         this.number = storeReq.getNumber();
