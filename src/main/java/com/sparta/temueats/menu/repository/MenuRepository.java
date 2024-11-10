@@ -1,6 +1,6 @@
-package com.sparta.temueats.store.repository;
+package com.sparta.temueats.menu.repository;
 
-import com.sparta.temueats.store.entity.P_menu;
+import com.sparta.temueats.menu.entity.P_menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

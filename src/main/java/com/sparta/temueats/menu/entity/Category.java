@@ -1,4 +1,4 @@
-package com.sparta.temueats.store.entity;
+package com.sparta.temueats.menu.entity;
 
 public enum Category {
 

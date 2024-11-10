@@ -1,10 +1,11 @@
-package com.sparta.temueats.store.entity;
+package com.sparta.temueats.menu.entity;
 
 import com.sparta.temueats.global.BaseEntity;
+import com.sparta.temueats.store.entity.P_store;
+import com.sparta.temueats.store.entity.SellState;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "P_MENU")

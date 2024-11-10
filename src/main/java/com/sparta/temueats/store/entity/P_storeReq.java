@@ -1,14 +1,19 @@
 package com.sparta.temueats.store.entity;
 
 import com.sparta.temueats.global.BaseEntity;
+import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.geo.Point;
 
 import java.util.UUID;
 
 @Entity(name = "P_STORE_REQ")
+@Builder
+@Getter
 public class P_storeReq extends BaseEntity {
 
     @Id
@@ -49,5 +54,7 @@ public class P_storeReq extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StoreReqState status;
+
+
 
 }

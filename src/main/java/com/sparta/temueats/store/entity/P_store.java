@@ -1,14 +1,17 @@
 package com.sparta.temueats.store.entity;
 
 import com.sparta.temueats.global.BaseEntity;
+import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
+import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.geo.Point;
 
 import java.util.UUID;
 
 @Entity(name = "P_STORE")
+@Builder
 public class P_store extends BaseEntity {
 
     @Id
