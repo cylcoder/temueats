@@ -4,7 +4,7 @@ import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.store.dto.StoreReqCreateDto;
 import com.sparta.temueats.store.dto.StoreReqUpdateDto;
-import com.sparta.temueats.store.dto.StoreResDto;
+import com.sparta.temueats.store.dto.StoreReqResDto;
 import com.sparta.temueats.store.service.StoreReqService;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.repository.UserRespository;
@@ -26,7 +26,7 @@ public class StoreReqController {
     private final UserRespository userRepository;
 
     @PostMapping
-    public ResponseDto<StoreResDto> saveStoreReq(@Valid StoreReqCreateDto storeReqCreateDto, BindingResult bindingResult) {
+    public ResponseDto<StoreReqResDto> saveStoreReq(@Valid StoreReqCreateDto storeReqCreateDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessages = bindingResult.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -35,8 +35,8 @@ public class StoreReqController {
         }
 
         P_user user = createMockUser();
-        StoreResDto storeResDto = storeReqService.saveStoreReq(storeReqCreateDto, user);
-        return new ResponseDto<>(1, "가게 등록 요청 성공", storeResDto);
+        StoreReqResDto storeReqResDto = storeReqService.saveStoreReq(storeReqCreateDto, user);
+        return new ResponseDto<>(1, "가게 등록 요청 성공", storeReqResDto);
     }
 
     @PutMapping("/state")
