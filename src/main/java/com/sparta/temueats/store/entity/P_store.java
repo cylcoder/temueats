@@ -59,7 +59,24 @@ public class P_store extends BaseEntity {
     private String address;
 
     public void update(StoreUpdateDto storeUpdateDto) {
-        state = storeUpdateDto.getStoreState();
+        if (storeUpdateDto.getImage() != null) {
+            image = storeUpdateDto.getImage();
+        }
+        if (storeUpdateDto.getLatitude() != null && storeUpdateDto.getLongitude() != null) {
+            latLng = new Point(storeUpdateDto.getLatitude(), storeUpdateDto.getLongitude());
+        }
+        if (storeUpdateDto.getAddress() != null) {
+            address = storeUpdateDto.getAddress();
+        }
+        if (storeUpdateDto.getLeastPrice() != null) {
+            leastPrice = storeUpdateDto.getLeastPrice();
+        }
+        if (storeUpdateDto.getDeliveryPrice() != null) {
+            deliveryPrice = storeUpdateDto.getDeliveryPrice();
+        }
+        if (storeUpdateDto.getStoreState() != null) {
+            state = storeUpdateDto.getStoreState();
+        }
     }
 
 }
