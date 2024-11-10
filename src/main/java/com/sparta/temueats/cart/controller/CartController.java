@@ -1,7 +1,8 @@
 package com.sparta.temueats.cart.controller;
 
-import com.sparta.temueats.cart.dto.CartResponseDto;
-import com.sparta.temueats.cart.dto.CartRequestDto;
+import com.sparta.temueats.cart.dto.CartUpdateResponseDto;
+import com.sparta.temueats.cart.dto.CartUpdateRequestDto;
+import com.sparta.temueats.cart.dto.CartGetListResponseDto;
 import com.sparta.temueats.cart.service.CartService;
 import com.sparta.temueats.global.ResponseDto;
 import jakarta.validation.Valid;

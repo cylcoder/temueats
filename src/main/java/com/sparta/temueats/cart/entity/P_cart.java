@@ -1,6 +1,6 @@
 package com.sparta.temueats.cart.entity;
 
-import com.sparta.temueats.cart.dto.CartRequestDto;
+import com.sparta.temueats.cart.dto.CartUpdateRequestDto;
 import com.sparta.temueats.order.entity.P_order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -39,13 +39,17 @@ public class P_cart {
 //    @JoinColumn(name = "menu_id")
 //    private P_menu menu;
 
+    @Column(name = "menu_id")
+    private UUID menuId;
+
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "cart")
     private P_order order;
 
 
-    public P_cart(CartRequestDto cartRequestDto, Long userId) {
-        this.quantity = cartRequestDto.getQuantity();
+    public P_cart(CartUpdateRequestDto cartUpdateRequestDto, Long userId, UUID menuId) {
+        this.quantity = cartUpdateRequestDto.getQuantity();
         this.paidYn = false;
         this.userId = userId;
+        this.menuId = menuId;
     }
 }
