@@ -27,6 +27,7 @@ public class CartGetListResponseDto {
         this.menuId = pCart.getMenuId();
         this.quantity = pCart.getQuantity();
         this.paid_yn = pCart.isPaidYn();
+        // todo BaseEntity pull 받으면 수정할 예정
 //        this.createdAt = createdAt;
 //        this.updatedAt = updatedAt;
 //        this.deletedAt = deletedAt;

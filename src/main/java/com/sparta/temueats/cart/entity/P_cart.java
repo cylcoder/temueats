@@ -1,6 +1,6 @@
 package com.sparta.temueats.cart.entity;
 
-import com.sparta.temueats.cart.dto.CartAddRequestDto;
+import com.sparta.temueats.cart.dto.CartUpdateRequestDto;
 import com.sparta.temueats.order.entity.P_order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -46,8 +46,8 @@ public class P_cart {
     private P_order order;
 
 
-    public P_cart(CartAddRequestDto cartAddRequestDto, Long userId, UUID menuId) {
-        this.quantity = cartAddRequestDto.getQuantity();
+    public P_cart(CartUpdateRequestDto cartUpdateRequestDto, Long userId, UUID menuId) {
+        this.quantity = cartUpdateRequestDto.getQuantity();
         this.paidYn = false;
         this.userId = userId;
         this.menuId = menuId;

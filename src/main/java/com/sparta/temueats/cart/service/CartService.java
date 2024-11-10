@@ -1,7 +1,7 @@
 package com.sparta.temueats.cart.service;
 
-import com.sparta.temueats.cart.dto.CartAddRequestDto;
-import com.sparta.temueats.cart.dto.CartAddResponseDto;
+import com.sparta.temueats.cart.dto.CartUpdateRequestDto;
+import com.sparta.temueats.cart.dto.CartUpdateResponseDto;
 import com.sparta.temueats.cart.dto.CartGetListResponseDto;
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
@@ -26,7 +26,7 @@ public class CartService {
 
     private final CartRepository cartRepository;
 
-    public CartAddResponseDto createCarts(CartAddRequestDto cartAddRequestDto, Long userId) {
+    public CartUpdateResponseDto createCarts(CartUpdateRequestDto cartUpdateRequestDto, Long userId) {
 
         // 2-1. 장바구니에 같은 메뉴 id가 있는 경우
         boolean isPresentMenu = cartRepository.findByMenuIdByUserId(MENU_ID, USER_ID1).isPresent();
@@ -46,8 +46,8 @@ public class CartService {
         }
 
         // 3. 오류가 없으면 담기
-        P_cart cart3 = cartRepository.save(new P_cart(cartAddRequestDto, USER_ID1, MENU_ID));
-        return new CartAddResponseDto(cart3);
+        P_cart cart3 = cartRepository.save(new P_cart(cartUpdateRequestDto, USER_ID1, MENU_ID));
+        return new CartUpdateResponseDto(cart3);
     }
 
     public List<CartGetListResponseDto> getCarts() {

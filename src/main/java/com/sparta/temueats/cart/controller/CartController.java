@@ -1,7 +1,7 @@
 package com.sparta.temueats.cart.controller;
 
-import com.sparta.temueats.cart.dto.CartAddResponseDto;
-import com.sparta.temueats.cart.dto.CartAddRequestDto;
+import com.sparta.temueats.cart.dto.CartUpdateResponseDto;
+import com.sparta.temueats.cart.dto.CartUpdateRequestDto;
 import com.sparta.temueats.cart.dto.CartGetListResponseDto;
 import com.sparta.temueats.cart.service.CartService;
 import com.sparta.temueats.global.ResponseDto;
@@ -23,23 +23,26 @@ public class CartController {
 
     // 장바구니 추가
     @PostMapping("/carts")
-    public ResponseDto<?> cartResponseDto(@RequestBody @Valid CartAddRequestDto cartAddRequestDto, BindingResult bindingResult) {
-        CartAddResponseDto cartAddResponseDto = cartService.createCarts(cartAddRequestDto, USER_ID);
-        return new ResponseDto<>(1, "장바구니 추가가 완료되었습니다.", cartAddResponseDto);
+    public ResponseDto<?> cartAddResponseDto(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto, BindingResult bindingResult) {
+        CartUpdateResponseDto cartUpdateResponseDto = cartService.createCarts(cartUpdateRequestDto, USER_ID);
+        return new ResponseDto<>(1, "장바구니 추가가 완료되었습니다.", cartUpdateResponseDto);
     }
 
     // 장바구니 전체 조회
-    // todo 조회용 dto 새로 만들기
     @GetMapping("/carts")
-    public ResponseDto<?> cartResponseDto() {
+    public ResponseDto<?> cartGetListResponseDto() {
         List<CartGetListResponseDto> cartGetListResponseListDto = cartService.getCarts();
         return new ResponseDto<>(1, "장바구니 전체 조회가 완료되었습니다.", cartGetListResponseListDto);
 
     }
 
-//    // 장바구니 메뉴 개수 수정
+    // 장바구니 메뉴 개수 수정
 //    @PutMapping("/carts/cart_id}/modify")
-//
+//    public ResponseDto<?> cartMenuUpdateResponseDto(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto, BindingResult bindingResult) {
+//        CartUpdateResponseDto cartUpdateResponseDto = cartService.updateCarts(cartUpdateRequestDto, USER_ID);
+//        return new ResponseDto<>(1, "장바구니 물품 수량 변경 성공", cartUpdateResponseDto);
+//    }
+
 //    // 장바구니 삭제
 //    @PutMapping("/carts/{cart_id}")
 }
