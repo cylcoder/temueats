@@ -8,13 +8,15 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class CartResponseDto {
+public class CartAddResponseDto {
     private UUID cartId;
+    private UUID menuId;
     private Long quantity;
     private boolean paidYn;
 
-    public CartResponseDto(P_cart pCart) {
+    public CartAddResponseDto(P_cart pCart) {
         this.cartId = pCart.getCartId();
+        this.menuId = pCart.getMenuId();
         this.quantity = pCart.getQuantity();
         this.paidYn = false;
     }

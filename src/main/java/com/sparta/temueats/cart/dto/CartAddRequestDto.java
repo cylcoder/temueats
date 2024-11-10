@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 
 @Getter
-public class CartRequestDto {
+public class CartAddRequestDto {
 
     @Column(nullable = false)
     @Min(value = 1, message = "수량 입력은 최소 1이상 가능합니다.")
