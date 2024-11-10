@@ -2,11 +2,19 @@ package com.sparta.temueats.user.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
 
 import java.util.Date;
 
 @Entity(name="P_USER")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class P_user {
 
     @Id
@@ -38,7 +46,6 @@ public class P_user {
     private String imageProfile;
 
     @NotNull
-    @Column(columnDefinition = "point")
     private Point latLng;
 
     @Size(max = 50, message = "주소는 최대 50자 이하이어야 합니다.")
