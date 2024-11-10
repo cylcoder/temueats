@@ -32,7 +32,7 @@ public class P_user {
     @Size(min = 2, max = 30, message = "닉네임은 2자 이상, 50자 이하이어야 합니다.")
     private String nickname;
 
-    @NotBlank()
+    @NotBlank
     @Pattern(regexp = "^(010|011|016|017|018|019)-\\d{3,4}-\\d{4}$")
     @Column(nullable = false)
     private String phone;
@@ -43,6 +43,10 @@ public class P_user {
 
     @NotNull
     private boolean use_yn;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRoleEnum role;
 
     @Size(max = 255, message = "이미지 URL은 최대 500자 이하이어야 합니다.")
     private String imageProfile;
