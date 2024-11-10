@@ -38,7 +38,7 @@ public class StoreResDto {
         this.latitude = storeReq.getLatLng().getX();
         this.longitude = storeReq.getLatLng().getY();
         this.address = storeReq.getAddress();
-        this.status = storeReq.getStatus();
+        this.status = storeReq.getState();
     }
 
 }

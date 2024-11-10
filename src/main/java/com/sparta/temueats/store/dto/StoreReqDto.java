@@ -73,7 +73,7 @@ public class StoreReqDto {
                 .category(this.category)
                 .latLng(new Point(this.latitude, this.longitude))
                 .address(this.address)
-                .status(StoreReqState.PENDING)
+                .state(StoreReqState.PENDING)
                 .build();
     }
 
