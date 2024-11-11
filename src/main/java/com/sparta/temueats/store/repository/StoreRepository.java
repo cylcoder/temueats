@@ -20,6 +20,8 @@ public interface StoreRepository extends JpaRepository<P_store, UUID> {
             "LEFT JOIN P_RATING r ON r.store = s " +
             "WHERE s.name LIKE %:name% " +
             "GROUP BY s")
-    List<StoreResDto> findByName(String name);
+    List<StoreResDto> findByNameContaining(String name);
+
+    List<P_store> findByName(String name);
 
 }

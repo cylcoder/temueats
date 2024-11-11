@@ -29,7 +29,7 @@ public class StoreService {
     }
 
     public List<StoreResDto> findByName(String name) {
-        return storeRepository.findByName(name);
+        return storeRepository.findByNameContaining(name);
     }
 
     public Optional<P_store> findById(UUID storeId) {

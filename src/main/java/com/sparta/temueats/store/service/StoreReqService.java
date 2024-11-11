@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,10 @@ public class StoreReqService {
     private final StoreRepository storeRepository;
 
     public StoreReqResDto saveStoreReq(StoreReqCreateDto storeReqCreateDto, P_user user) {
+        if (!storeRepository.findByName(storeReqCreateDto.getName()).isEmpty()) {
+            throw new CustomApiException("이미 존재하는 가게명");
+        }
+
         P_storeReq storeReq = storeReqCreateDto.toEntity(user);
         storeReq.setCreatedBy(user.getNickname());
         return new StoreReqResDto(storeReqRepository.save(storeReq));

@@ -32,6 +32,7 @@ public class StoreReqController {
             throw new CustomApiException("가게 등록 요청 실패: " + errorMessages);
         }
 
+        // user will be switched from session later
         P_user user = userUtils.createMockUser();
         StoreReqResDto storeReqResDto = storeReqService.saveStoreReq(storeReqCreateDto, user);
         return new ResponseDto<>(1, "가게 등록 요청 성공", storeReqResDto);
