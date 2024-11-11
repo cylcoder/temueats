@@ -3,7 +3,7 @@ package com.sparta.temueats.store.service;
 import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.store.dto.StoreReqCreateDto;
 import com.sparta.temueats.store.dto.StoreReqUpdateDto;
-import com.sparta.temueats.store.dto.StoreReqResDto;
+//import com.sparta.temueats.store.dto.StoreReqResDto;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.P_storeReq;
 import com.sparta.temueats.store.entity.StoreState;
@@ -24,11 +24,11 @@ public class StoreReqService {
     private final StoreReqRepository storeReqRepository;
     private final StoreRepository storeRepository;
 
-    public StoreReqResDto saveStoreReq(StoreReqCreateDto storeReqCreateDto, P_user user) {
-        P_storeReq storeReq = storeReqCreateDto.toEntity(user);
-        storeReq.setCreatedBy(user.getNickname());
-        return new StoreReqResDto(storeReqRepository.save(storeReq));
-    }
+//    public StoreReqResDto saveStoreReq(StoreReqCreateDto storeReqCreateDto, P_user user) {
+//        P_storeReq storeReq = storeReqCreateDto.toEntity(user);
+//        storeReq.setCreatedBy(user.getNickname());
+//        return new StoreReqResDto(storeReqRepository.save(storeReq));
+//    }
 
     public void updateState(StoreReqUpdateDto storeReqUpdateDto, P_user user) {
         Optional<P_storeReq> storeReqOptional = storeReqRepository.findById(storeReqUpdateDto.getStoreReqId());
