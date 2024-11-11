@@ -3,8 +3,8 @@ package com.sparta.temueats.store.controller;
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.store.dto.StoreReqCreateDto;
-import com.sparta.temueats.store.dto.StoreReqUpdateDto;
 import com.sparta.temueats.store.dto.StoreReqResDto;
+import com.sparta.temueats.store.dto.StoreReqUpdateDto;
 import com.sparta.temueats.store.service.StoreReqService;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.repository.UserRespository;
@@ -14,7 +14,8 @@ import org.springframework.data.geo.Point;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,8 +48,8 @@ public class StoreReqController {
     }
 
     P_user createMockUser() {
-        String nickname = "user" + (new Random().nextInt(9) + 1);
-        String email = nickname + "@gmail.com";
+        String nickname = "user" + (System.currentTimeMillis() % 1000);
+        String email = nickname + "@temueats.com";
 
         P_user user = P_user.builder()
                 .email(email)

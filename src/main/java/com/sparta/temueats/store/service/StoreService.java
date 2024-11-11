@@ -3,7 +3,6 @@ package com.sparta.temueats.store.service;
 import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
-import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
