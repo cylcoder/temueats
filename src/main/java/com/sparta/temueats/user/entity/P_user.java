@@ -1,5 +1,6 @@
 package com.sparta.temueats.user.entity;
 
+import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.user.dto.UpdateMypageRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -16,7 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class P_user {
+public class P_user extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
