@@ -1,7 +1,6 @@
 package com.sparta.temueats.order.entity;
 
 import com.sparta.temueats.cart.entity.P_cart;
-import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,8 +14,9 @@ import java.util.UUID;
 public interface CartRepository extends JpaRepository<P_cart, UUID> {
 
     @Query("select c from P_cart c where c.userId = :userId")
-    Optional<P_cart> findByUserId(@Param("userId") Long userId);
+    List<P_cart> findAllByUserId(Long userId);
 
-//    @Query("select c from P_cart c where c.menuId = :menuId")
-//    Optional<P_cart> findByMenuId(@Param("menuId") UUID menuId);
+
+    @Query("select c from P_cart c where c.menuId = :menuId AND c.userId = :userId")
+    Optional<P_cart> findByMenuIdByUserId(UUID menuId, Long userId);
 }
