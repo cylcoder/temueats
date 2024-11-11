@@ -34,10 +34,6 @@ public class P_review {
     @Column(nullable = true)
     private boolean reportYn;
 
-    @ManyToOne
-    @JoinColumn(name="storeId")
-    private P_store store;
-
     @Builder
     public P_review(String content, int score, boolean useYn, boolean reportYn) {
         this.content = content;
