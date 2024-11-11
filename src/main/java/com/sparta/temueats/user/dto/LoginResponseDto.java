@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LoginResponseDto {
 
+    private String email;
     private String nickname;
     private String role;
 }
