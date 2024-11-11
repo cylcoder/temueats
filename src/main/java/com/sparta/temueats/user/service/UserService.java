@@ -188,7 +188,6 @@ public class UserService {
         try {
             // 사용자 ID 추출
             Claims claims = jwtUtil.getUserInfoFromToken(token);
-            logger.info("사용자 ID: {}", claims.getSubject());
             Long userId = Long.parseLong(claims.getSubject());
 
 
@@ -201,5 +200,9 @@ public class UserService {
             logger.error("사용자 검증 중 오류 발생", e);
             return Optional.empty();
         }
+    }
+
+    public P_user getUserById(Long owner) {
+        return userRepository.findById(owner).orElse(null);
     }
 }
