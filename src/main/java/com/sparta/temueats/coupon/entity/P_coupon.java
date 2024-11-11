@@ -1,11 +1,13 @@
 package com.sparta.temueats.coupon.entity;
 
+import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
@@ -13,7 +15,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "P_COUPON")
-public class P_coupon {
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+public class P_coupon extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -38,7 +45,10 @@ public class P_coupon {
     private LocalDate expiredAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)  // 외래 키 컬럼
-    private P_user user;
+    @JoinColumn(name = "owner_id", nullable = false)  // 소유자
+    private P_user owner;
 
+    @ManyToOne
+    @JoinColumn(name = "issuer_id", nullable = false)  // 발행자
+    private P_user issuer;
 }

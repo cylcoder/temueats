@@ -1,44 +1,48 @@
 package com.sparta.temueats.store.dto;
 
+import com.sparta.temueats.menu.dto.MenuResDto;
 import com.sparta.temueats.menu.entity.Category;
-import com.sparta.temueats.store.entity.P_storeReq;
-import com.sparta.temueats.store.entity.StoreReqState;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.sparta.temueats.store.entity.P_store;
+import com.sparta.temueats.store.entity.StoreState;
+import lombok.*;
+import org.locationtech.jts.geom.Point;
 
-import java.util.UUID;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class StoreResDto {
 
-    private UUID storeReqId;
+    private String storeId;
     private String name;
     private String image;
     private String number;
+    private StoreState state;
     private Integer leastPrice;
     private Integer deliveryPrice;
     private Category category;
-    private Double latitude;
-    private Double longitude;
+    private Point latLng;
     private String address;
-    private StoreReqState status;
+    private Double rating;
+    private Integer reviewCount;
+    private Boolean isFavorite;
+    private List<MenuResDto> menu;
 
-    public StoreResDto(P_storeReq storeReq) {
-        this.storeReqId = storeReq.getStoreReqId();
-        this.name = storeReq.getName();
-        this.image = storeReq.getImage();
-        this.number = storeReq.getNumber();
-        this.leastPrice = storeReq.getLeastPrice();
-        this.deliveryPrice = storeReq.getDeliveryPrice();
-        this.category = storeReq.getCategory();
-        this.latitude = storeReq.getLatLng().getX();
-        this.longitude = storeReq.getLatLng().getY();
-        this.address = storeReq.getAddress();
-        this.status = storeReq.getState();
+    public StoreResDto(P_store store, Double rating, Integer reviewCount) {
+        storeId = store.getStoreId().toString();
+        name = store.getName();
+        image = store.getImage();
+        number = store.getNumber();
+        state = store.getState();
+        leastPrice = store.getLeastPrice();
+        deliveryPrice = store.getDeliveryPrice();
+        category = store.getCategory();
+        latLng = store.getLatLng();
+        address = store.getAddress();
+        this.rating = rating;
+        this.reviewCount = reviewCount;
     }
 
 }
