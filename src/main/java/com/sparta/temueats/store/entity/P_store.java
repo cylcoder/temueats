@@ -29,7 +29,7 @@ public class P_store extends BaseEntity {
     @Column(updatable = false, nullable = false)
     private UUID storeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private P_user user;
 
