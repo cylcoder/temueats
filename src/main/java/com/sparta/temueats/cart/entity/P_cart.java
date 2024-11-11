@@ -52,4 +52,8 @@ public class P_cart {
         this.userId = userId;
         this.menuId = menuId;
     }
+
+    public void update(CartUpdateRequestDto cartUpdateRequestDto) {
+        this.quantity =cartUpdateRequestDto.getQuantity();
+    }
 }

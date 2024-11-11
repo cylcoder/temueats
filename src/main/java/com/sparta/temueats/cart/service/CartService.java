@@ -8,9 +8,11 @@ import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.global.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -59,5 +61,20 @@ public class CartService {
         }
 
         return responseDtoList;
+    }
+
+    @Transactional
+    public CartUpdateResponseDto updateCarts(CartUpdateRequestDto cartUpdateRequestDto, Long userId, UUID cartId) {
+        Long updatePrice = cartUpdateRequestDto.getQuantity();
+
+        if (updatePrice < 0 || updatePrice > 50) {
+            throw new CustomApiException("수량은 최소 1부터 50까지 변경할 수 있습니다.");
+        }
+
+        P_cart cart = cartRepository.findById(cartId).orElseThrow(() ->
+                new CustomApiException("해당 장바구니 품목을 찾을 수 없습니다."));
+        cart.update(cartUpdateRequestDto);
+
+        return new CartUpdateResponseDto(cart);
     }
 }
