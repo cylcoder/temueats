@@ -10,5 +10,4 @@ public class initData {
     private CartService cartService;
     private CartRepository cartRepository;
 
-
 }

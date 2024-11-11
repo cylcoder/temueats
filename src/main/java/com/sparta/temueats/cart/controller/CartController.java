@@ -43,13 +43,22 @@ public class CartController {
     public ResponseDto<?> cartUpdateResponseDto(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto, BindingResult bindingResult,
                                                 @PathVariable UUID cartId) {
         CartUpdateResponseDto cartUpdateResponseDto = cartService.updateCarts(cartUpdateRequestDto, USER_ID, cartId);
-        return new ResponseDto<>(1, "장바구니 물품 수량 변경이 완료되었습니다.", cartUpdateResponseDto);
+        return new ResponseDto<>(1, "장바구니 메뉴 수량 변경이 완료되었습니다.", cartUpdateResponseDto);
     }
 
     // 장바구니 삭제
     @PutMapping("/carts/{cartId}/delete")
     public ResponseDto<?> cartDeleteResponse(@PathVariable UUID cartId) {
         cartService.deleteCarts(USER_ID, cartId);
-        return new ResponseDto<>(1, "장바구니 물품이 정상적으로 삭제되었습니다.", null);
+        return new ResponseDto<>(1, "장바구니 메뉴가 정상적으로 삭제되었습니다.", null);
     }
+
+    // 장바구니 결제할 물품 선택
+    @PutMapping("/carts/{cartId}/select")
+    public ResponseDto<?> cartSelectResponse(@PathVariable UUID cartId) {
+        cartService.selectCarts(USER_ID, cartId);
+        return new ResponseDto<>(1, "장바구니 메뉴 선택이 수정되었습니다.", null);
+    }
+
+
 }
