@@ -1,10 +1,13 @@
 package com.sparta.temueats.store.dto;
 
+import com.sparta.temueats.menu.dto.MenuResDto;
 import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.StoreState;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +27,8 @@ public class StoreResDto {
     private String address;
     private Double rating;
     private Integer reviewCount;
+    private Boolean isFavorite;
+    private List<MenuResDto> menu;
 
     public StoreResDto(P_store store, Double rating, Integer reviewCount) {
         storeId = store.getStoreId().toString();

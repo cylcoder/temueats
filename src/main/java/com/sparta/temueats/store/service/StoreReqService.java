@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,9 +24,9 @@ public class StoreReqService {
     private final StoreReqRepository storeReqRepository;
     private final StoreRepository storeRepository;
 
-    public StoreReqResDto saveStoreReq(StoreReqCreateDto storeReqCreateDto, P_user user) {
+    public StoreReqResDto save(StoreReqCreateDto storeReqCreateDto, P_user user) {
         if (!storeRepository.findByName(storeReqCreateDto.getName()).isEmpty()) {
-            throw new CustomApiException("이미 존재하는 가게명");
+            throw new CustomApiException("이미 존재하는 가게명입니다.");
         }
 
         P_storeReq storeReq = storeReqCreateDto.toEntity(user);
@@ -35,11 +34,11 @@ public class StoreReqService {
         return new StoreReqResDto(storeReqRepository.save(storeReq));
     }
 
-    public void updateState(StoreReqUpdateDto storeReqUpdateDto, P_user user) {
+    public void update(StoreReqUpdateDto storeReqUpdateDto, P_user user) {
         Optional<P_storeReq> storeReqOptional = storeReqRepository.findById(storeReqUpdateDto.getStoreReqId());
 
         if (storeReqOptional.isEmpty()) {
-            throw new CustomApiException("존재하지 않는 가게 등록 요청");
+            throw new CustomApiException("존재하지 않는 가게 등록 요청입니다.");
         }
 
         P_storeReq storeReq = storeReqOptional.get();

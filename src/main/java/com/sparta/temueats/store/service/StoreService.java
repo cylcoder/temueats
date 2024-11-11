@@ -23,7 +23,7 @@ public class StoreService {
 
     public void update(StoreUpdateDto storeUpdateDto, P_user user) {
         storeRepository.findById(storeUpdateDto.getStoreId())
-                .orElseThrow(() -> new CustomApiException("존재하지 않는 음식점"))
+                .orElseThrow(() -> new CustomApiException("존재하지 않는 음식점입니다."))
                 .update(storeUpdateDto, user);
 
     }

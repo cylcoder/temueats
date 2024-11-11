@@ -4,11 +4,19 @@ import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.SellState;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
 @Entity(name = "P_MENU")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class P_menu extends BaseEntity {
 
     @Id
