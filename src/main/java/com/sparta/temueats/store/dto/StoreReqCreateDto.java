@@ -3,6 +3,7 @@ package com.sparta.temueats.store.dto;
 import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.store.entity.P_storeReq;
 import com.sparta.temueats.store.entity.StoreReqState;
+import com.sparta.temueats.store.util.GeoUtils;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -71,7 +72,7 @@ public class StoreReqCreateDto {
                 .leastPrice(this.leastPrice)
                 .deliveryPrice(this.deliveryPrice)
                 .category(this.category)
-                .latLng(new Point(this.latitude, this.longitude))
+                .latLng(GeoUtils.toPoint(this.latitude, this.longitude))
                 .address(this.address)
                 .state(StoreReqState.PENDING)
                 .build();

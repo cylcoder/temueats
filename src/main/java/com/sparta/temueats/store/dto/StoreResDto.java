@@ -4,7 +4,7 @@ import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.StoreState;
 import lombok.*;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 @NoArgsConstructor
 @AllArgsConstructor

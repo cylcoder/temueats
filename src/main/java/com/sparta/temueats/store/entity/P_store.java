@@ -3,6 +3,7 @@ package com.sparta.temueats.store.entity;
 import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
+import com.sparta.temueats.store.util.GeoUtils;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 
 import java.util.UUID;
 
@@ -54,7 +56,7 @@ public class P_store extends BaseEntity {
     @Column(nullable = false)
     private Category category;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "geometry(Point, 4326)", nullable = false)
     private Point latLng;
 
     @Column(length = 50, nullable = false)
@@ -65,7 +67,7 @@ public class P_store extends BaseEntity {
             image = storeUpdateDto.getImage();
         }
         if (storeUpdateDto.getLatitude() != null && storeUpdateDto.getLongitude() != null) {
-            latLng = new Point(storeUpdateDto.getLatitude(), storeUpdateDto.getLongitude());
+            latLng = GeoUtils.toPoint(storeUpdateDto.getLatitude(), storeUpdateDto.getLongitude());
         }
         if (storeUpdateDto.getAddress() != null) {
             address = storeUpdateDto.getAddress();

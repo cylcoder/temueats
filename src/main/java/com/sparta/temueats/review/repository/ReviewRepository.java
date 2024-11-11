@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface ReviewRepository extends JpaRepository<P_review, UUID> {
 
-    P_store findByStore(Long storeId);
+//    P_store findByStore(Long storeId);
 }
