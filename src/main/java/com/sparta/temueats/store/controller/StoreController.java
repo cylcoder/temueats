@@ -6,6 +6,7 @@ import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
 import com.sparta.temueats.store.service.StoreService;
 import com.sparta.temueats.store.util.UserUtils;
+import com.sparta.temueats.store.util.ValidUtils;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +22,10 @@ import java.util.stream.Collectors;
 public class StoreController {
 
     private final StoreService storeService;
-    private final UserUtils userUtils;
 
     @PutMapping
     public ResponseDto<Object> update(@Valid @RequestBody StoreUpdateDto storeUpdateDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errorMessages = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
-            throw new CustomApiException("가게 정보 수정  실패: " + errorMessages);
-        }
+        ValidUtils.throwIfHasErrors(bindingResult, "가게 정보 수정 실패");
 
         // user will be switched from session later
         P_user user = storeService.findById(storeUpdateDto.getStoreId()).orElseThrow().getUser();
@@ -41,7 +36,7 @@ public class StoreController {
     @GetMapping
     public ResponseDto<List<StoreResDto>> findByName(@RequestParam String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new CustomApiException("검색어 미입력");
+            throw new CustomApiException("검색어는 필수입니다.");
         }
 
         return new ResponseDto<>(1, "가게 검색 성공", storeService.findByName(name));

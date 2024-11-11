@@ -25,7 +25,7 @@ public class AiController {
     public ResponseDto<String> request(@RequestBody Map<String, String> requestMap) {
         String request = requestMap.get("request");
         if (request == null || request.trim().isEmpty()) {
-            throw new CustomApiException("요청 메시지 누락");
+            throw new CustomApiException("요청 메시지는 필수입니다.");
         }
 
         // user will be switched from session later
