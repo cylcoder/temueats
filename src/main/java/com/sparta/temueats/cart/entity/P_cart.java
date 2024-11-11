@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -42,6 +43,9 @@ public class P_cart {
     @Column(name = "menu_id")
     private UUID menuId;
 
+    @Column(nullable = false)
+    private boolean deleted_yn;
+
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "cart")
     private P_order order;
 
@@ -55,5 +59,9 @@ public class P_cart {
 
     public void update(CartUpdateRequestDto cartUpdateRequestDto) {
         this.quantity =cartUpdateRequestDto.getQuantity();
+    }
+
+    public void delete() {
+        this.deleted_yn = true;
     }
 }
