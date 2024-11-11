@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="temueats@localhost" uuid="d0bf0590-2db8-41dc-b395-b89a954ba55b">
+    <data-source source="LOCAL" name="temueats@localhost" uuid="f834efb1-2eda-4a98-99b1-c8f55782a20e">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
+      <imported>true</imported>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/temueats</jdbc-url>
       <jdbc-additional-properties>
