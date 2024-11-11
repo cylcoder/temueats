@@ -7,6 +7,7 @@ import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.global.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,13 @@ public class CartService {
     // todo 더미 데이터 싹 수정
     static final Long USER_ID1 = 1L;
 
-    static final UUID MENU_ID = UUID.fromString("e95cb701-81b3-4124-9dd6-6b8fd423e783");
+    static final UUID MENU_ID = UUID.fromString("e95cb701-81b3-4124-9dd6-6b8fd423e782");
 
     static final UUID PRE_STORE_ID1 = UUID.randomUUID();
     static final UUID PRE_STORE_ID2 = UUID.randomUUID();
 
     private final CartRepository cartRepository;
+
 
     public CartUpdateResponseDto createCarts(CartUpdateRequestDto cartUpdateRequestDto, Long userId) {
 
@@ -67,7 +69,7 @@ public class CartService {
     public CartUpdateResponseDto updateCarts(CartUpdateRequestDto cartUpdateRequestDto, Long userId, UUID cartId) {
         Long updatePrice = cartUpdateRequestDto.getQuantity();
 
-        if (updatePrice < 0 || updatePrice > 50) {
+        if (updatePrice <= 0 || updatePrice > 50) {
             throw new CustomApiException("수량은 최소 1부터 50까지 변경할 수 있습니다.");
         }
 
@@ -76,5 +78,12 @@ public class CartService {
         cart.update(cartUpdateRequestDto);
 
         return new CartUpdateResponseDto(cart);
+    }
+
+    @Transactional
+    public void deleteCarts(Long userId, UUID cartId) {
+        P_cart cart = cartRepository.findById(cartId).orElseThrow(() ->
+                new CustomApiException("해당 장바구니 품목을 찾을 수 없습니다."));
+        cart.delete();
     }
 }
