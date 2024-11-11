@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,11 +38,12 @@ public class CartController {
     }
 
     // 장바구니 메뉴 개수 수정
-//    @PutMapping("/carts/cart_id}/modify")
-//    public ResponseDto<?> cartMenuUpdateResponseDto(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto, BindingResult bindingResult) {
-//        CartUpdateResponseDto cartUpdateResponseDto = cartService.updateCarts(cartUpdateRequestDto, USER_ID);
-//        return new ResponseDto<>(1, "장바구니 물품 수량 변경 성공", cartUpdateResponseDto);
-//    }
+    @PutMapping("/carts/{cartId}/modify")
+    public ResponseDto<?> cartUpdateResponseDto(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto, BindingResult bindingResult,
+                                                @PathVariable UUID cartId) {
+        CartUpdateResponseDto cartUpdateResponseDto = cartService.updateCarts(cartUpdateRequestDto, USER_ID, cartId);
+        return new ResponseDto<>(1, "장바구니 물품 수량 변경 성공", cartUpdateResponseDto);
+    }
 
 //    // 장바구니 삭제
 //    @PutMapping("/carts/{cart_id}")
