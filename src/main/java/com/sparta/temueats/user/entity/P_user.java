@@ -1,8 +1,12 @@
 package com.sparta.temueats.user.entity;
 
+import com.sparta.temueats.global.BaseEntity;
+import com.sparta.temueats.user.dto.UpdateMypageRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
 import java.util.Date;
@@ -13,7 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class P_user {
+public class P_user extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,5 +61,14 @@ public class P_user {
 
     @Size(max = 50, message = "주소는 최대 50자 이하이어야 합니다.")
     private String address;
+
+
+    public void updateUserInfo(UpdateMypageRequestDto request, GeometryFactory geometryFactory) {
+        this.latLng = geometryFactory.createPoint(new Coordinate(request.getLng(), request.getLat()));
+        this.address = request.getAddress();
+        this.nickname = request.getNickname();
+        this.phone = request.getPhone();
+        this.imageProfile = request.getImageProfile();
+    }
 
 }

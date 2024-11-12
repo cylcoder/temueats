@@ -2,12 +2,13 @@ package com.sparta.temueats.order.entity;
 
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.global.BaseEntity;
-import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,24 +25,45 @@ public class P_order extends BaseEntity {
     private UUID orderUId;
 
     @Column(nullable = false)
-    private int amount;
+    private Long amount;
 
     @Column(nullable = false)
     private boolean IsDelivery;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderState orderState;
 
     @Column
-    private int discountPrice;
+    private Long discountPrice;
 
     @Column
     @Size(max = 50, message = "요청 사항은 50글자 이내만 가능합니다.")
     private String customerRequest;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
-    private P_cart cart;
+    @Column(nullable = false)
+    private boolean cancelYn;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    private List<P_cart> cartList;
 
+    @Column(nullable = false)
+    private Long customerId;
+
+    @Column(nullable = false)
+    private Long ownerId;
+
+    @Builder
+    public P_order(UUID orderUId,Long amount, boolean IsDelivery, OrderState orderState, Long discountPrice, String customerRequest, boolean cancelYn, List<P_cart> cartList, Long customerId, Long ownerId) {
+        this.orderUId = orderUId;
+        this.amount = amount;
+        this.IsDelivery = IsDelivery;
+        this.orderState = orderState;
+        this.discountPrice = discountPrice;
+        this.customerRequest = customerRequest;
+        this.cancelYn = cancelYn;
+        this.cartList = cartList;
+        this.customerId = customerId;
+        this.ownerId = ownerId;
+    }
 }

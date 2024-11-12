@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.util.UUID;
 

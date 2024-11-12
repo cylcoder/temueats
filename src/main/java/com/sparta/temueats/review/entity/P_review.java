@@ -36,6 +36,7 @@ public class P_review extends BaseEntity {
     @Column(nullable = true)
     private boolean reportYn;
 
+
     @ManyToOne
     @JoinColumn(name="user_id",nullable = false)
     private P_user user;

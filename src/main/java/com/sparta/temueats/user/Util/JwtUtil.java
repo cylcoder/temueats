@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +47,12 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
     // 토큰 생성
-    public String createToken(String username, UserRoleEnum role) {
+    public String createToken(String id, UserRoleEnum role) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(username) // 사용자 식별자값(ID)
+                        .setSubject(id) // 사용자 식별자값(ID)
                         .claim(AUTHORIZATION_KEY, role) // 사용자 권한
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
@@ -59,20 +60,22 @@ public class JwtUtil {
                         .compact();
     }
 
+
     // JWT Cookie 에 저장
     public void addJwtToCookie(String token, HttpServletResponse res) {
         try {
-            token = URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
+            // `Bearer `의 공백을 `%20`로 인코딩
+            String encodedToken = URLEncoder.encode(token, "utf-8").replace("+", "%20");
 
-            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token); // Name-Value
+            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, encodedToken);
             cookie.setPath("/");
-
-            // Response 객체에 Cookie 추가
+            cookie.setHttpOnly(true); // HttpOnly 설정
             res.addCookie(cookie);
         } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage());
         }
     }
+
 
     // JWT 토큰 substring
     public String substringToken(String tokenValue) {
@@ -104,4 +107,18 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
+    // 쿠키에서 토큰 추출
+    public String getTokenFromCookies(HttpServletRequest req) {
+        if (req.getCookies() != null) {
+            for (Cookie cookie : req.getCookies()) {
+                if (AUTHORIZATION_HEADER.equals(cookie.getName())) {
+                    return cookie.getValue().replace("%20", " "); // 토큰 값 반환
+                }
+            }
+        }
+        logger.error("쿠키에서 토큰을 찾을 수 없음");
+        return null;
+    }
+
 }

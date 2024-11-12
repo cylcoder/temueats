@@ -12,4 +12,5 @@ public interface ReviewRepository extends JpaRepository<P_review, UUID> {
     P_store findByStore(Long storeId);
 
     List<P_review> findByUserId(Long userId);
+
 }

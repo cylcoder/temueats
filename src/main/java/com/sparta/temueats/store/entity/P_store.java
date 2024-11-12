@@ -3,6 +3,7 @@ package com.sparta.temueats.store.entity;
 import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
+import com.sparta.temueats.store.util.GeoUtils;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class P_store extends BaseEntity {
     @Column(updatable = false, nullable = false)
     private UUID storeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private P_user user;
 
@@ -54,18 +55,18 @@ public class P_store extends BaseEntity {
     @Column(nullable = false)
     private Category category;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "geometry(Point, 4326)", nullable = false)
     private Point latLng;
 
     @Column(length = 50, nullable = false)
     private String address;
 
-    public void update(StoreUpdateDto storeUpdateDto) {
+    public void update(StoreUpdateDto storeUpdateDto, P_user user) {
         if (storeUpdateDto.getImage() != null) {
             image = storeUpdateDto.getImage();
         }
         if (storeUpdateDto.getLatitude() != null && storeUpdateDto.getLongitude() != null) {
-            latLng = new Point(storeUpdateDto.getLatitude(), storeUpdateDto.getLongitude());
+            latLng = GeoUtils.toPoint(storeUpdateDto.getLatitude(), storeUpdateDto.getLongitude());
         }
         if (storeUpdateDto.getAddress() != null) {
             address = storeUpdateDto.getAddress();
@@ -79,6 +80,8 @@ public class P_store extends BaseEntity {
         if (storeUpdateDto.getStoreState() != null) {
             state = storeUpdateDto.getStoreState();
         }
+
+        setUpdatedBy(user.getNickname());
     }
 
 }
