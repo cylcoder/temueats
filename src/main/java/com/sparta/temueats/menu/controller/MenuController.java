@@ -2,9 +2,12 @@ package com.sparta.temueats.menu.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.menu.dto.MenuCreateDto;
+import com.sparta.temueats.menu.dto.MenuCreateWithImageDto;
 import com.sparta.temueats.menu.dto.MenuResDto;
 import com.sparta.temueats.menu.dto.MenuUpdateDto;
 import com.sparta.temueats.menu.service.MenuService;
+import com.sparta.temueats.store.dto.StoreReqCreateWithImageDto;
+import com.sparta.temueats.store.dto.StoreReqResDto;
 import com.sparta.temueats.store.util.ValidUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -27,6 +30,16 @@ public class MenuController {
         ValidUtils.throwIfHasErrors(res, "메뉴 등록 실패");
 
         return menuService.save(menuCreateDto, req);
+    }
+
+    @PostMapping("/with-image")
+    public ResponseDto<MenuResDto> save(
+            @Valid @ModelAttribute MenuCreateWithImageDto menuCreateWithImageDto,
+            BindingResult res,
+            HttpServletRequest req) {
+        ValidUtils.throwIfHasErrors(res, "메뉴 등록 실패");
+
+        return menuService.save(menuCreateWithImageDto, req);
     }
 
     @PutMapping

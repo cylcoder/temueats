@@ -31,7 +31,7 @@ public class StoreReqController {
     }
     
     @PostMapping("/with-image")
-    public ResponseDto<StoreReqResDto> saveWithImage(
+    public ResponseDto<StoreReqResDto> save(
             @Valid @ModelAttribute StoreReqCreateWithImageDto storeReqCreateWithImageDto,
             BindingResult res,
             HttpServletRequest req) {

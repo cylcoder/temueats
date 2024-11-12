@@ -1,6 +1,7 @@
-package com.sparta.temueats.global.s3;
+package com.sparta.temueats.s3.controller;
 
 import com.sparta.temueats.global.ResponseDto;
+import com.sparta.temueats.s3.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

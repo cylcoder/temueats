@@ -1,7 +1,7 @@
 package com.sparta.temueats.store.service;
 
 import com.sparta.temueats.global.ResponseDto;
-import com.sparta.temueats.global.s3.FileService;
+import com.sparta.temueats.s3.service.FileService;
 import com.sparta.temueats.store.dto.StoreReqCreateDto;
 import com.sparta.temueats.store.dto.StoreReqCreateWithImageDto;
 import com.sparta.temueats.store.dto.StoreReqResDto;
@@ -59,6 +59,10 @@ public class StoreReqService {
             return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
         }
 
+        if (!storeRepository.findByName(storeReqCreateWithImageDto.getName()).isEmpty()) {
+            return new ResponseDto<>(FAILURE, "이미 존재하는 가게명입니다.");
+        }
+
         String image = null;
         if (storeReqCreateWithImageDto.getImage() != null && !storeReqCreateWithImageDto.getImage().isEmpty()) {
             try {
@@ -68,7 +72,9 @@ public class StoreReqService {
             }
         }
 
-        P_storeReq storeReq = storeReqCreateWithImageDto.toEntity(userOptional.get(), image);
+        P_user user = userOptional.get();
+        P_storeReq storeReq = storeReqCreateWithImageDto.toEntity(user, image);
+        storeReq.setCreatedBy(user.getNickname());
         StoreReqResDto storeReqResDto = new StoreReqResDto(storeReqRepository.save(storeReq));
         return new ResponseDto<>(SUCCESS, "가게 등록 요청 성공", storeReqResDto);
     }
