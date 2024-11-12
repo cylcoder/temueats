@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "P_REVIEWCOMMENT")
+@Table(name = "P_REVIEW_COMMENT")
 public class P_reviewComment {
     @Id
     @GeneratedValue(generator = "UUID")

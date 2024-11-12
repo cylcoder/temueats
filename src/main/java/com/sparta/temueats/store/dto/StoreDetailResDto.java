@@ -47,21 +47,4 @@ public class StoreDetailResDto {
         address = store.getAddress();
     }
 
-    public StoreDetailResDto(P_store store, Double rating, Integer reviewCount, Boolean isFavorite) {
-        storeId = store.getStoreId().toString();
-        name = store.getName();
-        image = store.getImage();
-        number = store.getNumber();
-        state = store.getState();
-        leastPrice = store.getLeastPrice();
-        deliveryPrice = store.getDeliveryPrice();
-        category = store.getCategory();
-        latitude = store.getLatLng().getX();
-        longitude = store.getLatLng().getY();
-        address = store.getAddress();
-        this.rating = rating;
-        this.reviewCount = reviewCount;
-        this.isFavorite = isFavorite;
-    }
-
 }

@@ -50,18 +50,6 @@ public class StoreReqCreateDto {
     @Size(max = 50, message = "주소는 최대 50자입니다.")
     private String address;
 
-    public StoreReqCreateDto(P_storeReq storeReq) {
-        this.name = storeReq.getName();
-        this.image = storeReq.getImage();
-        this.number = storeReq.getNumber();
-        this.leastPrice = storeReq.getLeastPrice();
-        this.deliveryPrice = storeReq.getDeliveryPrice();
-        this.category = storeReq.getCategory();
-        this.latitude = storeReq.getLatLng().getX();
-        this.longitude = storeReq.getLatLng().getY();
-        this.address = storeReq.getAddress();
-    }
-
     public P_storeReq toEntity(P_user user) {
         return P_storeReq.builder()
                 .requestedBy(user)
