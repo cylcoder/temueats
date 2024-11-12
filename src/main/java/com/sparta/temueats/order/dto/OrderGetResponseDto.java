@@ -1,18 +1,18 @@
 package com.sparta.temueats.order.dto;
 
 import com.sparta.temueats.cart.entity.P_cart;
+import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class OrderGetListResponseDto {
+public class OrderGetResponseDto {
     private UUID orderId;
     private UUID orderUId;
     private Long amount;
@@ -32,7 +32,7 @@ public class OrderGetListResponseDto {
 //    private String deletedBy;
 //    private boolean deletedYn;
 
-    public OrderGetListResponseDto(P_order order) {
+    public OrderGetResponseDto(P_order order) {
         this.orderId = order.getOrderId();
         this.orderUId = order.getOrderUId();
         this.amount = order.getAmount();
