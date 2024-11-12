@@ -3,8 +3,9 @@ package com.sparta.temueats.order.service;
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.global.ex.CustomApiException;
+import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.order.dto.OrderCreateRequestDto;
-import com.sparta.temueats.order.dto.OrderGetListResponseDto;
+import com.sparta.temueats.order.dto.OrderGetResponseDto;
 import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.order.repository.OrderRepository;
@@ -22,7 +23,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
 
-    static final Long USER_ID_CUSTOMER = 3L;
+    static final Long USER_ID_CUSTOMER = 1L;
     private final Long USER_ID_OWNER = 2L;
 
     private final Long AMOUNT = 9000L;
@@ -89,27 +90,33 @@ public class OrderService {
                 .build());
     }
 
-    public List<OrderGetListResponseDto> getCustomerOrders() {
+    public List<OrderGetResponseDto> getCustomerOrders() {
         List<P_order> orderList = orderRepository.findAllByCustomerId(USER_ID_CUSTOMER);
-        List<OrderGetListResponseDto> responseDtoList = new ArrayList<>();
+        List<OrderGetResponseDto> responseDtoList = new ArrayList<>();
 
         for (P_order order : orderList) {
-            responseDtoList.add(new OrderGetListResponseDto(order));
+            responseDtoList.add(new OrderGetResponseDto(order));
         }
 
         return responseDtoList;
     }
 
-    public List<OrderGetListResponseDto> getOwnerOrders() {
+    public List<OrderGetResponseDto> getOwnerOrders() {
         List<P_order> orderList = orderRepository.findAllByOwnerId(USER_ID_OWNER);
-        List<OrderGetListResponseDto> responseDtoList = new ArrayList<>();
+        List<OrderGetResponseDto> responseDtoList = new ArrayList<>();
 
         for (P_order order : orderList) {
-            responseDtoList.add(new OrderGetListResponseDto(order));
+            responseDtoList.add(new OrderGetResponseDto(order));
         }
 
         return responseDtoList;
     }
 
+
+    public OrderGetResponseDto getOrder(UUID orderId) {
+        P_order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new CustomApiException("해당 주문을 찾을 수 없습니다."));
+        return new OrderGetResponseDto(order);
+    }
 
 }
