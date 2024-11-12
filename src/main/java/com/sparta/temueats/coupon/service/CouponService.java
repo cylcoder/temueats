@@ -7,16 +7,16 @@ import com.sparta.temueats.coupon.dto.UsableCouponListResponseDto;
 import com.sparta.temueats.coupon.entity.P_coupon;
 import com.sparta.temueats.coupon.repository.CouponRepository;
 import com.sparta.temueats.global.ResponseDto;
+import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import com.sparta.temueats.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CouponService {
@@ -69,6 +69,21 @@ public class CouponService {
         }
 
         return new ResponseDto<>(1, "쿠폰 생성 완료", null);
+    }
+    // 쿠폰 사용
+    public void useCoupon(UUID couponId) {
+
+        P_coupon coupon = couponRepository.findById(couponId).orElse(null);
+        if (coupon == null) {
+            throw new CustomApiException("해당하는 쿠폰이 없습니다");
+        }
+        if (coupon.getStatus()==false) {
+            throw new CustomApiException("이미 사용되거나 만료된 쿠폰입니다");
+        }
+        // 사용 처리
+        coupon.setStatus(false);
+        couponRepository.save(coupon);
+
     }
 
     public ResponseDto getCouponList(HttpServletRequest req) {
