@@ -20,9 +20,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CartService {
     // todo 더미 데이터 싹 수정
-    static final Long USER_ID1 = 1L;
+    static final Long USER_ID1 = 3L;
 
-    static final UUID MENU_ID = UUID.fromString("e95cb701-81b3-4124-9dd6-6b8fd423e787");
+    static final UUID MENU_ID = UUID.fromString("e95cb701-81b3-4124-9dd6-6b8fd423e800");
 
     static final UUID PRE_STORE_ID1 = UUID.randomUUID();
     static final UUID PRE_STORE_ID2 = UUID.randomUUID();
