@@ -55,12 +55,17 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 정보 수정 성공");
     }
 
-    public ResponseDto<List<StoreResDto>> findByNameContaining(String name) {
+    public ResponseDto<List<StoreResDto>> findByNameContaining(String name, HttpServletRequest req) {
+        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
+        if (userOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
+        }
+
         if (name == null || name.trim().isEmpty()) {
             return new ResponseDto<>(FAILURE, "검색어는 필수입니다.");
         }
 
-        List<StoreResDto> stores = storeRepository.findByNameContaining(name);
+        List<StoreResDto> stores = storeRepository.findByNameContaining(name, userOptional.get().getId());
 
         if (stores.isEmpty()) {
             return new ResponseDto<>(SUCCESS, name + "와(과) 일치하는 검색결과가 없습니다.");

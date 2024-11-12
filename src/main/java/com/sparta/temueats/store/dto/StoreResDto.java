@@ -29,7 +29,7 @@ public class StoreResDto {
     private Integer reviewCount;
     private Boolean isFavorite;
 
-    public StoreResDto(P_store store, Double rating, Integer reviewCount) {
+    public StoreResDto(P_store store, Double rating, Integer reviewCount, Boolean isFavorite) {
         storeId = store.getStoreId().toString();
         name = store.getName();
         image = store.getImage();
@@ -43,6 +43,7 @@ public class StoreResDto {
         address = store.getAddress();
         this.rating = rating;
         this.reviewCount = reviewCount;
+        this.isFavorite = isFavorite;
     }
 
     public StoreResDto(P_store store) {

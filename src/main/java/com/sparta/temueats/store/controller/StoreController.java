@@ -34,8 +34,10 @@ public class StoreController {
     }
 
     @GetMapping
-    public ResponseDto<List<StoreResDto>> findByNameContaining(@RequestParam String name) {
-        return storeService.findByNameContaining(name);
+    public ResponseDto<List<StoreResDto>> findByNameContaining(
+            @RequestParam String name,
+            HttpServletRequest req) {
+        return storeService.findByNameContaining(name, req);
     }
 
     @GetMapping("/{storeId}")
