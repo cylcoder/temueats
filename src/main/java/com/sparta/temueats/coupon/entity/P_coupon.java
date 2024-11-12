@@ -36,7 +36,8 @@ public class P_coupon extends BaseEntity {
     private int discountAmount;
 
     @NotNull
-    private boolean status;
+    private Boolean status;
+
 
     @Past
     private LocalDateTime usedAt;
