@@ -65,5 +65,6 @@ public class P_order extends BaseEntity {
         this.cartList = cartList;
         this.customerId = customerId;
         this.ownerId = ownerId;
+
     }
 }
