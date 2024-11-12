@@ -7,6 +7,7 @@ import com.sparta.temueats.menu.dto.MenuUpdateDto;
 import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.menu.repository.MenuRepository;
 import com.sparta.temueats.store.entity.P_store;
+import com.sparta.temueats.store.repository.StoreRepository;
 import com.sparta.temueats.store.service.StoreService;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.service.UserService;
@@ -26,7 +27,7 @@ import static com.sparta.temueats.global.ResponseDto.SUCCESS;
 public class MenuService {
 
     private final MenuRepository menuRepository;
-    private final StoreService storeService;
+    private final StoreRepository storeRepository;
     private final UserService userService;
 
     public ResponseDto<MenuResDto> save(MenuCreateDto menuCreateDto, HttpServletRequest req) {
@@ -35,7 +36,7 @@ public class MenuService {
             return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
         }
 
-        Optional<P_store> storeOptional = storeService.findById(menuCreateDto.getStoreId());
+        Optional<P_store> storeOptional = storeRepository.findById(menuCreateDto.getStoreId());
         if (storeOptional.isEmpty()) {
             return new ResponseDto<>(FAILURE, "유효하지 않은 가게 번호입니다.");
         }

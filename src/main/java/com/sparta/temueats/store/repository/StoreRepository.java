@@ -1,12 +1,16 @@
 package com.sparta.temueats.store.repository;
 
+import com.sparta.temueats.store.dto.StoreDetailResDto;
 import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.entity.P_store;
+import com.sparta.temueats.user.entity.P_user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
