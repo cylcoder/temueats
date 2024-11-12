@@ -32,18 +32,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    static P_menu staticMenu = P_menu.builder()
-            .menuId(UUID.randomUUID())
-            .store(new P_store())
-            .name("딸기 탕후루")
-            .description("맛있는 딸기 탕후루입니다.")
-            .price(3000)
-            .image("img_url")
-            .category(Category.CHINESE)
-            .sellState(SellState.SALE)
-            .signatureYn(true)
-            .build();
-
     static GeometryFactory geometryFactory = new GeometryFactory();
 
     static P_user staticCustomerUser = P_user.builder()
@@ -60,7 +48,7 @@ public class OrderService {
             .address("123층 123호")
             .build();
     static P_user staticOwnerUser = P_user.builder()
-            .id(5L)
+            .id(3L)
             .email("email5@naver.com")
             .password("임시12345")
             .phone("010-5555-5555")
@@ -89,13 +77,18 @@ public class OrderService {
 
         // 2. 가져와서 가격 취합 후 db에 저장
         Long total = 0L;
+        Long ownerId = 0L;
         for (P_cart cart : allBySelect) {
             total += cart.getMenu().getPrice().longValue();
+            ownerId = cart.getMenu().getStore().getUser().getId();
         }
 
         // 3. 쿠폰 있는 지 확인하고 사용
         List<P_coupon> coupons = couponRepository.findAllByOwnerAndStatus(usedUser, true);
-        int discount = coupons.get(0).getDiscountAmount();
+        int discount = 0;
+        if (!coupons.isEmpty()) {
+            discount = coupons.get(0).getDiscountAmount();
+        }
         Long finalTotal = total - discount;
 
         // 4. 저장
@@ -109,7 +102,7 @@ public class OrderService {
                         .cancelYn(false)
                         .cartList(allBySelect)
                         .customerId(usedUser.getId())
-                        .ownerId(staticMenu.getStore().getUser().getId())
+                        .ownerId(ownerId)
                 .build());
 
     }

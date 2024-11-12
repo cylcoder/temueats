@@ -44,7 +44,21 @@ public class CartService {
             .latLng(geometryFactory.createPoint(new Coordinate(123, 123)))
             .address("123층 123호")
             .build();
-    static P_user usedUser = staticCustomerUser;
+
+    static P_user staticOwnerUser = P_user.builder()
+            .id(3L)
+            .email("email5@naver.com")
+            .password("임시12345")
+            .phone("010-5555-5555")
+            .nickname("네임5")
+            .birth(Date.valueOf("2002-12-26"))
+            .use_yn(true)
+            .role(UserRoleEnum.OWNER)
+            .imageProfile("img_url")
+            .latLng(geometryFactory.createPoint(new Coordinate(55, 55)))
+            .address("555층 555호")
+            .build();
+    static P_user usedUser = staticOwnerUser;
 
     private final CartRepository cartRepository;
     private final MenuRepository menuRepository;
