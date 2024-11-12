@@ -2,11 +2,14 @@ package com.sparta.temueats.order.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.order.dto.OrderCreateRequestDto;
+import com.sparta.temueats.order.dto.OrderGetListResponseDto;
 import com.sparta.temueats.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,13 +38,18 @@ public class OrderController {
     }
 
     // 주문 목록 조회 (Customer)
-//     @GetMapping("/orders/customer")
-//    public ResponseDto<?> orderGetCustomerResponseListDto() {
-//        orderService.getCustomerOrders();
-//     }
+     @GetMapping("/orders/customer")
+    public ResponseDto<?> orderGetCustomerResponseListDto() {
+         List<OrderGetListResponseDto> customerOrders = orderService.getCustomerOrders();
+         return new ResponseDto<>(1, "주문 목록 조회에 성공했습니다.", customerOrders);
+     }
 
     // 주문 목록 조회 (Owner)
-    // @GetMapping("/orders/Owner")
+     @GetMapping("/orders/owner")
+    public ResponseDto<?> orderGetOwnerResponseListDto() {
+        List<OrderGetListResponseDto> ownerOrders = orderService.getOwnerOrders();
+        return new ResponseDto<>(1, "주문 목록 조회에 성공했습니다.", ownerOrders);
+     }
 
     // 주문 상세 조회 (Customer)
 

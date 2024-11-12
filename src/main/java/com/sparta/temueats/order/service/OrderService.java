@@ -4,12 +4,14 @@ import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.order.dto.OrderCreateRequestDto;
+import com.sparta.temueats.order.dto.OrderGetListResponseDto;
 import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +22,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
 
-    static final Long USER_ID_CUSTOMER = 1L;
+    static final Long USER_ID_CUSTOMER = 3L;
     private final Long USER_ID_OWNER = 2L;
 
     private final Long AMOUNT = 9000L;
@@ -37,7 +39,7 @@ public class OrderService {
         // 2. 가져와서 가격 취합 후 db에 저장
         Long total = 0L;
         for (P_cart cart : allBySelect) {
-//            amount += cart.getMenu().getPrice(); ???
+//            amount += cart.getMenu().getPrice();
             total += AMOUNT; // 임시
         }
 
@@ -62,7 +64,7 @@ public class OrderService {
 
     public void createTakeOutOrders(OrderCreateRequestDto orderCreateRequestDto, Long userId) {
         // 1. 주문 생성 시 장바구니에서 선택된 물품들 가져오기
-        List<P_cart> allBySelect = cartRepository.findAllBySelectAndUserId(USER_ID_CUSTOMER);
+        List<P_cart> allBySelect = cartRepository.findAllBySelectAndUserId(USER_ID_OWNER);
 
         if (allBySelect.isEmpty()) {
             throw new CustomApiException("장바구니에서 주문할 메뉴를 하나 이상 선택해주세요.");
@@ -70,6 +72,7 @@ public class OrderService {
 
         // 2. 주인이 금액 입력 (쿠폰 사용은 안됨)
         Long finalTotal = AMOUNT;
+
 
         // 3. 저장
         orderRepository.save(P_order.builder()
@@ -86,6 +89,27 @@ public class OrderService {
                 .build());
     }
 
-//    public List<OrderCustomerResponseDto> getCustomerOrders() {
-//    }
+    public List<OrderGetListResponseDto> getCustomerOrders() {
+        List<P_order> orderList = orderRepository.findAllByCustomerId(USER_ID_CUSTOMER);
+        List<OrderGetListResponseDto> responseDtoList = new ArrayList<>();
+
+        for (P_order order : orderList) {
+            responseDtoList.add(new OrderGetListResponseDto(order));
+        }
+
+        return responseDtoList;
+    }
+
+    public List<OrderGetListResponseDto> getOwnerOrders() {
+        List<P_order> orderList = orderRepository.findAllByOwnerId(USER_ID_OWNER);
+        List<OrderGetListResponseDto> responseDtoList = new ArrayList<>();
+
+        for (P_order order : orderList) {
+            responseDtoList.add(new OrderGetListResponseDto(order));
+        }
+
+        return responseDtoList;
+    }
+
+
 }
