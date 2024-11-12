@@ -11,7 +11,9 @@ import com.sparta.temueats.user.repository.UserRepository;
 import com.sparta.temueats.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -47,11 +49,10 @@ public class ReviewService {
     }
 
     public MyReviewReadResponseList getMyReviews(Long userId) {
-
-        Long newUser=0L;
         //userService로 유저정보 가져오기
-        P_user user=userService.getUserById(newUser);
+        P_user user=userService.getUserById(userId);
         String nickname=user.getNickname();
+
         //userReview목록조회
         List<P_review> myReviewList =reviewRepository.findByUserId(userId);
         List<MyReviewResponse> myReviewResponseList = new ArrayList<>();
@@ -101,6 +102,23 @@ public class ReviewService {
                 .code(1)
                 .message("가게 리뷰목록 조회 성공")
                 .build();
+    }
+
+    @Transactional
+    public DeleteReviewResponse deleteReviews(UUID reviewId,Long userId) {
+        //리뷰 불러오기
+        P_review review=reviewRepository.findById(reviewId)
+                .orElseThrow(()->new IllegalArgumentException("리뷰가 존재하지 않습니다."));
+       //user일치 확인
+        if(!review.getUser().getId().equals(userId)){
+            return new DeleteReviewResponse(-1,"권한이 없습니다.");
+        }
+
+        review.changeUseYn();
+        reviewRepository.save(review);
+
+        return new DeleteReviewResponse(1,"리뷰 삭제가 완료 되었습니다.");
+
     }
 }
 
