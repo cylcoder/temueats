@@ -1,6 +1,7 @@
 package com.sparta.temueats.coupon.entity;
 
 import com.sparta.temueats.global.BaseEntity;
+import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -38,7 +39,6 @@ public class P_coupon extends BaseEntity {
     @NotNull
     private Boolean status;
 
-
     @Past
     private LocalDateTime usedAt;
 
@@ -52,4 +52,8 @@ public class P_coupon extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "issuer_id", nullable = false)  // 발행자
     private P_user issuer;
+
+    @OneToOne
+    @JoinColumn(name = "order_id", unique = true)  // 하나의 주문과만 연결
+    private P_order order;
 }
