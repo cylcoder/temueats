@@ -1,6 +1,7 @@
 package com.sparta.temueats.order.entity;
 
 import com.sparta.temueats.cart.entity.P_cart;
+import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Table(name = "P_ORDER")
-public class P_order {
+public class P_order extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
