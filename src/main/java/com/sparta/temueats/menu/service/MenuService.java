@@ -3,6 +3,7 @@ package com.sparta.temueats.menu.service;
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.menu.dto.MenuCreateDto;
 import com.sparta.temueats.menu.dto.MenuResDto;
+import com.sparta.temueats.menu.dto.MenuUpdateDto;
 import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.menu.repository.MenuRepository;
 import com.sparta.temueats.store.entity.P_store;
@@ -28,7 +29,6 @@ public class MenuService {
     private final StoreService storeService;
     private final UserService userService;
 
-
     public ResponseDto<MenuResDto> save(MenuCreateDto menuCreateDto, HttpServletRequest req) {
         Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
         if (userOptional.isEmpty()) {
@@ -48,6 +48,21 @@ public class MenuService {
         menu.setCreatedBy(userOptional.get().getNickname());
         menuRepository.save(menu);
         return new ResponseDto<>(SUCCESS,"메뉴 등록 성공", new MenuResDto(menu));
+    }
+
+    public ResponseDto<MenuResDto> update(MenuUpdateDto menuUpdateDto, HttpServletRequest req) {
+        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
+        if (userOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
+        }
+
+        Optional<P_menu> menuOptional = menuRepository.findById(menuUpdateDto.getMenuId());
+        if (menuOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 메뉴 번호입니다.");
+        }
+
+        P_menu menu = menuOptional.get().update(menuUpdateDto, userOptional.get());
+        return new ResponseDto<>(SUCCESS,"메뉴 수정 성공", new MenuResDto(menu));
     }
 
 }
