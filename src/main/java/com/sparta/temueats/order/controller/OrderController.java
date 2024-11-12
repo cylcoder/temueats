@@ -2,7 +2,7 @@ package com.sparta.temueats.order.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.order.dto.OrderCreateRequestDto;
-import com.sparta.temueats.order.dto.OrderGetListResponseDto;
+import com.sparta.temueats.order.dto.OrderGetResponseDto;
 import com.sparta.temueats.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,18 +41,31 @@ public class OrderController {
     // 주문 목록 조회 (Customer)
      @GetMapping("/orders/customer")
     public ResponseDto<?> orderGetCustomerResponseListDto() {
-         List<OrderGetListResponseDto> customerOrders = orderService.getCustomerOrders();
+         List<OrderGetResponseDto> customerOrders = orderService.getCustomerOrders();
          return new ResponseDto<>(1, "주문 목록 조회에 성공했습니다.", customerOrders);
      }
 
     // 주문 목록 조회 (Owner)
      @GetMapping("/orders/owner")
     public ResponseDto<?> orderGetOwnerResponseListDto() {
-        List<OrderGetListResponseDto> ownerOrders = orderService.getOwnerOrders();
+        List<OrderGetResponseDto> ownerOrders = orderService.getOwnerOrders();
         return new ResponseDto<>(1, "주문 목록 조회에 성공했습니다.", ownerOrders);
      }
 
     // 주문 상세 조회 (Customer)
+    @GetMapping("/orders/customer/{orderId}")
+    public ResponseDto<?> orderGetCusomterResponseDto(@PathVariable UUID orderId) {
+        OrderGetResponseDto customerOrder = orderService.getOrder(orderId);
+        return new ResponseDto<>(1, "주문 상세 조회에 성공했습니다.", customerOrder);
+    }
+
+    // 주문 상세 조회 (Owner)
+    @GetMapping("/orders/owner/{orderId}")
+    public ResponseDto<?> orderGetOwnerResponseDto(@PathVariable UUID orderId) {
+        OrderGetResponseDto ownerOrder = orderService.getOrder(orderId);
+        return new ResponseDto<>(1, "주문 상세 조회에 성공했습니다.", ownerOrder);
+    }
+
 
     // 주문 취소 (Customer)
 }
