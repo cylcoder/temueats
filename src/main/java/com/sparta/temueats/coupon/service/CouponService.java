@@ -12,6 +12,7 @@ import com.sparta.temueats.user.entity.UserRoleEnum;
 import com.sparta.temueats.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ public class CouponService {
         this.userService = userService;
     }
 
+    // 쿠폰 발행
     public ResponseDto createCoupon(CouponRequestDto couponRequestDto, HttpServletRequest req) {
 
         // 사용자 검증
@@ -71,6 +73,7 @@ public class CouponService {
         return new ResponseDto<>(1, "쿠폰 생성 완료", null);
     }
 
+    // 쿠폰 리스트 조회
     public ResponseDto getCouponList(HttpServletRequest req) {
         // 사용자 조회
         P_user user = userService.validateTokenAndGetUser(req).orElse(null);
@@ -90,5 +93,16 @@ public class CouponService {
 
         return new ResponseDto<>(1, "쿠폰리스트", new CouponListResponseDto(usable, unusable));
 
+    }
+
+    // 사용기한 지난 쿠폰 만료 처리
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void expireCoupon() {
+
+        List<P_coupon> expiredCoupons = couponRepository.findAllByStatusAndExpiredAtBefore(true, LocalDate.now());
+
+        expiredCoupons.forEach(coupon -> coupon.setStatus(false));
+
+        couponRepository.saveAll(expiredCoupons);
     }
 }
