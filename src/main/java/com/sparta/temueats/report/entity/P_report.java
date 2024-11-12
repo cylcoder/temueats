@@ -1,5 +1,6 @@
 package com.sparta.temueats.report.entity;
 
+import com.sparta.temueats.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Table(name = "P_REPORT")
-public class P_report {
+public class P_report extends BaseEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID reportId;
