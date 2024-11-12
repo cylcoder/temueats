@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static com.sparta.temueats.global.ResponseDto.FAILURE;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/stores")
@@ -35,10 +37,22 @@ public class StoreController {
 
     @GetMapping
     public ResponseDto<List<StoreResDto>> findByNameContaining(
-            @RequestParam String name,
+            @RequestParam(required = false) String store,
+            @RequestParam(required = false) String menu,
             HttpServletRequest req) {
-        return storeService.findByNameContaining(name, req);
+
+        if (store != null && !store.trim().isEmpty()) {
+            return storeService.findByStoreNameContaining(store, req);
+        }
+
+        if (menu != null && !menu.trim().isEmpty()) {
+            return storeService.findByMenuNameContaining(menu, req);
+        }
+
+        return new ResponseDto<>(FAILURE, "검색어는 필수입니다.");
     }
+
+
 
     @GetMapping("/{storeId}")
     public ResponseDto<StoreDetailResDto> findDetailById(@PathVariable UUID storeId, HttpServletRequest req) {
