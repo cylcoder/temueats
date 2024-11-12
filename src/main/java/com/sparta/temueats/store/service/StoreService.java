@@ -2,7 +2,7 @@ package com.sparta.temueats.store.service;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.global.ex.CustomApiException;
-import com.sparta.temueats.store.dto.AddFavStoeRequestDto;
+import com.sparta.temueats.store.dto.AddFavStoreRequestDto;
 import com.sparta.temueats.store.dto.FavStoreListResponseDto;
 import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +46,7 @@ public class StoreService {
     }
 
     // 가게 즐겨찾기 추가/삭제
-    public ResponseDto addFavStore(AddFavStoeRequestDto requestDto, HttpServletRequest req) {
+    public ResponseDto addFavStore(AddFavStoreRequestDto requestDto, HttpServletRequest req) {
 
         // 사용자 검증
         P_user user = userService.validateTokenAndGetUser(req).orElse(null);

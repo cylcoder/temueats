@@ -2,11 +2,10 @@ package com.sparta.temueats.store.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.global.ex.CustomApiException;
-import com.sparta.temueats.store.dto.AddFavStoeRequestDto;
+import com.sparta.temueats.store.dto.AddFavStoreRequestDto;
 import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
 import com.sparta.temueats.store.service.StoreService;
-import com.sparta.temueats.store.util.UserUtils;
 import com.sparta.temueats.store.util.ValidUtils;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,7 +44,7 @@ public class StoreController {
 
     // 즐겨찾기 추가, 삭제
     @PostMapping("/fav")
-    public ResponseDto favStore(@RequestBody AddFavStoeRequestDto requestDto, HttpServletRequest req) {
+    public ResponseDto favStore(@RequestBody AddFavStoreRequestDto requestDto, HttpServletRequest req) {
 
         return storeService.addFavStore(requestDto, req);
     }

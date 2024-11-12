@@ -1,6 +1,7 @@
 package com.sparta.temueats.store.entity;
 
 
+import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class P_favStore {
+public class P_favStore extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
