@@ -42,6 +42,4 @@ public class P_order extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private P_cart cart;
-
-
 }
