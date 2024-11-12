@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,8 @@ public class CouponService {
         String name = couponRequestDto.getName();
         int quantity = couponRequestDto.getQuantity();
 
+        // 쿠폰 리스트 생성
+        List<P_coupon> coupons = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
             P_coupon coupon = P_coupon.builder()
                     .discountAmount(discountAmount)
@@ -68,10 +71,11 @@ public class CouponService {
                     .owner(owner)
                     .status(true)
                     .build();
-
-            // 쿠폰을 DB에 저장
-            couponRepository.save(coupon);
+            coupons.add(coupon);
         }
+
+        // 쿠폰 리스트를 한 번에 저장
+        couponRepository.saveAll(coupons);
 
         return new ResponseDto<>(1, "쿠폰 생성 완료", null);
     }
