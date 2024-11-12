@@ -5,6 +5,7 @@ import com.sparta.temueats.store.entity.P_store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ReviewRepository extends JpaRepository<P_review, UUID> {
@@ -13,5 +14,8 @@ public interface ReviewRepository extends JpaRepository<P_review, UUID> {
 
     @Query("SELECT COUNT(r) FROM P_review r WHERE r.store.storeId = :storeId AND r.useYn = true")
     Integer countReviewsByStoreId(UUID storeId);
+
+    @Query("SELECT r FROM P_review r WHERE r.store.storeId = :storeId AND r.useYn = true")
+    List<P_review> findByStoreId(UUID storeId);
 
 }

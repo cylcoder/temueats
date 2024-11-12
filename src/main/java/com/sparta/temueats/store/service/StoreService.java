@@ -2,9 +2,11 @@ package com.sparta.temueats.store.service;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.menu.dto.MenuResDto;
-import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.menu.repository.MenuRepository;
 import com.sparta.temueats.menu.service.MenuService;
+import com.sparta.temueats.rating.repository.RatingRepository;
+import com.sparta.temueats.review.dto.response.ReviewResDto;
+import com.sparta.temueats.review.entity.P_review;
 import com.sparta.temueats.review.repository.ReviewRepository;
 import com.sparta.temueats.store.dto.*;
 import com.sparta.temueats.store.entity.P_favStore;
@@ -35,7 +37,7 @@ public class StoreService {
     private final UserService userService;
     private final ReviewRepository reviewRepository;
     private final MenuRepository menuRepository;
-    private final MenuService menuService;
+    private final RatingRepository ratingRepository;
 
     public ResponseDto<Object> update(StoreUpdateDto storeUpdateDto, HttpServletRequest req) {
         Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
@@ -86,10 +88,12 @@ public class StoreService {
         P_store store = storeOptional.get();
 
         StoreDetailResDto storeDetailResDto = new StoreDetailResDto(store);
-        storeDetailResDto.setReviewCount(reviewRepository.countReviewsByStoreId(storeId));
+        List<P_review> reviews = reviewRepository.findByStoreId(storeId);
+        storeDetailResDto.setReviewCount(reviews.size());
         storeDetailResDto.setIsFavorite(favStoreRepository.findByUserAndStore(user, store).isPresent());
         storeDetailResDto.setMenu(menuRepository.findByStore(store).stream().map(MenuResDto::new).toList());
-
+        storeDetailResDto.setReviews(reviews.stream().map(ReviewResDto::new).toList());
+        storeDetailResDto.setRating(ratingRepository.findByStoreAndVisibleYn(store, true).getScore());
         return new ResponseDto<>(SUCCESS, "가게 상세 조회 성공", storeDetailResDto);
     }
 

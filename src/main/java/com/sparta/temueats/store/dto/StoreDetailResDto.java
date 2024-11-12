@@ -2,6 +2,7 @@ package com.sparta.temueats.store.dto;
 
 import com.sparta.temueats.menu.dto.MenuResDto;
 import com.sparta.temueats.menu.entity.Category;
+import com.sparta.temueats.review.dto.response.ReviewResDto;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.StoreState;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ public class StoreDetailResDto {
     private Integer reviewCount;
     private Boolean isFavorite;
     private List<MenuResDto> menu;
+    private List<ReviewResDto> reviews;
 
     public StoreDetailResDto(P_store store) {
         storeId = store.getStoreId().toString();
