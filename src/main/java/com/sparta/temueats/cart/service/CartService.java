@@ -6,11 +6,22 @@ import com.sparta.temueats.cart.dto.CartGetListResponseDto;
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.global.ex.CustomApiException;
+import com.sparta.temueats.menu.entity.Category;
+import com.sparta.temueats.menu.entity.P_menu;
+import com.sparta.temueats.store.entity.P_store;
+import com.sparta.temueats.store.entity.SellState;
+import com.sparta.temueats.user.entity.P_user;
+import com.sparta.temueats.user.entity.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.annotation.Before;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,30 +31,61 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CartService {
     // todo 더미 데이터 싹 수정
-    static final Long USER_ID1 = 3L;
+    static final Long USER_ID = 1L;
 
-    static final UUID MENU_ID = UUID.fromString("e95cb701-81b3-4124-9dd6-6b8fd423e800");
+    static P_menu staticMenu = P_menu.builder()
+            .menuId(UUID.randomUUID())
+            .store(new P_store())
+            .name("딸기 탕후루")
+            .description("맛있는 딸기 탕후루입니다.")
+            .price(3000)
+            .image("img_url")
+            .category(Category.CHINESE)
+            .sellState(SellState.SALE)
+            .signatureYn(true)
+            .build();
 
-    static final UUID PRE_STORE_ID1 = UUID.randomUUID();
-    static final UUID PRE_STORE_ID2 = UUID.randomUUID();
+    static GeometryFactory geometryFactory = new GeometryFactory();
+    static P_user staticUser = P_user.builder()
+            .id(USER_ID)
+            .email("email@naver.com")
+            .password("임시1234")
+            .phone("010-1234-5678")
+            .nickname("네임")
+            .birth(Date.valueOf("20021226"))
+            .use_yn(true)
+            .role(UserRoleEnum.CUSTOMER)
+            .imageProfile("img_url")
+            .latLng(geometryFactory.createPoint(new Coordinate(123, 123)))
+            .address("123층 123호")
+            .build();
 
     private final CartRepository cartRepository;
 
-
-    public CartUpdateResponseDto createCarts(CartUpdateRequestDto cartUpdateRequestDto, Long userId) {
+    public CartUpdateResponseDto createCarts(CartUpdateRequestDto cartUpdateRequestDto, Long user) {
 
         // 1. 장바구니가 비어 있으면 바로 담기 & 바로 리턴
+        List<P_cart> allByUserId = cartRepository.findAllByUserId(staticUser.getId());
+        if (allByUserId.isEmpty()) {
+            P_cart cart3 = cartRepository.save(P_cart.builder()
+                    .quantity(cartUpdateRequestDto.getQuantity())
+                    .selectYn(false)
+                    .user(staticUser)
+                    .menu(staticMenu)
+                    .deletedYn(false)
+                    .build());
+            return new CartUpdateResponseDto(cart3);
+        }
 
         // 2-1. 장바구니에 같은 메뉴 id가 있는 경우
-        boolean isPresentMenu = cartRepository.findByMenuIdByUserId(MENU_ID, USER_ID1).isPresent();
-        if (isPresentMenu) {
+        P_cart cart = cartRepository.findByMenuIdByUserId(staticMenu.getMenuId(), staticUser.getId());
+        if (cart != null) {
             // 이미 같은 메뉴가 있다는 예외
             throw new CustomApiException("이미 해당 메뉴가 장바구니에 존재합니다.");
         }
 
         // 2-2. 담겨져 있는 메뉴의 가게 id와 새로 담는 메뉴의 가게 id가 다를 경우 예외
-        // todo cart2.getMenu().getStore() 탐색 로직 추가해서 storeId 구해야 함.
-        if (PRE_STORE_ID1.equals(PRE_STORE_ID2)) {
+        if (cart.getMenu().getStore().getStoreId().equals(staticMenu.getStore().getStoreId())) {
             throw new CustomApiException("서로 다른 가게 메뉴를 함께 담을 수 없습니다.");
         }
 
@@ -51,15 +93,15 @@ public class CartService {
         P_cart cart3 = cartRepository.save(P_cart.builder()
                         .quantity(cartUpdateRequestDto.getQuantity())
                         .selectYn(false)
-                        .userId(USER_ID1)
-                        .menuId(MENU_ID)
+                        .user(staticUser)
+                         .menu(staticMenu)
                         .deletedYn(false)
                 .build());
         return new CartUpdateResponseDto(cart3);
     }
 
     public List<CartGetListResponseDto> getCarts() {
-        List<P_cart> cartList = cartRepository.findAllByUserId(USER_ID1);
+        List<P_cart> cartList = cartRepository.findAllByUserId(USER_ID);
         List<CartGetListResponseDto> responseDtoList = new ArrayList<>();
 
         for (P_cart cart : cartList) {

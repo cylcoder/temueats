@@ -32,19 +32,15 @@ public class P_cart extends BaseEntity {
     @Column(nullable = false)
     private boolean selectYn;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private P_user user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private P_user user;
 
-    @Column(name = "user_id")
-    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id_1")
+    @JoinColumn(name = "menu_id")
     private P_menu menu;
 
-    @Column(name = "menu_id")
-    private UUID menuId;
 
     @Column(nullable = false)
     private boolean deletedYn;
@@ -54,11 +50,11 @@ public class P_cart extends BaseEntity {
     private P_order order;
 
     @Builder
-    public P_cart(Long quantity, boolean selectYn, Long userId, UUID menuId, boolean deletedYn) {
+    public P_cart(Long quantity, boolean selectYn, P_user user, P_menu menu, boolean deletedYn) {
         this.quantity = quantity;
         this.selectYn = selectYn;
-        this.userId = userId;
-        this.menuId = menuId;
+        this.user = user;
+        this.menu = menu;
         this.deletedYn = deletedYn;
     }
 

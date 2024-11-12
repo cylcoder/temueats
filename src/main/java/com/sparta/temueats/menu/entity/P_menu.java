@@ -48,4 +48,15 @@ public class P_menu extends BaseEntity {
     @Column(nullable = false)
     private Boolean signatureYn;
 
+    @Builder
+    public P_menu(P_store store, String name, String description, Integer price, String image, Category category, SellState sellState, Boolean signatureYn) {
+        this.store = store;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.category = category;
+        this.sellState = sellState;
+        this.signatureYn = signatureYn;
+    }
 }
