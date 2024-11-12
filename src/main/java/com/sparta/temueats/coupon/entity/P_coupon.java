@@ -36,7 +36,8 @@ public class P_coupon extends BaseEntity {
     private int discountAmount;
 
     @NotNull
-    private boolean status; // true: 사용가능, false: 사용불가(만료, 사용됨)
+    private Boolean status;
+
 
     @Past
     private LocalDateTime usedAt;
