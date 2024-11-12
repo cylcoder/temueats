@@ -4,6 +4,7 @@ import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.user.dto.CreateUserRequestDto;
 import com.sparta.temueats.user.dto.LoginRequestDto;
 import com.sparta.temueats.user.dto.UpdateMypageRequestDto;
+import com.sparta.temueats.user.dto.UpdateRoleRequestDto;
 import com.sparta.temueats.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -50,6 +51,13 @@ public class UserController {
     public ResponseDto updateMypage(@RequestBody UpdateMypageRequestDto request, HttpServletRequest req) {
 
         return userService.updateMypage(request, req);
+    }
+
+    // 권한 수정
+    @PutMapping("/manage")
+    public ResponseDto updateRole(@RequestBody UpdateRoleRequestDto request, HttpServletRequest req) {
+
+        return userService.updateRole(request, req);
     }
 
 }
