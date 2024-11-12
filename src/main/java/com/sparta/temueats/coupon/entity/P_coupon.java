@@ -38,6 +38,7 @@ public class P_coupon extends BaseEntity {
     @NotNull
     private Boolean status;
 
+
     @Past
     private LocalDateTime usedAt;
 
