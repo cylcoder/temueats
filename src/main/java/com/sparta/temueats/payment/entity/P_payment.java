@@ -1,6 +1,7 @@
 package com.sparta.temueats.payment.entity;
 
 
+import com.sparta.temueats.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Table(name = "P_PAYMENT")
-public class P_payment {
+public class P_payment extends BaseEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID paymentID;
