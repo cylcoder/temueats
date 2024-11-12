@@ -6,7 +6,6 @@ import com.sparta.temueats.store.dto.StoreReqResDto;
 import com.sparta.temueats.store.dto.StoreReqUpdateDto;
 import com.sparta.temueats.store.service.StoreReqService;
 import com.sparta.temueats.store.util.ValidUtils;
-import com.sparta.temueats.user.entity.P_user;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
