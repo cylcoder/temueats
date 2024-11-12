@@ -1,4 +1,4 @@
-package com.sparta.temueats.user.Util;
+package com.sparta.temueats.user.util;
 
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -107,7 +106,6 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
-
     // 쿠키에서 토큰 추출
     public String getTokenFromCookies(HttpServletRequest req) {
         if (req.getCookies() != null) {

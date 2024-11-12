@@ -2,7 +2,7 @@ package com.sparta.temueats.user.service;
 
 
 import com.sparta.temueats.global.ResponseDto;
-import com.sparta.temueats.user.Util.JwtUtil;
+import com.sparta.temueats.user.util.JwtUtil;
 import com.sparta.temueats.user.dto.*;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.entity.UserRoleEnum;
@@ -169,6 +169,34 @@ public class UserService {
 
     }
 
+    public P_user findUserById(Long owner) {
+        return userRepository.findById(owner).orElse(null);
+    }
+
+    public ResponseDto updateRole(UpdateRoleRequestDto request, HttpServletRequest req) {
+
+        // 요청자 검증
+        P_user user = validateTokenAndGetUser(req).orElse(null);
+        if (user == null) {
+            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
+        }
+
+        // 요청자권한 검증
+        if (user.getRole().equals(UserRoleEnum.CUSTOMER) || user.getRole().equals(UserRoleEnum.OWNER)) {
+            return new ResponseDto<>(-1, "권한이 없는 사용자입니다", null);
+        }
+
+        // 수신자 검증
+        P_user targetUser = findUserById(request.getId());
+        if (targetUser == null) {
+            return new ResponseDto<>(-1, "존재하지 않는 사용자입니다", null);
+        }
+        // 권한 부여
+        targetUser.setRole(request.getRole());
+        userRepository.save(targetUser);
+        return new ResponseDto<>(1, "권한 변경 완료", null);
+    }
+
     public Optional<P_user> validateTokenAndGetUser(HttpServletRequest req) {
 
         String token = jwtUtil.getTokenFromCookies(req);
@@ -200,33 +228,5 @@ public class UserService {
             logger.error("사용자 검증 중 오류 발생", e);
             return Optional.empty();
         }
-    }
-
-    public P_user getUserById(Long owner) {
-        return userRepository.findById(owner).orElse(null);
-    }
-
-    public ResponseDto updateRole(UpdateRoleRequestDto request, HttpServletRequest req) {
-
-        // 요청자 검증
-        P_user user = validateTokenAndGetUser(req).orElse(null);
-        if (user == null) {
-            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
-        }
-
-        // 요청자권한 검증
-        if (user.getRole().equals(UserRoleEnum.CUSTOMER) || user.getRole().equals(UserRoleEnum.OWNER)) {
-            return new ResponseDto<>(-1, "권한이 없는 사용자입니다", null);
-        }
-
-        // 수신자 검증
-        P_user targetUser = getUserById(request.getId());
-        if (targetUser == null) {
-            return new ResponseDto<>(-1, "존재하지 않는 사용자입니다", null);
-        }
-        // 권한 부여
-        targetUser.setRole(request.getRole());
-        userRepository.save(targetUser);
-        return new ResponseDto<>(1, "권한 변경 완료", null);
     }
 }

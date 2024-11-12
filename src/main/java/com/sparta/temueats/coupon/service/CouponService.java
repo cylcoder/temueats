@@ -45,7 +45,7 @@ public class CouponService {
             return new ResponseDto<>(-1, "권한이 없는 사용자입니다", null);
         }
         // 수신자 검증
-        P_user owner = userService.getUserById(couponRequestDto.getOwner());
+        P_user owner = userService.findUserById(couponRequestDto.getOwner());
         if (owner == null) {
             return new ResponseDto<>(-1, "유효하지 않은 수신자입니다", null);
         }
