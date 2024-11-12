@@ -6,8 +6,6 @@ import com.sparta.temueats.menu.dto.MenuCreateWithImageDto;
 import com.sparta.temueats.menu.dto.MenuResDto;
 import com.sparta.temueats.menu.dto.MenuUpdateDto;
 import com.sparta.temueats.menu.service.MenuService;
-import com.sparta.temueats.store.dto.StoreReqCreateWithImageDto;
-import com.sparta.temueats.store.dto.StoreReqResDto;
 import com.sparta.temueats.store.util.ValidUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
