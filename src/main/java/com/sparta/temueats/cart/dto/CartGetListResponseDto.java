@@ -13,7 +13,7 @@ public class CartGetListResponseDto {
     private UUID cartId;
     private UUID menuId;
     private Long quantity;
-    private boolean paid_yn;
+    private boolean selectYn;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
@@ -26,14 +26,13 @@ public class CartGetListResponseDto {
         this.cartId = pCart.getCartId();
         this.menuId = pCart.getMenuId();
         this.quantity = pCart.getQuantity();
-        this.paid_yn = pCart.isPaidYn();
-        // todo BaseEntity pull 받으면 수정할 예정
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//        this.deletedAt = deletedAt;
-//        this.createdBy = createdBy;
-//        this.updatedBy = updatedBy;
-//        this.deletedBy = deletedBy;
-//        this.deletedYn = deletedYn;
+        this.selectYn = pCart.isSelectYn();
+        this.createdAt = pCart.getCreatedAt();
+        this.updatedAt = pCart.getUpdatedAt();
+        this.deletedAt = pCart.getDeletedAt();
+        this.createdBy = pCart.getCreatedBy();
+        this.updatedBy = pCart.getUpdatedBy();
+        this.deletedBy = pCart.getDeletedBy();
+        this.deletedYn = pCart.getDeletedYn();
     }
 }
