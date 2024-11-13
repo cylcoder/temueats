@@ -4,6 +4,7 @@ import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.coupon.entity.P_coupon;
 import com.sparta.temueats.coupon.repository.CouponRepository;
+import com.sparta.temueats.coupon.service.CouponService;
 import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.menu.entity.P_menu;
@@ -66,6 +67,7 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final CouponRepository couponRepository;
     private final UserRepository userRepository;
+    private final CouponService couponService;
 
     public void createDeliveryOrders(DeliveryOrderCreateRequestDto deliveryOrderCreateRequestDto, Long user) {
         // 1. 주문 생성 시 장바구니에서 선택된 물품들 가져오기
@@ -83,33 +85,47 @@ public class OrderService {
             ownerId = cart.getMenu().getStore().getUser().getId();
         }
 
-        // 3. 쿠폰 있는 지 확인하고 사용
-        List<P_coupon> coupons = couponRepository.findAllByOwnerAndStatus(usedUser, true);
-        int discount = 0;
-        if (!coupons.isEmpty()) {
-            discount = coupons.get(0).getDiscountAmount();
-        }
-        Long finalTotal = total - discount;
+        // 3. 주문 객체 생성 및 저장
+        P_order order = P_order.builder()
+                .orderUId(UUID.randomUUID())
+                .amount(total)
+                .IsDelivery(true)
+                .orderState(OrderState.STANDBY)
+                .discountPrice(0L)
+                .customerRequest(deliveryOrderCreateRequestDto.getCustomerRequest())
+                .cancelYn(false)
+                .cartList(allBySelect)
+                .customerId(usedUser.getId())
+                .ownerId(ownerId)
+                .build();
 
-        // 4. 저장
-        orderRepository.save(P_order.builder()
-                        .orderUId(UUID.randomUUID())
-                        .amount(finalTotal)
-                        .IsDelivery(true)
-                        .orderState(OrderState.STANDBY)
-                        .discountPrice((long) discount)
-                        .customerRequest(deliveryOrderCreateRequestDto.getCustomerRequest())
-                        .cancelYn(false)
-                        .cartList(allBySelect)
-                        .customerId(usedUser.getId())
-                        .ownerId(ownerId)
-                .build());
+        order = orderRepository.save(order);
+
+
+        // 4. 쿠폰 있는 지 확인하고 사용
+        List<P_coupon> coupons = couponRepository.findAllByOwnerAndStatus(usedUser, true);
+
+        if (!coupons.isEmpty()) {
+            P_coupon coupon = coupons.get(0);
+            int discount = coupon.getDiscountAmount();
+            Long finalTotal = total - discount;
+
+            couponService.useCoupon(coupon.getId(), order);
+
+            // 4-1 쿠폰 할인 금액 및 최종 금액을 적용하여 다시 저장
+            order.updateDiscountPrice(discount);
+            order.updateAmount(finalTotal);
+
+        }
+
+
 
     }
 
     public void createTakeOutOrders(TakeOutOrderCreateRequestDto takeOutOrderCreateRequestDto, Long user) {
         // 1. 주문 생성 시 장바구니에서 선택된 물품들 가져오기
         List<P_cart> allBySelect = cartRepository.findAllBySelectAndUserId(usedUser.getId());
+
 
         if (allBySelect.isEmpty()) {
             throw new CustomApiException("장바구니에서 주문할 메뉴를 하나 이상 선택해주세요.");

@@ -67,4 +67,12 @@ public class P_order extends BaseEntity {
         this.ownerId = ownerId;
 
     }
+
+    public void updateDiscountPrice(int discount) {
+        this.discountPrice = (long) discount;
+    }
+
+    public void updateAmount(Long finalTotal) {
+        this.amount = finalTotal;
+    }
 }
