@@ -2,7 +2,7 @@ package com.sparta.temueats.review.controller;
 
 
 import com.sparta.temueats.global.ResponseDto;
-import com.sparta.temueats.review.dto.request.DeleteCommnetRequest;
+import com.sparta.temueats.review.dto.request.DeleteCommentRequest;
 import com.sparta.temueats.review.dto.request.CreateCommentRequest;
 import com.sparta.temueats.review.dto.request.DeleteCommentResponse;
 import com.sparta.temueats.review.dto.response.CreateCommentResponse;
@@ -27,8 +27,8 @@ public class ReviewCommentController {
 
     @DeleteMapping("/{review_id}")
     public ResponseDto<DeleteCommentResponse> deleteComment(@PathVariable UUID review_id,
-                                                            @RequestBody DeleteCommnetRequest deleteCommnetRequest){
-            DeleteCommentResponse deleteCommentResponse=reviewCommentService.deleteComment(review_id,deleteCommnetRequest);
+                                                            @RequestBody DeleteCommentRequest deleteCommentRequest){
+            DeleteCommentResponse deleteCommentResponse=reviewCommentService.deleteComment(review_id, deleteCommentRequest);
 
             return new ResponseDto<>(deleteCommentResponse.getCode(), deleteCommentResponse.getMessage(), null);
     }
