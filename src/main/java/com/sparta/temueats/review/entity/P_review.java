@@ -1,6 +1,8 @@
 package com.sparta.temueats.review.entity;
 
+import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.store.entity.P_store;
+import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +14,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Table(name = "P_REVIEW")
-public class P_review {
+public class P_review extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -33,6 +35,12 @@ public class P_review {
 
     @Column(nullable = true)
     private boolean reportYn;
+
+
+    @ManyToOne
+    @JoinColumn(name="user_id",nullable = false)
+    private P_user user;
+
 
     @Builder
     public P_review(String content, int score, boolean useYn, boolean reportYn) {
