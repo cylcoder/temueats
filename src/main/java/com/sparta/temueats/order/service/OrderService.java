@@ -20,9 +20,11 @@ import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import com.sparta.temueats.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
     static GeometryFactory geometryFactory = new GeometryFactory();
 
@@ -93,7 +96,7 @@ public class OrderService {
                 .orderState(OrderState.STANDBY)
                 .discountPrice(0L)
                 .customerRequest(deliveryOrderCreateRequestDto.getCustomerRequest())
-                .cancelYn(false)
+                .cancelYn(true)
                 .cartList(allBySelect)
                 .customerId(usedUser.getId())
                 .ownerId(ownerId)
@@ -148,7 +151,7 @@ public class OrderService {
                 .orderState(OrderState.PROGRESS)
                 .discountPrice(0L)
                 .customerRequest(null)
-                .cancelYn(false)
+                .cancelYn(true)
                 .cartList(allBySelect)
                 .customerId(customer.orElseThrow().getId())
                 .ownerId(usedUser.getId())
@@ -184,4 +187,47 @@ public class OrderService {
         return new OrderGetResponseDto(order);
     }
 
+    @Transactional
+    public void cancelCustomerOrder(UUID orderId) {
+        // 1. 주문 테이블에서 해당 orderId 를 찾아옴
+        P_order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new CustomApiException("해당 주문 내역을 찾을 수 없습니다."));
+
+        // 2. 해당 orderId의 cancelYn 체크
+        if (!order.isCancelYn()) {
+            throw new CustomApiException("결제 후 5분이 지나 주문을 취소할 수 없습니다.");
+        }
+
+        // 2-1. 주문 상태 변경 후 취소 정보 추가
+        order.updateStatus(OrderState.FAIL);
+
+        log.info("주문 상태 변경까지 완료");
+
+        // 2-2. 쿠폰 적용 취소하기
+        Optional<P_coupon> usedCoupon = couponRepository.findCouponByOrderId(order.getOrderId());
+        couponService.cancelCoupon(usedCoupon.get().getId());
+
+        // 3. 결제 상태를 canceled 로 설정하고 취소일시, 취소자에 정보 추가
+        // todo 결제 기능 개발 후 추가
+
+    }
+
+    @Transactional
+    public void cancelOwnerOrder(UUID orderId) {
+        // 1. 주문 테이블에서 해당 orderId 를 찾아옴
+        P_order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new CustomApiException("해당 주문 내역을 찾을 수 없습니다."));
+
+        // 2. 해당 orderId의 cancelYn 체크
+        if (!order.isCancelYn()) {
+            throw new CustomApiException("결제 후 5분이 지나 주문을 취소할 수 없습니다.");
+        }
+
+        // 2-1. 주문 상태 변경 후 취소 정보 추가
+        order.updateStatus(OrderState.FAIL);
+
+        // 3. 결제 상태를 canceled 로 설정하고 취소일시, 취소자에 정보 추가
+        // todo 결제 기능 개발 후 추가
+
+    }
 }
