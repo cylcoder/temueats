@@ -61,7 +61,7 @@ public class P_store extends BaseEntity {
     @Column(length = 50, nullable = false)
     private String address;
 
-    public void update(StoreUpdateDto storeUpdateDto, P_user user) {
+    public P_store update(StoreUpdateDto storeUpdateDto, P_user user) {
         if (storeUpdateDto.getImage() != null) {
             image = storeUpdateDto.getImage();
         }
@@ -82,6 +82,8 @@ public class P_store extends BaseEntity {
         }
 
         setUpdatedBy(user.getNickname());
+
+        return this;
     }
 
 }

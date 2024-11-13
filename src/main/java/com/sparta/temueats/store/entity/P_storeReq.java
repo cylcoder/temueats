@@ -59,7 +59,7 @@ public class P_storeReq extends BaseEntity {
     @Column(nullable = false)
     private StoreReqState state;
 
-    public void updateState(StoreReqState storeReqState) {
+    public void update(StoreReqState storeReqState) {
         state = storeReqState;
     }
 
