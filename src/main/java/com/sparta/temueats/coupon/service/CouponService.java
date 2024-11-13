@@ -87,9 +87,9 @@ public class CouponService {
         if (coupon == null) {
             throw new CustomApiException("해당하는 쿠폰이 없습니다");
         }
-        if (!coupon.getStatus()) {
-            throw new CustomApiException("이미 사용되거나 만료된 쿠폰입니다");
-        }
+//        if (!coupon.getStatus()) {
+//            throw new CustomApiException("이미 사용되거나 만료된 쿠폰입니다");
+//        }
         return coupon;
     }
 
