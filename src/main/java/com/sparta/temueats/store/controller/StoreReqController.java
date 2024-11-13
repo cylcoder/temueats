@@ -23,26 +23,26 @@ public class StoreReqController {
     @PostMapping
     public ResponseDto<StoreReqResDto> save(
             @Valid StoreReqCreateDto storeReqCreateDto,
-            BindingResult res,
-            HttpServletRequest req) {
+            BindingResult res
+    ) {
         ValidUtils.throwIfHasErrors(res, "가게 등록 요청 실패");
 
-        return storeReqService.save(storeReqCreateDto, req);
+        return storeReqService.save(storeReqCreateDto);
     }
     
     @PostMapping("/with-image")
     public ResponseDto<StoreReqResDto> save(
             @Valid @ModelAttribute StoreReqCreateWithImageDto storeReqCreateWithImageDto,
-            BindingResult res,
-            HttpServletRequest req) {
+            BindingResult res
+    ) {
         ValidUtils.throwIfHasErrors(res, "가게 등록 요청 실패");
 
-        return storeReqService.save(storeReqCreateWithImageDto, req);
+        return storeReqService.save(storeReqCreateWithImageDto);
     }
 
     @PutMapping
-    public ResponseDto<Object> update(@RequestBody StoreReqUpdateDto storeReqUpdateDto, HttpServletRequest req) {
-        return storeReqService.update(storeReqUpdateDto, req);
+    public ResponseDto<Object> update(@RequestBody StoreReqUpdateDto storeReqUpdateDto) {
+        return storeReqService.update(storeReqUpdateDto);
     }
 
 }

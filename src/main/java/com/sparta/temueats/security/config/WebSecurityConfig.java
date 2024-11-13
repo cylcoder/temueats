@@ -1,9 +1,9 @@
-package com.sparta.temueats.config;
+package com.sparta.temueats.security.config;
 
 import com.sparta.temueats.security.UserDetailsServiceImpl;
 import com.sparta.temueats.security.filter.JwtAuthenticationFilter;
 import com.sparta.temueats.security.filter.JwtAuthorizationFilter;
-import com.sparta.temueats.user.util.JwtUtil;
+import com.sparta.temueats.security.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

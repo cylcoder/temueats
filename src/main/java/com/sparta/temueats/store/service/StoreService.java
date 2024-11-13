@@ -38,11 +38,9 @@ public class StoreService {
     private final MenuRepository menuRepository;
     private final RatingRepository ratingRepository;
 
-    public ResponseDto<Object> update(StoreUpdateDto storeUpdateDto, HttpServletRequest req) {
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+    public ResponseDto<Object> update(StoreUpdateDto storeUpdateDto) {
+
+        P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(storeUpdateDto.getStoreId());
         if (storeOptional.isEmpty()) {
@@ -50,17 +48,15 @@ public class StoreService {
         }
 
         P_store store = storeOptional.get();
-        store.update(storeUpdateDto, userOptional.get());
+        store.update(storeUpdateDto, user);
         return new ResponseDto<>(SUCCESS, "가게 정보 수정 성공");
     }
 
-    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName, HttpServletRequest req) {
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName) {
+        P_user user = userService.getUser();
 
-        List<StoreResDto> stores = storeRepository.findByStoreNameContaining(storeName, userOptional.get().getId());
+
+        List<StoreResDto> stores = storeRepository.findByStoreNameContaining(storeName, user.getId());
 
         if (stores.isEmpty()) {
             return new ResponseDto<>(SUCCESS, storeName + "와(과) 일치하는 검색결과가 없습니다.");
@@ -69,13 +65,11 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 검색 성공", stores);
     }
 
-    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName, HttpServletRequest req) {
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName) {
 
-        List<StoreResDto> stores = storeRepository.findByMenuNameContaining(menuName, userOptional.get().getId());
+        P_user user = userService.getUser();
+
+        List<StoreResDto> stores = storeRepository.findByMenuNameContaining(menuName, user.getId());
 
         if (stores.isEmpty()) {
             return new ResponseDto<>(SUCCESS, menuName + "와(과) 일치하는 검색결과가 없습니다.");
@@ -88,18 +82,15 @@ public class StoreService {
         return storeRepository.findById(storeId);
     }
 
-    public ResponseDto<StoreDetailResDto> findDetailById(UUID storeId, HttpServletRequest req) {
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+    public ResponseDto<StoreDetailResDto> findDetailById(UUID storeId) {
+
+        P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(storeId);
         if (storeOptional.isEmpty()) {
             return new ResponseDto<>(FAILURE, "존재하지 않는 가게 번호입니다.");
         }
 
-        P_user user = userOptional.get();
         P_store store = storeOptional.get();
 
         StoreDetailResDto storeDetailResDto = new StoreDetailResDto(store);
@@ -113,13 +104,10 @@ public class StoreService {
     }
 
     // 가게 즐겨찾기 추가/삭제
-    public ResponseDto addFavStore(AddFavStoreRequestDto requestDto, HttpServletRequest req) {
+    public ResponseDto addFavStore(AddFavStoreRequestDto requestDto) {
 
-        // 사용자 검증
-        P_user user = userService.validateTokenAndGetUser(req).orElse(null);
-        if(user == null) {
-            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
-        }
+        P_user user = userService.getUser();
+
         // 가게 검증
         P_store store = findEntityById(requestDto.getStoreId()).orElse(null);
         if(store == null) {
@@ -146,12 +134,10 @@ public class StoreService {
 
 
     // 즐겨찾기 가게 목록 조회
-    public ResponseDto getFavStoreList(HttpServletRequest req) {
+    public ResponseDto getFavStoreList() {
         // 사용자 검증
-        P_user user = userService.validateTokenAndGetUser(req).orElse(null);
-        if(user == null) {
-            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
-        }
+        P_user user = userService.getUser();
+
         // 즐겨찾기 가게 목록 조회
         List<P_store> favStores = favStoreRepository.findByUser(user);
         List<FavStoreListResponseDto> stores = favStores.stream()

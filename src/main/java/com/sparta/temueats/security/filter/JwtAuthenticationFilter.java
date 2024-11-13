@@ -2,9 +2,9 @@ package com.sparta.temueats.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.temueats.security.UserDetailsImpl;
+import com.sparta.temueats.security.util.JwtUtil;
 import com.sparta.temueats.user.dto.LoginRequestDto;
 import com.sparta.temueats.user.entity.UserRoleEnum;
-import com.sparta.temueats.user.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,12 +48,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String email = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getEmail(); // username == email
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        String email = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getEmail();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-        String token = jwtUtil.createToken(email, role);
-        jwtUtil.addJwtToCookie(token, response);
+        String accessToken = jwtUtil.createAccessToken(email, role.name());
+        String refreshToken = jwtUtil.createRefreshToken(email);
+
+        jwtUtil.addAccessTokenToHeader(accessToken, response);  // 액세스 토큰을 헤더에 추가
+        jwtUtil.addRefreshTokenToCookie(refreshToken, response);  // 리프레시 토큰을 쿠키에 추가
     }
 
     @Override

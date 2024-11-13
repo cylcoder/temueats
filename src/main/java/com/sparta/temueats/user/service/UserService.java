@@ -2,24 +2,20 @@ package com.sparta.temueats.user.service;
 
 
 import com.sparta.temueats.global.ResponseDto;
+import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.security.UserDetailsImpl;
-import com.sparta.temueats.user.util.JwtUtil;
 import com.sparta.temueats.user.dto.*;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import com.sparta.temueats.user.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import java.util.Optional;
-
 
 @Slf4j
 @Service
@@ -28,15 +24,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
     private final GeometryFactory geometryFactory = new GeometryFactory();  // GeometryFactory 인스턴스 생성
 
 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
     }
 
     public ResponseDto createUser(CreateUserRequestDto request) {
@@ -73,9 +67,9 @@ public class UserService {
 
     }
 
-    public ResponseDto getMypage(UserDetailsImpl userDetails) {
+    public ResponseDto getMypage() {
 
-        P_user user = userDetails.getUser();
+        P_user user = getUser();
 
         MypageResponseDto response = MypageResponseDto.builder()
                 .email(user.getEmail())
@@ -91,12 +85,10 @@ public class UserService {
         return new ResponseDto<>(1, null, response);
     }
 
-    public ResponseDto updateMypage(UpdateMypageRequestDto request, HttpServletRequest req) {
+    public ResponseDto updateMypage(UpdateMypageRequestDto request) {
 
-        P_user user = validateTokenAndGetUser(req).orElse(null);
-        if (user == null) {
-            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
-        }
+        P_user user = getUser();
+
         // 닉네임 중복확인
         if(userRepository.findByNickname(request.getNickname()).isPresent()) {
             return new ResponseDto<>(-1, "중복된 닉네임입니다", null);
@@ -121,21 +113,11 @@ public class UserService {
 
     }
 
-    public P_user findUserById(Long owner) {
-        return userRepository.findById(owner).orElse(null);
-    }
+    public ResponseDto updateRole(UpdateRoleRequestDto request) {
 
-    public P_user findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
-    }
-
-    public ResponseDto updateRole(UpdateRoleRequestDto request, HttpServletRequest req) {
 
         // 요청자 검증
-        P_user user = validateTokenAndGetUser(req).orElse(null);
-        if (user == null) {
-            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
-        }
+        P_user user = getUser();
 
         // 요청자권한 검증
         if (user.getRole().equals(UserRoleEnum.CUSTOMER) || user.getRole().equals(UserRoleEnum.OWNER)) {
@@ -153,37 +135,30 @@ public class UserService {
         return new ResponseDto<>(1, "권한 변경 완료", null);
     }
 
-    public Optional<P_user> validateTokenAndGetUser(HttpServletRequest req) {
+    // 현재 로그인한 유저 객체 반환
+    public P_user getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        String token = jwtUtil.getTokenFromCookies(req);
-        token = jwtUtil.substringToken(token);
-        // 토큰 값 검증
-        if (!jwtUtil.validateToken(token)) {
-            log.error("유효하지 않은 토큰");
-            return Optional.empty();
+        if(authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl) {
+            String email = ((UserDetailsImpl) authentication.getPrincipal()).getUser().getEmail();
+            P_user user = findByEmail(email);
+            if (user == null) {
+                throw new CustomApiException("해당하는 사용자 없음");
+            }
         }
+        throw new CustomApiException("인증된 사용자 아님");
+    }
 
-        // 토큰이 유효하지 않으면 Optional.empty() 반환
-        if (!StringUtils.hasText(token) || !jwtUtil.validateToken(token)) {
-            log.error("유효하지 않은 토큰");
-            return Optional.empty();
-        }
+    public P_user findUserById(Long owner) {
+        return userRepository.findById(owner).orElse(null);
+    }
 
-        try {
-            // 사용자 ID 추출
-            Claims claims = jwtUtil.getUserInfoFromToken(token);
-            Long userId = Long.parseLong(claims.getSubject());
+    public P_user findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
 
-
-            // 사용자 조회 및 반환
-            return userRepository.findById(userId);
-        } catch (NumberFormatException e) {
-            log.error("잘못된 사용자 ID", e);
-            return Optional.empty();
-        } catch (Exception e) {
-            log.error("사용자 검증 중 오류 발생", e);
-            return Optional.empty();
-        }
+    public UserRoleEnum findRoleByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null).getRole();
     }
 
 

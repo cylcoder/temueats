@@ -33,11 +33,8 @@ public class MenuService {
     private final UserService userService;
     private final FileService fileService;
 
-    public ResponseDto<MenuResDto> save(MenuCreateDto menuCreateDto, HttpServletRequest req) {
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+    public ResponseDto<MenuResDto> save(MenuCreateDto menuCreateDto) {
+        P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(menuCreateDto.getStoreId());
         if (storeOptional.isEmpty()) {
@@ -49,16 +46,14 @@ public class MenuService {
         }
 
         P_menu menu = menuCreateDto.toEntity(storeOptional.get());
-        menu.setCreatedBy(userOptional.get().getNickname());
+        menu.setCreatedBy(user.getNickname());
         menuRepository.save(menu);
         return new ResponseDto<>(SUCCESS,"메뉴 등록 성공", new MenuResDto(menu));
     }
 
-    public ResponseDto<MenuResDto> save(MenuCreateWithImageDto menuCreateWithImageDto, HttpServletRequest req) {
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+    public ResponseDto<MenuResDto> save(MenuCreateWithImageDto menuCreateWithImageDto) {
+
+        P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(menuCreateWithImageDto.getStoreId());
         if (storeOptional.isEmpty()) {
@@ -79,24 +74,22 @@ public class MenuService {
         }
 
         P_menu menu = menuCreateWithImageDto.toEntity(storeOptional.get(), image);
-        menu.setCreatedBy(userOptional.get().getNickname());
+        menu.setCreatedBy(user.getNickname());
         menuRepository.save(menu);
         return new ResponseDto<>(SUCCESS,"메뉴 등록 성공", new MenuResDto(menu));
     }
 
 
-    public ResponseDto<MenuResDto> update(MenuUpdateDto menuUpdateDto, HttpServletRequest req) {
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+    public ResponseDto<MenuResDto> update(MenuUpdateDto menuUpdateDto) {
+
+        P_user user = userService.getUser();
 
         Optional<P_menu> menuOptional = menuRepository.findById(menuUpdateDto.getMenuId());
         if (menuOptional.isEmpty()) {
             return new ResponseDto<>(FAILURE, "유효하지 않은 메뉴 번호입니다.");
         }
 
-        P_menu menu = menuOptional.get().update(menuUpdateDto, userOptional.get());
+        P_menu menu = menuOptional.get().update(menuUpdateDto, user);
         return new ResponseDto<>(SUCCESS,"메뉴 수정 성공", new MenuResDto(menu));
     }
 

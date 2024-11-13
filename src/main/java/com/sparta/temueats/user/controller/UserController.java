@@ -30,22 +30,22 @@ public class UserController {
 
     // 마이페이지 조회
     @GetMapping("/mypage")
-    public ResponseDto getMypage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.getMypage(userDetails);
+    public ResponseDto getMypage() {
+        return userService.getMypage();
     }
 
     // 개인 정보 수정
     @PutMapping("/mypage")
-    public ResponseDto updateMypage(@RequestBody UpdateMypageRequestDto request, HttpServletRequest req) {
+    public ResponseDto updateMypage(@RequestBody UpdateMypageRequestDto request) {
 
-        return userService.updateMypage(request, req);
+        return userService.updateMypage(request);
     }
 
     // 권한 수정
     @PutMapping("/manage")
-    public ResponseDto updateRole(@RequestBody UpdateRoleRequestDto request, HttpServletRequest req) {
+    public ResponseDto updateRole(@RequestBody UpdateRoleRequestDto request) {
 
-        return userService.updateRole(request, req);
+        return userService.updateRole(request);
     }
 
 }

@@ -28,25 +28,25 @@ public class StoreController {
     @PutMapping
     public ResponseDto<Object> update(
             @Valid @RequestBody StoreUpdateDto storeUpdateDto,
-            BindingResult res,
-            HttpServletRequest req) {
+            BindingResult res
+    ) {
         ValidUtils.throwIfHasErrors(res, "가게 정보 수정 실패");
 
-        return storeService.update(storeUpdateDto, req);
+        return storeService.update(storeUpdateDto);
     }
 
     @GetMapping
     public ResponseDto<List<StoreResDto>> findByNameContaining(
             @RequestParam(required = false) String store,
-            @RequestParam(required = false) String menu,
-            HttpServletRequest req) {
+            @RequestParam(required = false) String menu
+    ) {
 
         if (store != null && !store.trim().isEmpty()) {
-            return storeService.findByStoreNameContaining(store, req);
+            return storeService.findByStoreNameContaining(store);
         }
 
         if (menu != null && !menu.trim().isEmpty()) {
-            return storeService.findByMenuNameContaining(menu, req);
+            return storeService.findByMenuNameContaining(menu);
         }
 
         return new ResponseDto<>(FAILURE, "검색어는 필수입니다.");
@@ -55,22 +55,22 @@ public class StoreController {
 
 
     @GetMapping("/{storeId}")
-    public ResponseDto<StoreDetailResDto> findDetailById(@PathVariable UUID storeId, HttpServletRequest req) {
-        return storeService.findDetailById(storeId, req);
+    public ResponseDto<StoreDetailResDto> findDetailById(@PathVariable UUID storeId) {
+        return storeService.findDetailById(storeId);
     }
 
     // 즐겨찾기 추가, 삭제
     @PostMapping("/fav")
-    public ResponseDto favStore(@RequestBody AddFavStoreRequestDto requestDto, HttpServletRequest req) {
+    public ResponseDto favStore(@RequestBody AddFavStoreRequestDto requestDto) {
 
-        return storeService.addFavStore(requestDto, req);
+        return storeService.addFavStore(requestDto);
     }
 
     // 즐겨찾기 가게 목록 조회
     @GetMapping("/fav")
-    public ResponseDto getFavStoreList(HttpServletRequest req) {
+    public ResponseDto getFavStoreList() {
 
-        return storeService.getFavStoreList(req);
+        return storeService.getFavStoreList();
     }
 
 }

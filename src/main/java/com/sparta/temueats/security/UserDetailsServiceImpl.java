@@ -17,6 +17,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userService = userService;
     }
 
+    public String findRoleByEmail(String email) {
+        return userService.findRoleByEmail(email).toString();
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 

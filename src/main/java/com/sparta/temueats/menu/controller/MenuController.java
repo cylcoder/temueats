@@ -23,31 +23,31 @@ public class MenuController {
     @PostMapping
     public ResponseDto<MenuResDto> save(
             @RequestBody @Valid MenuCreateDto menuCreateDto,
-            BindingResult res,
-            HttpServletRequest req) {
+            BindingResult res
+    ) {
         ValidUtils.throwIfHasErrors(res, "메뉴 등록 실패");
 
-        return menuService.save(menuCreateDto, req);
+        return menuService.save(menuCreateDto);
     }
 
     @PostMapping("/with-image")
     public ResponseDto<MenuResDto> save(
             @Valid @ModelAttribute MenuCreateWithImageDto menuCreateWithImageDto,
-            BindingResult res,
-            HttpServletRequest req) {
+            BindingResult res
+    ) {
         ValidUtils.throwIfHasErrors(res, "메뉴 등록 실패");
 
-        return menuService.save(menuCreateWithImageDto, req);
+        return menuService.save(menuCreateWithImageDto);
     }
 
     @PutMapping
     public ResponseDto<MenuResDto> update(
             @RequestBody @Valid MenuUpdateDto menuUpdateDto,
-            BindingResult res,
-            HttpServletRequest req) {
+            BindingResult res
+    ) {
         ValidUtils.throwIfHasErrors(res, "메뉴 수정 실패");
 
-        return menuService.update(menuUpdateDto, req);
+        return menuService.update(menuUpdateDto);
     }
 
 }

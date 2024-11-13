@@ -1,8 +1,8 @@
 package com.sparta.temueats.security.filter;
 
 import com.sparta.temueats.security.UserDetailsServiceImpl;
-import com.sparta.temueats.user.util.JwtUtil;
-import io.jsonwebtoken.Claims;
+import com.sparta.temueats.security.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,32 +30,38 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String accessToken = jwtUtil.getTokenFromHeader(request, "Authorization");
 
-        String tokenValue = jwtUtil.getTokenFromCookies(req);
-
-        if (StringUtils.hasText(tokenValue)) {
-            // JWT 토큰 substring
-            tokenValue = jwtUtil.substringToken(tokenValue);
-            log.info(tokenValue);
-
-            if (!jwtUtil.validateToken(tokenValue)) {
-                log.error("Token Error");
-                return;
-            }
-
-            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-
+        if (StringUtils.hasText(accessToken)) {
             try {
-                setAuthentication(info.getSubject());
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                return;
+                // 액세스 토큰이 유효하면 인증 설정
+                if (jwtUtil.validateToken(accessToken)) {
+                    setAuthentication(jwtUtil.getUserInfoFromToken(accessToken).getSubject());
+                }
+            } catch (ExpiredJwtException e) {
+                // 액세스 토큰이 만료된 경우 리프레시 토큰 사용
+                String refreshToken = jwtUtil.getTokenFromCookies(request, JwtUtil.REFRESH_TOKEN_COOKIE);
+                if (StringUtils.hasText(refreshToken) && jwtUtil.validateToken(refreshToken)) {
+                    String email = jwtUtil.getUserInfoFromToken(refreshToken).getSubject();
+                    String role = userDetailsService.findRoleByEmail(email);
+
+                    // 새로운 액세스 토큰 발급 및 헤더 추가
+                    String newAccessToken = jwtUtil.createAccessToken(email, role);
+                    jwtUtil.addJwtToHeader(newAccessToken, response, "Authorization");
+
+                    // 새 액세스 토큰으로 인증 설정
+                    setAuthentication(email);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
             }
         }
 
-        filterChain.doFilter(req, res);
+        filterChain.doFilter(request, response);
     }
+
 
     // 인증 처리
     public void setAuthentication(String email) {
