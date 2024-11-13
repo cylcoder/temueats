@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.sparta.temueats.store.util.AuthUtils.AuthStatus.AUTHORIZED;
 import static com.sparta.temueats.user.entity.UserRoleEnum.*;
@@ -65,6 +66,16 @@ public class StoreReqController {
         }
 
         return storeReqService.update(storeReqUpdateDto);
+    }
+
+    @DeleteMapping("/{storeReqId}")
+    public ResponseDto<Object> delete(@PathVariable UUID storeReqId) {
+        AuthStatus authStatus = authUtils.validate(List.of(OWNER, MANAGER, MASTER));
+        if (!authStatus.equals(AUTHORIZED)) {
+            return new ResponseDto<>(ResponseDto.FAILURE, authStatus.getMsg());
+        }
+
+        return storeReqService.delete(storeReqId);
     }
 
 }
