@@ -14,7 +14,6 @@ import com.sparta.temueats.store.repository.FavStoreRepository;
 import com.sparta.temueats.store.repository.StoreRepository;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,6 @@ public class StoreService {
     private final RatingRepository ratingRepository;
 
     public ResponseDto<Object> update(StoreUpdateDto storeUpdateDto) {
-
         P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(storeUpdateDto.getStoreId());
@@ -55,7 +53,6 @@ public class StoreService {
     public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName) {
         P_user user = userService.getUser();
 
-
         List<StoreResDto> stores = storeRepository.findByStoreNameContaining(storeName, user.getId());
 
         if (stores.isEmpty()) {
@@ -66,7 +63,6 @@ public class StoreService {
     }
 
     public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName) {
-
         P_user user = userService.getUser();
 
         List<StoreResDto> stores = storeRepository.findByMenuNameContaining(menuName, user.getId());
@@ -83,7 +79,6 @@ public class StoreService {
     }
 
     public ResponseDto<StoreDetailResDto> findDetailById(UUID storeId) {
-
         P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(storeId);

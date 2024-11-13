@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.sparta.temueats.global.ResponseDto.FAILURE;
 import static com.sparta.temueats.global.ResponseDto.SUCCESS;
@@ -37,7 +38,6 @@ public class StoreReqService {
     private final RatingRepository ratingRepository;
 
     public ResponseDto<StoreReqResDto> save(StoreReqCreateDto storeReqCreateDto) {
-
         P_user user = userService.getUser();
 
         if (!storeRepository.findByName(storeReqCreateDto.getName()).isEmpty()) {
@@ -45,7 +45,7 @@ public class StoreReqService {
         }
 
         P_storeReq storeReq = storeReqCreateDto.toEntity(user);
-        storeReq.setCreatedBy(user.getNickname());
+//        storeReq.setCreatedBy(user.getNickname());
         storeReqRepository.save(storeReq);
         return new ResponseDto<>(SUCCESS, "가게 등록 요청 성공", new StoreReqResDto(storeReq));
     }
@@ -53,7 +53,6 @@ public class StoreReqService {
     public ResponseDto<StoreReqResDto> save(
             StoreReqCreateWithImageDto storeReqCreateWithImageDto
            ) {
-
         P_user user = userService.getUser();
 
         if (!storeRepository.findByName(storeReqCreateWithImageDto.getName()).isEmpty()) {
@@ -76,7 +75,6 @@ public class StoreReqService {
     }
 
     public ResponseDto<Object> update(StoreReqUpdateDto storeReqUpdateDto) {
-
         P_user user = userService.getUser();
 
         Optional<P_storeReq> storeReqOptional = storeReqRepository.findById(storeReqUpdateDto.getStoreReqId());
@@ -101,6 +99,7 @@ public class StoreReqService {
                 .build();
         rating.setCreatedBy(creator);
         ratingRepository.save(rating);
+
         return new ResponseDto<>(SUCCESS, "가게 요청 상태 수정 완료");
     }
 
@@ -117,6 +116,10 @@ public class StoreReqService {
                 .address(storeReq.getAddress())
                 .state(StoreState.CLOSED)
                 .build();
+    }
+
+    public void delete(UUID id) {
+        storeReqRepository.findById(id).get().delete();
     }
 
 }

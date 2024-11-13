@@ -25,11 +25,11 @@ public class ReviewCommentController {
             return new ResponseDto<>(createCommentResponse.getCode(), createCommentResponse.getMessage(), null);
     }
 
-//    @DeleteMapping("/{review_id}")
-//    public ResponseDto<DeleteCommentResponse> deleteComment(@PathVariable UUID review_id,
-//                                                            @RequestBody DeleteCommnetRequest deleteCommnetRequest){
-//            DeleteCommentResponse deleteCommentResponse=reviewCommentService.deleteComment(review_id,deleteCommnetRequest);
-//
-//            return new ResponseDto<>(deleteCommentResponse.getCode(), deleteCommentResponse.getMessage(), null);
-//    }
+    @DeleteMapping("/{review_id}")
+    public ResponseDto<DeleteCommentResponse> deleteComment(@PathVariable UUID review_id,
+                                                            @RequestBody DeleteCommentRequest deleteCommentRequest){
+            DeleteCommentResponse deleteCommentResponse=reviewCommentService.deleteComment(review_id, deleteCommentRequest);
+
+            return new ResponseDto<>(deleteCommentResponse.getCode(), deleteCommentResponse.getMessage(), null);
+    }
 }

@@ -3,6 +3,6 @@ package com.sparta.temueats.review.dto.request;
 import lombok.Getter;
 
 @Getter
-public class DeleteCommnetRequest {
+public class DeleteCommentRequest {
     private Long userId;
 }

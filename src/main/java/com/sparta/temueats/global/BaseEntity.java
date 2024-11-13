@@ -1,9 +1,14 @@
 package com.sparta.temueats.global;
 
+import com.sparta.temueats.global.ex.CustomApiException;
+import com.sparta.temueats.security.UserDetailsImpl;
+import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +18,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -34,17 +39,29 @@ public abstract class BaseEntity {
 
     @PrePersist
     public void prePersist() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (deletedYn == null) {
-            deletedYn = false;
-        }
+        createdAt = LocalDateTime.now();
+        deletedYn = false;
+        setCreatedBy(getUserName());
     }
 
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
+        setUpdatedBy(getUserName());
+    }
+
+    private static String getUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl userDetailsImpl) {
+            return userDetailsImpl.getUser().getNickname();
+        }
+        return null;
+    }
+
+    public void delete() {
+        deletedAt = LocalDateTime.now();
+        deletedYn = true;
+        deletedBy = getUserName();
     }
 
 }
