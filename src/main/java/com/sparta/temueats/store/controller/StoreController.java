@@ -64,6 +64,16 @@ public class StoreController {
         return storeService.findDetailById(storeId);
     }
 
+    @DeleteMapping("/{storeId}")
+    public ResponseDto<Object> delete(@PathVariable UUID storeId) {
+        AuthUtils.AuthStatus authStatus = authUtils.validate(List.of(OWNER, MANAGER, MASTER));
+        if (!authStatus.equals(AUTHORIZED)) {
+            return new ResponseDto<>(ResponseDto.FAILURE, authStatus.getMsg());
+        }
+
+        return storeService.delete(storeId);
+    }
+
     // 즐겨찾기 추가, 삭제
     @PostMapping("/fav")
     public ResponseDto favStore(@RequestBody AddFavStoreRequestDto requestDto) {

@@ -1,8 +1,8 @@
 package com.sparta.temueats.review.service;
 
 import com.sparta.temueats.review.dto.request.CreateCommentRequest;
-import com.sparta.temueats.review.dto.request.DeleteCommentResponse;
 import com.sparta.temueats.review.dto.request.DeleteCommentRequest;
+import com.sparta.temueats.review.dto.request.DeleteCommentResponse;
 import com.sparta.temueats.review.dto.response.CreateCommentResponse;
 import com.sparta.temueats.review.entity.P_review;
 import com.sparta.temueats.review.entity.P_reviewComment;
