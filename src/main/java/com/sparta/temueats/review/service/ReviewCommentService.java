@@ -36,18 +36,18 @@ public class ReviewCommentService {
         return new CreateCommentResponse(1,"댓글이 작성되었습니다.");
     }
 
-//    @Transactional
-//    public DeleteCommentResponse deleteComment(UUID reviewId, DeleteCommnetRequest deleteCommnetRequest) {
-//        P_user user= userService.getUserById(deleteCommnetRequest.getUserId());
-//        if(user==null){
-//            return new DeleteCommentResponse(-1,"아이디가 존재하지 않습니다.");
-//        }
-//        P_reviewComment reviewComment=reviewCommentRepository.findByReview_ReviewId(reviewId).
-//                orElseThrow(()->new IllegalArgumentException("리뷰가 존재하지 않습니다."));
-//        reviewComment.changeVisibleYn();
-//        reviewCommentRepository.save(reviewComment);
-//
-//        return new DeleteCommentResponse(1,"라뷰가 삭제되었습니다.");
-//
-//    }
+    @Transactional
+    public DeleteCommentResponse deleteComment(UUID reviewId, DeleteCommnetRequest deleteCommnetRequest) {
+        P_user user= userService.getUser();
+        if(user==null){
+            return new DeleteCommentResponse(-1,"아이디가 존재하지 않습니다.");
+        }
+        P_reviewComment reviewComment=reviewCommentRepository.findByReview_ReviewId(reviewId).
+                orElseThrow(()->new IllegalArgumentException("리뷰가 존재하지 않습니다."));
+        reviewComment.changeVisibleYn();
+        reviewCommentRepository.save(reviewComment);
+
+        return new DeleteCommentResponse(1,"라뷰가 삭제되었습니다.");
+
+    }
 }
