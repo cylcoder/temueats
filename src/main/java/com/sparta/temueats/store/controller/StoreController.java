@@ -6,8 +6,8 @@ import com.sparta.temueats.store.dto.StoreDetailResDto;
 import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
 import com.sparta.temueats.store.service.StoreService;
+import com.sparta.temueats.store.util.AuthUtils;
 import com.sparta.temueats.store.util.ValidUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.sparta.temueats.global.ResponseDto.FAILURE;
+import static com.sparta.temueats.store.util.AuthUtils.AuthStatus.AUTHORIZED;
+import static com.sparta.temueats.user.entity.UserRoleEnum.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,12 +26,18 @@ import static com.sparta.temueats.global.ResponseDto.FAILURE;
 public class StoreController {
 
     private final StoreService storeService;
+    private final AuthUtils authUtils;
 
     @PutMapping
     public ResponseDto<Object> update(
             @Valid @RequestBody StoreUpdateDto storeUpdateDto,
             BindingResult res
     ) {
+        AuthUtils.AuthStatus authStatus = authUtils.validate(List.of(OWNER, MANAGER, MASTER));
+        if (!authStatus.equals(AUTHORIZED)) {
+            return new ResponseDto<>(ResponseDto.FAILURE, authStatus.getMsg());
+        }
+
         ValidUtils.throwIfHasErrors(res, "가게 정보 수정 실패");
 
         return storeService.update(storeUpdateDto);
@@ -40,7 +48,6 @@ public class StoreController {
             @RequestParam(required = false) String store,
             @RequestParam(required = false) String menu
     ) {
-
         if (store != null && !store.trim().isEmpty()) {
             return storeService.findByStoreNameContaining(store);
         }
@@ -51,8 +58,6 @@ public class StoreController {
 
         return new ResponseDto<>(FAILURE, "검색어는 필수입니다.");
     }
-
-
 
     @GetMapping("/{storeId}")
     public ResponseDto<StoreDetailResDto> findDetailById(@PathVariable UUID storeId) {

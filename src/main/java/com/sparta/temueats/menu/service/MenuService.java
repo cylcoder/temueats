@@ -1,18 +1,17 @@
 package com.sparta.temueats.menu.service;
 
 import com.sparta.temueats.global.ResponseDto;
-import com.sparta.temueats.s3.service.FileService;
 import com.sparta.temueats.menu.dto.MenuCreateDto;
 import com.sparta.temueats.menu.dto.MenuCreateWithImageDto;
 import com.sparta.temueats.menu.dto.MenuResDto;
 import com.sparta.temueats.menu.dto.MenuUpdateDto;
 import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.menu.repository.MenuRepository;
+import com.sparta.temueats.s3.service.FileService;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.repository.StoreRepository;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +33,6 @@ public class MenuService {
     private final FileService fileService;
 
     public ResponseDto<MenuResDto> save(MenuCreateDto menuCreateDto) {
-        P_user user = userService.getUser();
-
         Optional<P_store> storeOptional = storeRepository.findById(menuCreateDto.getStoreId());
         if (storeOptional.isEmpty()) {
             return new ResponseDto<>(FAILURE, "유효하지 않은 가게 번호입니다.");
@@ -46,15 +43,11 @@ public class MenuService {
         }
 
         P_menu menu = menuCreateDto.toEntity(storeOptional.get());
-        menu.setCreatedBy(user.getNickname());
         menuRepository.save(menu);
         return new ResponseDto<>(SUCCESS,"메뉴 등록 성공", new MenuResDto(menu));
     }
 
     public ResponseDto<MenuResDto> save(MenuCreateWithImageDto menuCreateWithImageDto) {
-
-        P_user user = userService.getUser();
-
         Optional<P_store> storeOptional = storeRepository.findById(menuCreateWithImageDto.getStoreId());
         if (storeOptional.isEmpty()) {
             return new ResponseDto<>(FAILURE, "유효하지 않은 가게 번호입니다.");
@@ -74,7 +67,6 @@ public class MenuService {
         }
 
         P_menu menu = menuCreateWithImageDto.toEntity(storeOptional.get(), image);
-        menu.setCreatedBy(user.getNickname());
         menuRepository.save(menu);
         return new ResponseDto<>(SUCCESS,"메뉴 등록 성공", new MenuResDto(menu));
     }

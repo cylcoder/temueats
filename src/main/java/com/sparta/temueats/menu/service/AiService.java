@@ -3,12 +3,10 @@ package com.sparta.temueats.menu.service;
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.menu.entity.P_aiLog;
 import com.sparta.temueats.menu.repository.AiRepository;
-import com.sparta.temueats.user.entity.P_user;
-import com.sparta.temueats.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static com.sparta.temueats.global.ResponseDto.FAILURE;
 import static com.sparta.temueats.global.ResponseDto.SUCCESS;
@@ -26,14 +23,13 @@ import static com.sparta.temueats.global.ResponseDto.SUCCESS;
 @RequiredArgsConstructor
 public class AiService {
 
-//    @Value("${ai.api.url}")
+    @Value("${ai.api.url}")
     private String url;
 
     public static final String CONSTRAINT = "답변을 최대한 간결하게 50자 이하로";
 
     private final RestTemplate restTemplate;
     private final AiRepository aiRepository;
-    private final UserService userService;
 
     public ResponseDto<String> request(Map<String, String> aiReqMap) {
         String aiReq = aiReqMap.get("request");
@@ -41,16 +37,12 @@ public class AiService {
             return new ResponseDto<>(FAILURE, "요청 메시지는 필수입니다.");
         }
 
-        P_user user = userService.getUser();
-
         String res = sendReq(aiReq);
         P_aiLog aiLog = P_aiLog.builder()
                 .request(aiReq)
                 .response(res)
                 .build();
-        aiLog.setCreatedBy(user.getNickname());
         aiRepository.save(aiLog);
-
         return new ResponseDto<>(SUCCESS, "요청 성공", res);
     }
 
