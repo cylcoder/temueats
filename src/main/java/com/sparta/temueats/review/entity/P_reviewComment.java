@@ -34,4 +34,8 @@ public class P_reviewComment extends BaseEntity {
         this.review = review;
     }
 
+    public void changeVisibleYn() {
+        this.visibleYn = false;
+    }
+
 }
