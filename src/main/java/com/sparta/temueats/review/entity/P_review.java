@@ -41,6 +41,9 @@ public class P_review extends BaseEntity {
     @JoinColumn(name="user_id",nullable = false)
     private P_user user;
 
+    @OneToOne(mappedBy = "review", cascade = CascadeType.ALL)
+    private P_reviewComment reviewComment;
+
     @Builder
     public P_review(String content, int score, boolean useYn, boolean reportYn) {
         this.content = content;
