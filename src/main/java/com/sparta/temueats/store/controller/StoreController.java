@@ -48,17 +48,16 @@ public class StoreController {
             @RequestParam(required = false) String store,
             @RequestParam(required = false) String menu,
             @RequestParam(defaultValue = "desc") String order,
-            @RequestParam(defaultValue = "createdAt") String orderBy
+            @RequestParam(defaultValue = "createdAt") String orderBy,
+            @RequestParam(defaultValue = "0") int page,
+           @RequestParam(defaultValue = "10") int size
     ) {
-        System.out.println("order = " + order);
-        System.out.println("sortBy = " + orderBy);
-
         if (store != null && !store.trim().isEmpty()) {
-            return storeService.findByStoreNameContaining(store, order, orderBy);
+            return storeService.findByStoreNameContaining(store, order, orderBy, page, size);
         }
 
         if (menu != null && !menu.trim().isEmpty()) {
-            return storeService.findByMenuNameContaining(menu, order, orderBy);
+            return storeService.findByMenuNameContaining(menu, order, orderBy, page, size);
         }
 
         return new ResponseDto<>(FAILURE, "검색어는 필수입니다.");

@@ -15,6 +15,8 @@ import com.sparta.temueats.store.repository.StoreRepository;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,14 +55,16 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 정보 수정 성공");
     }
 
-    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName, String order, String orderBy) {
+    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(
+            String storeName, String order, String orderBy, int page, int size) {
         Long userId = userService.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
 
         List<StoreResDto> stores;
         if ("createdAt".equals(orderBy)) {
-            stores = storeRepository.findByStoreNameContainingOrderByCreatedAtDesc(storeName, userId);
+            stores = storeRepository.findByStoreNameContainingOrderByCreatedAtDesc(storeName, userId, pageable);
         } else {
-            stores = storeRepository.findByStoreNameContainingOrderByUpdatedAtDesc(storeName, userId);
+            stores = storeRepository.findByStoreNameContainingOrderByUpdatedAtDesc(storeName, userId, pageable);
         }
 
         if ("asc".equals(order)) {
@@ -74,14 +78,16 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 검색 성공", stores);
     }
 
-    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName, String order, String sortBy) {
+    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(
+            String menuName, String order, String sortBy, int page, int size) {
         Long userId = userService.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
 
         List<StoreResDto> stores;
         if ("createdAt".equals(sortBy)) {
-            stores = storeRepository.findByMenuNameContainingOrderByCreatedAtDesc(menuName, userId);
+            stores = storeRepository.findByMenuNameContainingOrderByCreatedAtDesc(menuName, userId, pageable);
         } else {
-            stores = storeRepository.findByMenuNameContainingOrderByUpdatedAtDesc(menuName, userId);
+            stores = storeRepository.findByMenuNameContainingOrderByUpdatedAtDesc(menuName, userId, pageable);
         }
 
         if ("asc".equals(order)) {

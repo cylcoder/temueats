@@ -2,6 +2,7 @@ package com.sparta.temueats.store.repository;
 
 import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.entity.P_store;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,7 @@ public interface StoreRepository extends JpaRepository<P_store, UUID> {
             "WHERE s.name LIKE %:storeName% " +
             "GROUP BY s " +
             "ORDER BY s.createdAt DESC")
-    List<StoreResDto> findByStoreNameContainingOrderByCreatedAtDesc(String storeName, Long userId);
+    List<StoreResDto> findByStoreNameContainingOrderByCreatedAtDesc(String storeName, Long userId, Pageable pageable);
 
     @Query("SELECT new com.sparta.temueats.store.dto.StoreResDto(s, " +
             "COALESCE(AVG(r.score), 0), " +
@@ -36,7 +37,7 @@ public interface StoreRepository extends JpaRepository<P_store, UUID> {
             "WHERE s.name LIKE %:storeName% " +
             "GROUP BY s " +
             "ORDER BY s.updatedAt DESC")
-    List<StoreResDto> findByStoreNameContainingOrderByUpdatedAtDesc(String storeName, Long userId);
+    List<StoreResDto> findByStoreNameContainingOrderByUpdatedAtDesc(String storeName, Long userId, Pageable pageable);
 
     @Query("SELECT new com.sparta.temueats.store.dto.StoreResDto(s, " +
             "COALESCE(AVG(r.score), 0), " +
@@ -49,7 +50,7 @@ public interface StoreRepository extends JpaRepository<P_store, UUID> {
             "WHERE m.name LIKE %:menuName% " +
             "GROUP BY s " +
             "ORDER BY s.createdAt DESC")
-    List<StoreResDto> findByMenuNameContainingOrderByCreatedAtDesc(String menuName, Long userId);
+    List<StoreResDto> findByMenuNameContainingOrderByCreatedAtDesc(String menuName, Long userId, Pageable pageable);
 
     @Query("SELECT new com.sparta.temueats.store.dto.StoreResDto(s, " +
             "COALESCE(AVG(r.score), 0), " +
@@ -62,6 +63,6 @@ public interface StoreRepository extends JpaRepository<P_store, UUID> {
             "WHERE m.name LIKE %:menuName% " +
             "GROUP BY s " +
             "ORDER BY s.updatedAt DESC")
-    List<StoreResDto> findByMenuNameContainingOrderByUpdatedAtDesc(String menuName, Long userId);
+    List<StoreResDto> findByMenuNameContainingOrderByUpdatedAtDesc(String menuName, Long userId, Pageable pageable);
 
 }
