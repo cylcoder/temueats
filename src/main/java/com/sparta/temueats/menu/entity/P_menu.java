@@ -1,7 +1,6 @@
 package com.sparta.temueats.menu.entity;
 
 import com.sparta.temueats.global.BaseEntity;
-import com.sparta.temueats.menu.dto.MenuCreateDto;
 import com.sparta.temueats.menu.dto.MenuUpdateDto;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.SellState;

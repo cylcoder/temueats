@@ -35,17 +35,4 @@ public class MenuUpdateDto {
 
     private Boolean signatureYn;
 
-    public P_menu toEntity(P_store store) {
-        return P_menu.builder()
-                .store(store)
-                .name(this.name)
-                .description(this.description)
-                .price(this.price)
-                .image(this.image)
-                .category(this.category)
-                .signatureYn(this.signatureYn)
-                .sellState(SellState.SALE)
-                .build();
-    }
-
 }

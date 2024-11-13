@@ -15,9 +15,12 @@ public interface ReviewRepository extends JpaRepository<P_review, UUID> {
     @Query("SELECT r.store FROM P_review r WHERE r.store.storeId = :storeId")
     Optional<P_store> findStoreByStoreId(@Param("storeId") UUID storeId);
     //가게UUID로 리뷰리스트 가져오기
-    @Query("SELECT r FROM P_review r WHERE r.store.storeId = :storeId")
-    List<P_review> findByStoreId(@Param("storeId") UUID storeId);
+    @Query("SELECT r FROM P_review r WHERE r.store.storeId = :storeId AND r.useYn = true")
+    List<P_review> findByStoreId(UUID storeId);
 
     List<P_review> findByUserId(Long userId);
+
+    @Query("SELECT COUNT(r) FROM P_review r WHERE r.store.storeId = :storeId AND r.useYn = true")
+    Integer countReviewsByStoreId(UUID storeId);
 
 }

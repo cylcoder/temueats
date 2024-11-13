@@ -10,7 +10,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "P_REVIEWCOMMENT")
+@Table(name = "P_REVIEW_COMMENT")
 public class P_reviewComment extends BaseEntity {
     @Id
     @GeneratedValue(generator = "UUID")

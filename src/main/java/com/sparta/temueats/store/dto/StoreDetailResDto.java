@@ -1,6 +1,8 @@
 package com.sparta.temueats.store.dto;
 
+import com.sparta.temueats.menu.dto.MenuResDto;
 import com.sparta.temueats.menu.entity.Category;
+import com.sparta.temueats.review.dto.response.ReviewResDto;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.StoreState;
 import lombok.AllArgsConstructor;
@@ -8,11 +10,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class StoreResDto {
+public class StoreDetailResDto {
 
     private String storeId;
     private String name;
@@ -28,25 +32,10 @@ public class StoreResDto {
     private Double rating;
     private Integer reviewCount;
     private Boolean isFavorite;
+    private List<MenuResDto> menu;
+    private List<ReviewResDto> reviews;
 
-    public StoreResDto(P_store store, Double rating, Integer reviewCount, Boolean isFavorite) {
-        storeId = store.getStoreId().toString();
-        name = store.getName();
-        image = store.getImage();
-        number = store.getNumber();
-        state = store.getState();
-        leastPrice = store.getLeastPrice();
-        deliveryPrice = store.getDeliveryPrice();
-        category = store.getCategory();
-        latitude = store.getLatLng().getX();
-        longitude = store.getLatLng().getY();
-        address = store.getAddress();
-        this.rating = rating;
-        this.reviewCount = reviewCount;
-        this.isFavorite = isFavorite;
-    }
-
-    public StoreResDto(P_store store) {
+    public StoreDetailResDto(P_store store) {
         storeId = store.getStoreId().toString();
         name = store.getName();
         image = store.getImage();

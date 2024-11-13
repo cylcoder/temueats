@@ -2,6 +2,7 @@ package com.sparta.temueats.store.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.store.dto.AddFavStoreRequestDto;
+import com.sparta.temueats.store.dto.StoreDetailResDto;
 import com.sparta.temueats.store.dto.StoreResDto;
 import com.sparta.temueats.store.dto.StoreUpdateDto;
 import com.sparta.temueats.store.service.StoreService;
@@ -13,6 +14,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
+
+import static com.sparta.temueats.global.ResponseDto.FAILURE;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,8 +36,27 @@ public class StoreController {
     }
 
     @GetMapping
-    public ResponseDto<List<StoreResDto>> findByName(@RequestParam String name) {
-        return storeService.findByName(name);
+    public ResponseDto<List<StoreResDto>> findByNameContaining(
+            @RequestParam(required = false) String store,
+            @RequestParam(required = false) String menu,
+            HttpServletRequest req) {
+
+        if (store != null && !store.trim().isEmpty()) {
+            return storeService.findByStoreNameContaining(store, req);
+        }
+
+        if (menu != null && !menu.trim().isEmpty()) {
+            return storeService.findByMenuNameContaining(menu, req);
+        }
+
+        return new ResponseDto<>(FAILURE, "검색어는 필수입니다.");
+    }
+
+
+
+    @GetMapping("/{storeId}")
+    public ResponseDto<StoreDetailResDto> findDetailById(@PathVariable UUID storeId, HttpServletRequest req) {
+        return storeService.findDetailById(storeId, req);
     }
 
     // 즐겨찾기 추가, 삭제

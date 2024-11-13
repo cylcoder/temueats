@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://13.125.168.6:5432/temueats
-    username: temueats
-    password: temueats
+    username:
+    password:
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10

@@ -2,6 +2,7 @@ package com.sparta.temueats.store.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.store.dto.StoreReqCreateDto;
+import com.sparta.temueats.store.dto.StoreReqCreateWithImageDto;
 import com.sparta.temueats.store.dto.StoreReqResDto;
 import com.sparta.temueats.store.dto.StoreReqUpdateDto;
 import com.sparta.temueats.store.service.StoreReqService;
@@ -27,6 +28,16 @@ public class StoreReqController {
         ValidUtils.throwIfHasErrors(res, "가게 등록 요청 실패");
 
         return storeReqService.save(storeReqCreateDto, req);
+    }
+    
+    @PostMapping("/with-image")
+    public ResponseDto<StoreReqResDto> save(
+            @Valid @ModelAttribute StoreReqCreateWithImageDto storeReqCreateWithImageDto,
+            BindingResult res,
+            HttpServletRequest req) {
+        ValidUtils.throwIfHasErrors(res, "가게 등록 요청 실패");
+
+        return storeReqService.save(storeReqCreateWithImageDto, req);
     }
 
     @PutMapping
