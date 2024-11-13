@@ -3,6 +3,7 @@ package com.sparta.temueats.review.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.review.dto.request.CreateReviewRequestDto;
+import com.sparta.temueats.review.dto.request.DeleteReviewRequest;
 import com.sparta.temueats.review.dto.request.MyReviewRequestDto;
 import com.sparta.temueats.review.dto.request.StoreReviewRequest;
 import com.sparta.temueats.review.dto.response.*;
@@ -40,8 +41,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{store_id}")
-    public ResponseDto<List<StoreReviewResponse>> getStoreReviews(@PathVariable UUID storeId){
-        StoreReviewResponseList storeReviewResponseList=reviewService.getStoreReviews(storeId);
+    public ResponseDto<List<StoreReviewResponse>> getStoreReviews(@PathVariable UUID store_id){
+        StoreReviewResponseList storeReviewResponseList=reviewService.getStoreReviews(store_id);
 
         return new ResponseDto<>(storeReviewResponseList.getCode(),
                 storeReviewResponseList.getMessage(),
@@ -49,6 +50,16 @@ public class ReviewController {
 
     }
 
+    @DeleteMapping("/{review_id}")
+    public ResponseDto<DeleteReviewResponse> deleteReviews(@PathVariable UUID review_id,
+            @RequestBody DeleteReviewRequest deleteReviewRequest){
+        DeleteReviewResponse deleteReviewResponse=reviewService.deleteReviews(review_id,deleteReviewRequest.getUserId());
+
+        return new ResponseDto<>(deleteReviewResponse.getCode(),
+                deleteReviewResponse.getMessage(),
+                null);
+
+    }
 
 }
 
