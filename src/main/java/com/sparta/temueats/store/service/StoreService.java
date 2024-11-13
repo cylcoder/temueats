@@ -18,12 +18,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.sparta.temueats.global.ResponseDto.FAILURE;
 import static com.sparta.temueats.global.ResponseDto.SUCCESS;
+import static java.util.Collections.reverse;
+import static java.util.Collections.reverseOrder;
 
 @Service
 @RequiredArgsConstructor
@@ -50,10 +53,19 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 정보 수정 성공");
     }
 
-    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName) {
-        P_user user = userService.getUser();
+    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName, String order, String orderBy) {
+        Long userId = userService.getUser().getId();
 
-        List<StoreResDto> stores = storeRepository.findByStoreNameContaining(storeName, user.getId());
+        List<StoreResDto> stores;
+        if ("createdAt".equals(orderBy)) {
+            stores = storeRepository.findByStoreNameContainingOrderByCreatedAtDesc(storeName, userId);
+        } else {
+            stores = storeRepository.findByStoreNameContainingOrderByUpdatedAtDesc(storeName, userId);
+        }
+
+        if ("asc".equals(order)) {
+            reverse(stores);
+        }
 
         if (stores.isEmpty()) {
             return new ResponseDto<>(SUCCESS, storeName + "와(과) 일치하는 검색결과가 없습니다.");
@@ -62,10 +74,19 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 검색 성공", stores);
     }
 
-    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName) {
-        P_user user = userService.getUser();
+    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName, String order, String sortBy) {
+        Long userId = userService.getUser().getId();
 
-        List<StoreResDto> stores = storeRepository.findByMenuNameContaining(menuName, user.getId());
+        List<StoreResDto> stores;
+        if ("createdAt".equals(sortBy)) {
+            stores = storeRepository.findByMenuNameContainingOrderByCreatedAtDesc(menuName, userId);
+        } else {
+            stores = storeRepository.findByMenuNameContainingOrderByUpdatedAtDesc(menuName, userId);
+        }
+
+        if ("asc".equals(order)) {
+            reverse(stores);
+        }
 
         if (stores.isEmpty()) {
             return new ResponseDto<>(SUCCESS, menuName + "와(과) 일치하는 검색결과가 없습니다.");

@@ -46,14 +46,19 @@ public class StoreController {
     @GetMapping
     public ResponseDto<List<StoreResDto>> findByNameContaining(
             @RequestParam(required = false) String store,
-            @RequestParam(required = false) String menu
+            @RequestParam(required = false) String menu,
+            @RequestParam(defaultValue = "desc") String order,
+            @RequestParam(defaultValue = "createdAt") String orderBy
     ) {
+        System.out.println("order = " + order);
+        System.out.println("sortBy = " + orderBy);
+
         if (store != null && !store.trim().isEmpty()) {
-            return storeService.findByStoreNameContaining(store);
+            return storeService.findByStoreNameContaining(store, order, orderBy);
         }
 
         if (menu != null && !menu.trim().isEmpty()) {
-            return storeService.findByMenuNameContaining(menu);
+            return storeService.findByMenuNameContaining(menu, order, orderBy);
         }
 
         return new ResponseDto<>(FAILURE, "검색어는 필수입니다.");
