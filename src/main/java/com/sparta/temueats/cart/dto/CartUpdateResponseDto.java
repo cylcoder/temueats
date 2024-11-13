@@ -15,7 +15,7 @@ public class CartUpdateResponseDto {
 
     public CartUpdateResponseDto(P_cart pCart) {
         this.cartId = pCart.getCartId();
-        this.menuId = pCart.getMenuId();
+        this.menuId = pCart.getMenu().getMenuId();
         this.quantity = pCart.getQuantity();
     }
 }
