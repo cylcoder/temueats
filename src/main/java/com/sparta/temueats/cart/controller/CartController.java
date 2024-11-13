@@ -24,9 +24,10 @@ public class CartController {
     private final CartService cartService;
 
     // 장바구니 추가
-    @PostMapping("/carts")
-    public ResponseDto<?> cartAddResponseDto(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto, BindingResult bindingResult) {
-        CartUpdateResponseDto cartUpdateResponseDto = cartService.createCarts(cartUpdateRequestDto, USER_ID);
+    @PostMapping("/carts/{menuId}")
+    public ResponseDto<?> cartAddResponseDto(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto, BindingResult bindingResult,
+                                             @PathVariable UUID menuId) {
+        CartUpdateResponseDto cartUpdateResponseDto = cartService.createCarts(cartUpdateRequestDto, USER_ID, menuId);
         return new ResponseDto<>(1, "장바구니 추가가 완료되었습니다.", cartUpdateResponseDto);
     }
 
