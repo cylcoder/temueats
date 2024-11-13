@@ -76,6 +76,7 @@ public class UserService {
                 .nickname(user.getNickname())
                 .phone(user.getPhone())
                 .birth(user.getBirth())
+                .role(user.getRole().toString())
                 .imageProfile(user.getImageProfile())
                 .address(user.getAddress())
                 .lat(user.getLatLng().getY())
@@ -139,12 +140,13 @@ public class UserService {
     public P_user getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl) {
-            String email = ((UserDetailsImpl) authentication.getPrincipal()).getUser().getEmail();
+        if(authentication != null && authentication.getPrincipal() instanceof UserDetailsImpl userDetailsImpl) {
+            String email = userDetailsImpl.getUser().getEmail();
             P_user user = findByEmail(email);
             if (user == null) {
                 throw new CustomApiException("해당하는 사용자 없음");
             }
+            return user;
         }
         throw new CustomApiException("인증된 사용자 아님");
     }
@@ -158,7 +160,9 @@ public class UserService {
     }
 
     public UserRoleEnum findRoleByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null).getRole();
+        return userRepository.findByEmail(email)
+                .map(P_user::getRole)
+                .orElse(null);
     }
 
 

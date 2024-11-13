@@ -1,6 +1,5 @@
 package com.sparta.temueats.security.util;
 
-import com.sparta.temueats.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -32,14 +29,12 @@ public class JwtUtil {
     // Token 식별자
 
     // 토큰 만료시간
-    private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
-    private static final long ACCESS_TOKEN_EXPIRATION = 30 * 60 * 1000L; // 30분
+    private static final long ACCESS_TOKEN_EXPIRATION = 60 * 60 * 1000L; // 60분
     private static final long REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000L; // 7일
 
     @Value("${spring.jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
     private Key key;
-    private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     // 로그 설정
     public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
@@ -48,19 +43,6 @@ public class JwtUtil {
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
-    }
-    // 토큰 생성
-    public String createToken(String email, UserRoleEnum role) {
-        Date date = new Date();
-
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setSubject(email) // 사용자 식별자값(email)
-                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
-                        .setIssuedAt(date) // 발급일
-                        .signWith(key, signatureAlgorithm) // 암호화 알고리즘
-                        .compact();
     }
 
     // 액세스 토큰 생성
@@ -102,34 +84,8 @@ public class JwtUtil {
         cookie.setHttpOnly(true);
         cookie.setSecure(true); // HTTPS에서만 전송되도록 설정
         cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60); // 예: 1주일
+        cookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(cookie);
-    }
-
-
-    // JWT Cookie 에 저장
-    public void addJwtToCookie(String token, HttpServletResponse res) {
-        try {
-            // `Bearer `의 공백을 `%20`로 인코딩
-            String encodedToken = URLEncoder.encode(token, "utf-8").replace("+", "%20");
-
-            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, encodedToken);
-            cookie.setPath("/");
-            cookie.setHttpOnly(true); // HttpOnly 설정
-            res.addCookie(cookie);
-        } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-
-    // JWT 토큰 substring
-    public String substringToken(String tokenValue) {
-        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            return tokenValue.substring(7);
-        }
-        logger.error("Not Found Token");
-        throw new NullPointerException("Not Found Token");
     }
 
     // 토큰 검증
@@ -137,7 +93,7 @@ public class JwtUtil {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (SecurityException | MalformedJwtException | SignatureException e) {
+        } catch (SecurityException | MalformedJwtException e) {
             logger.error("Invalid JWT signature");
         } catch (ExpiredJwtException e) {
             logger.error("Expired JWT token");
@@ -182,7 +138,6 @@ public class JwtUtil {
                 }
             }
         }
-        logger.error("쿠키에서 " + cookieName + " 토큰을 찾을 수 없음");
         return null;
     }
 
