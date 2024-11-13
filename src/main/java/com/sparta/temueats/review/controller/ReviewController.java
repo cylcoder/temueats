@@ -41,8 +41,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{store_id}")
-    public ResponseDto<List<StoreReviewResponse>> getStoreReviews(@PathVariable UUID storeId){
-        StoreReviewResponseList storeReviewResponseList=reviewService.getStoreReviews(storeId);
+    public ResponseDto<List<StoreReviewResponse>> getStoreReviews(@PathVariable UUID store_id){
+        StoreReviewResponseList storeReviewResponseList=reviewService.getStoreReviews(store_id);
 
         return new ResponseDto<>(storeReviewResponseList.getCode(),
                 storeReviewResponseList.getMessage(),
@@ -60,5 +60,6 @@ public class ReviewController {
                 null);
 
     }
+
 }
 
