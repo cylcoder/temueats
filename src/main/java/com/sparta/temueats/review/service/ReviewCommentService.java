@@ -38,8 +38,7 @@ public class ReviewCommentService {
 
     @Transactional
     public DeleteCommentResponse deleteComment(UUID reviewId, DeleteCommnetRequest deleteCommnetRequest) {
-        P_user user = null;
-//        P_user user= userService.getUserById(deleteCommnetRequest.getUserId());
+        P_user user= userService.getUserById(deleteCommnetRequest.getUserId());
         if(user==null){
             return new DeleteCommentResponse(-1,"아이디가 존재하지 않습니다.");
         }
