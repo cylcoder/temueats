@@ -98,6 +98,16 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 상세 조회 성공", storeDetailResDto);
     }
 
+    public ResponseDto<Object> delete(UUID storeId) {
+        Optional<P_store> storeOptional = storeRepository.findById(storeId);
+        if (storeOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "존재하지 않는 가게 번호입니다.");
+        }
+
+        storeOptional.get().delete();
+        return new ResponseDto<>(SUCCESS, "가게 삭제 성공");
+    }
+
     // 가게 즐겨찾기 추가/삭제
     public ResponseDto addFavStore(AddFavStoreRequestDto requestDto) {
 
