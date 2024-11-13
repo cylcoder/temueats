@@ -87,7 +87,6 @@ public class CouponService {
         if (coupon == null) {
             throw new CustomApiException("해당하는 쿠폰이 없습니다");
         }
-
         return coupon;
     }
 

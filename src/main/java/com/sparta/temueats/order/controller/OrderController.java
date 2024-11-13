@@ -55,7 +55,7 @@ public class OrderController {
 
     // 주문 상세 조회 (Customer)
     @GetMapping("/orders/customer/{orderId}")
-    public ResponseDto<?> orderGetCusomterResponseDto(@PathVariable UUID orderId) {
+    public ResponseDto<?> orderGetCustomerResponseDto(@PathVariable UUID orderId) {
         OrderGetResponseDto customerOrder = orderService.getOrder(orderId);
         return new ResponseDto<>(1, "주문 상세 조회에 성공했습니다.", customerOrder);
     }
@@ -69,4 +69,17 @@ public class OrderController {
 
 
     // 주문 취소 (Customer)
+    @PutMapping("/orders/{orderId}/customer")
+    public ResponseDto<?> orderCancelCustomerResponseDto(@PathVariable UUID orderId) {
+        orderService.cancelCustomerOrder(orderId);
+        return new ResponseDto<>(1, "주문이 취소되었습니다.", null);
+    }
+
+    // 주문 취소 (Owner)
+    @PutMapping("/orders/{orderId}/owner")
+    public ResponseDto<?> orderCancelOwnerResponseDto(@PathVariable UUID orderId) {
+        orderService.cancelOwnerOrder(orderId);
+        return new ResponseDto<>(1, "주문이 취소되었습니다.", null);
+    }
+
 }
