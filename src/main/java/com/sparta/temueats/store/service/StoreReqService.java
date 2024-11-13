@@ -84,7 +84,7 @@ public class StoreReqService {
             return  new ResponseDto<>(FAILURE,"존재하지 않는 가게 등록 요청입니다.");
         }
 
-        String creator = userOptional.get().getNickname();
+        String creator = user.getNickname();
 
         P_storeReq storeReq = storeReqOptional.get();
         storeReq.update(storeReqUpdateDto.getStoreReqState());
