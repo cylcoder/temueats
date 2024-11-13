@@ -184,4 +184,25 @@ public class OrderService {
         return new OrderGetResponseDto(order);
     }
 
+    public void cancelCustomerOrder(UUID orderId) {
+        // 1. 주문 테이블에서 해당 orderId 를 찾아옴
+        Optional<P_order> order = orderRepository.findById(orderId);
+
+        // 2. 해당 orderId의 cancelYn 체크
+        if (!order.get().isCancelYn()) {
+            throw new CustomApiException("결제 후 5분이 지나 주문을 취소할 수 없습니다.");
+        }
+
+        // 2-1. 주문 상태 변경 후 취소 정보 추가
+        order.updateStatus(OrderState.FAIL);
+
+        couponRepository.findByCouponOrderId(order.get().getOrderId());
+
+
+    }
+
+    public void cancelOwnerOrder(UUID orderId) {
+
+
+    }
 }

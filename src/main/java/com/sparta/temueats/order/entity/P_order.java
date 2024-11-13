@@ -75,4 +75,8 @@ public class P_order extends BaseEntity {
     public void updateAmount(Long finalTotal) {
         this.amount = finalTotal;
     }
+
+    public void updateStatus(OrderState status) {
+        this.orderState = status;
+    }
 }
