@@ -121,7 +121,7 @@ public class CouponService {
 
     // 쿠폰 리스트 조회
     public ResponseDto getCouponList(HttpServletRequest req) {
-        // 사용자 조회
+        // 사용자 조회ㄹ
         P_user user = userService.validateTokenAndGetUser(req).orElse(null);
         if (user == null) {
             return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);

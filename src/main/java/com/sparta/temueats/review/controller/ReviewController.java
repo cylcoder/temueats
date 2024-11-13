@@ -4,14 +4,14 @@ package com.sparta.temueats.review.controller;
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.review.dto.request.CreateReviewRequestDto;
 import com.sparta.temueats.review.dto.request.MyReviewRequestDto;
-import com.sparta.temueats.review.dto.response.CreateResponseDto;
-import com.sparta.temueats.review.dto.response.MyReviewReadResponseList;
-import com.sparta.temueats.review.dto.response.MyReviewResponse;
+import com.sparta.temueats.review.dto.request.StoreReviewRequest;
+import com.sparta.temueats.review.dto.response.*;
 import com.sparta.temueats.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -21,9 +21,9 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/{store_id}")
-    public ResponseDto<CreateResponseDto> createReview(@PathVariable Long store_id,
+    public ResponseDto<CreateResponseDto> createReview(@PathVariable Long storeId,
                                                       @RequestBody CreateReviewRequestDto createReviewRequestDto){
-        CreateResponseDto createResponseDto=reviewService.createReview(store_id,createReviewRequestDto);
+        CreateResponseDto createResponseDto=reviewService.createReview(storeId,createReviewRequestDto);
 
         return new ResponseDto<>(createResponseDto.getCode(),createResponseDto.getMessage(),null);
 
@@ -31,10 +31,24 @@ public class ReviewController {
 
     @GetMapping
     public ResponseDto<List<MyReviewResponse>> getMyReviews(@RequestBody MyReviewRequestDto myReviewRequestDto){
-        MyReviewReadResponseList myReviewReadResponseList= reviewService.myReviewRead(myReviewRequestDto.getUserId());
+        MyReviewReadResponseList myReviewReadResponseList= reviewService.getMyReviews(myReviewRequestDto.getUserId());
 
-        return new ResponseDto<>(myReviewReadResponseList.getCode(),myReviewReadResponseList.getMessage(),myReviewReadResponseList.getMyReviewResponseList());
+        return new ResponseDto<>(myReviewReadResponseList.getCode(),
+                myReviewReadResponseList.getMessage(),
+                myReviewReadResponseList.getMyReviewResponseList());
 
     }
+
+    @GetMapping("/{store_id}")
+    public ResponseDto<List<StoreReviewResponse>> getStoreReviews(@PathVariable UUID storeId){
+        StoreReviewResponseList storeReviewResponseList=reviewService.getStoreReviews(storeId);
+
+        return new ResponseDto<>(storeReviewResponseList.getCode(),
+                storeReviewResponseList.getMessage(),
+                storeReviewResponseList.getStoreReviewResponses());
+
+    }
+
+
 }
 

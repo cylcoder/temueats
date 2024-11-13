@@ -1,8 +1,10 @@
 package com.sparta.temueats.menu.entity;
 
 import com.sparta.temueats.global.BaseEntity;
-import com.sparta.temueats.user.entity.P_user;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
