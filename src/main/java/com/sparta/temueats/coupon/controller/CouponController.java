@@ -17,15 +17,15 @@ public class CouponController {
     }
 
     @PostMapping("")
-    public ResponseDto createCoupon(@RequestBody CouponRequestDto couponRequestDto, HttpServletRequest req) {
+    public ResponseDto createCoupon(@RequestBody CouponRequestDto couponRequestDto) {
 
-        return couponService.createCoupon(couponRequestDto, req);
+        return couponService.createCoupon(couponRequestDto);
     }
 
     @GetMapping("")
-    public ResponseDto getCouponList(HttpServletRequest req) {
+    public ResponseDto getCouponList() {
 
-        return couponService.getCouponList(req);
+        return couponService.getCouponList();
     }
 
 }

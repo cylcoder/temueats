@@ -35,23 +35,20 @@ public class AiService {
     private final AiRepository aiRepository;
     private final UserService userService;
 
-    public ResponseDto<String> request(Map<String, String> aiReqMap, HttpServletRequest httpReq) {
+    public ResponseDto<String> request(Map<String, String> aiReqMap) {
         String aiReq = aiReqMap.get("request");
         if (aiReq == null || aiReq.trim().isEmpty()) {
             return new ResponseDto<>(FAILURE, "요청 메시지는 필수입니다.");
         }
 
-        Optional<P_user> userOptional = userService.validateTokenAndGetUser(httpReq);
-        if (userOptional.isEmpty()) {
-            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
-        }
+        P_user user = userService.getUser();
 
         String res = sendReq(aiReq);
         P_aiLog aiLog = P_aiLog.builder()
                 .request(aiReq)
                 .response(res)
                 .build();
-        aiLog.setCreatedBy(userOptional.get().getNickname());
+        aiLog.setCreatedBy(user.getNickname());
         aiRepository.save(aiLog);
 
         return new ResponseDto<>(SUCCESS, "요청 성공", res);

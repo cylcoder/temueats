@@ -50,7 +50,7 @@ public class ReviewService {
 
     public MyReviewReadResponseList getMyReviews(Long userId) {
         //userService로 유저정보 가져오기
-        P_user user=userService.getUserById(userId);
+        P_user user = userService.getUser();
         String nickname=user.getNickname();
 
         //userReview목록조회

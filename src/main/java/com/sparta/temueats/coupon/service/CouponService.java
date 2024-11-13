@@ -12,7 +12,6 @@ import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import com.sparta.temueats.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,19 +35,16 @@ public class CouponService {
     }
 
     // 쿠폰 발행
-    public ResponseDto createCoupon(CouponRequestDto couponRequestDto, HttpServletRequest req) {
+    public ResponseDto createCoupon(CouponRequestDto couponRequestDto) {
 
         // 사용자 검증
-        P_user issuer = userService.validateTokenAndGetUser(req).orElse(null);
-        if (issuer == null) {
-            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
-        }
+        P_user issuer = userService.getUser();
         // 권한 검증
         if(issuer.getRole() == UserRoleEnum.CUSTOMER || issuer.getRole() == UserRoleEnum.OWNER) {
             return new ResponseDto<>(-1, "권한이 없는 사용자입니다", null);
         }
         // 수신자 검증
-        P_user owner = userService.getUserById(couponRequestDto.getOwner());
+        P_user owner = userService.findUserById(couponRequestDto.getOwner());
         if (owner == null) {
             return new ResponseDto<>(-1, "유효하지 않은 수신자입니다", null);
         }
@@ -121,12 +117,9 @@ public class CouponService {
     }
 
     // 쿠폰 리스트 조회
-    public ResponseDto getCouponList(HttpServletRequest req) {
-        // 사용자 조회ㄹ
-        P_user user = userService.validateTokenAndGetUser(req).orElse(null);
-        if (user == null) {
-            return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
-        }
+    public ResponseDto getCouponList() {
+
+        P_user user = userService.getUser();
         // 사용 가능 쿠폰 조회
         List<P_coupon> useableCouponList = couponRepository.findAllByOwnerAndStatus(user, true);
         List<UsableCouponListResponseDto> usable = useableCouponList.stream()
