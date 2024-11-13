@@ -41,12 +41,15 @@ public class P_review extends BaseEntity {
     @JoinColumn(name="user_id",nullable = false)
     private P_user user;
 
-
     @Builder
     public P_review(String content, int score, boolean useYn, boolean reportYn) {
         this.content = content;
         this.score = score;
         this.useYn = useYn;
         this.reportYn = reportYn;
+    }
+
+    public void changeUseYn(){
+        this.useYn = false;
     }
 }

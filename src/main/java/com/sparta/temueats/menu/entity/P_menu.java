@@ -1,8 +1,10 @@
 package com.sparta.temueats.menu.entity;
 
 import com.sparta.temueats.global.BaseEntity;
+import com.sparta.temueats.menu.dto.MenuUpdateDto;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.SellState;
+import com.sparta.temueats.user.entity.P_user;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,5 +49,33 @@ public class P_menu extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean signatureYn;
+
+    public P_menu update(MenuUpdateDto menuUpdateDto, P_user user) {
+        if (menuUpdateDto.getName() != null) {
+            name = menuUpdateDto.getName();
+        }
+        if (menuUpdateDto.getDescription() != null) {
+            description = menuUpdateDto.getDescription();
+        }
+        if (menuUpdateDto.getPrice() != null) {
+            price = menuUpdateDto.getPrice();
+        }
+        if (menuUpdateDto.getImage() != null) {
+            image = menuUpdateDto.getImage();
+        }
+        if (menuUpdateDto.getCategory() != null) {
+            category = menuUpdateDto.getCategory();
+        }
+        if (menuUpdateDto.getSellState() != null) {
+            sellState = menuUpdateDto.getSellState();
+        }
+        if (menuUpdateDto.getSignatureYn() != null) {
+            signatureYn = menuUpdateDto.getSignatureYn();
+        }
+        
+        setUpdatedBy(user.getNickname());
+
+        return this;
+    }
 
 }

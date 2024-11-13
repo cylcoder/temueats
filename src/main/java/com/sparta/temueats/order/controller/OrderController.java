@@ -1,8 +1,9 @@
 package com.sparta.temueats.order.controller;
 
 import com.sparta.temueats.global.ResponseDto;
-import com.sparta.temueats.order.dto.OrderCreateRequestDto;
+import com.sparta.temueats.order.dto.DeliveryOrderCreateRequestDto;
 import com.sparta.temueats.order.dto.OrderGetResponseDto;
+import com.sparta.temueats.order.dto.TakeOutOrderCreateRequestDto;
 import com.sparta.temueats.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +27,15 @@ public class OrderController {
 
     // 주문 생성 (Customer)
     @PostMapping("/orders/customer")
-    public ResponseDto<?> orderCreateResponseCustomerDto(@RequestBody @Valid OrderCreateRequestDto orderCreateRequestDto, BindingResult bindingResult) {
-        orderService.createDeliveryOrders(orderCreateRequestDto, USER_ID);
+    public ResponseDto<?> orderCreateResponseCustomerDto(@RequestBody @Valid DeliveryOrderCreateRequestDto deliveryOrderCreateRequestDto, BindingResult bindingResult) {
+        orderService.createDeliveryOrders(deliveryOrderCreateRequestDto, USER_ID);
         return new ResponseDto<>(1, "주문이 정상적으로 생성되었습니다.", null);
     }
 
     // 주문 생성 (Owner)
     @PostMapping("/orders/owner")
-    public ResponseDto<?> orderCreateResponseOwnerDto(@RequestBody @Valid OrderCreateRequestDto orderCreateRequestDto, BindingResult bindingResult) {
-        orderService.createTakeOutOrders(orderCreateRequestDto, USER_ID);
+    public ResponseDto<?> orderCreateResponseOwnerDto(@RequestBody @Valid TakeOutOrderCreateRequestDto takeOutOrderCreateRequestDto, BindingResult bindingResult) {
+        orderService.createTakeOutOrders(takeOutOrderCreateRequestDto, USER_ID);
         return new ResponseDto<>(1, "주문이 정상적으로 생성되었습니다.", null);
     }
 

@@ -13,19 +13,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class StoreReqCreateDto {
+public class StoreReqCreateWithImageDto {
 
     @NotBlank(message = "가게 이름은 필수입니다.")
     @Size(min = 2, max = 50, message = "가게 이름은 2자 이상 50자 이하로 입력해주세요.")
     private String name;
 
-    @Size(max = 500, message = "이미지 URL은 최대 500자입니다.")
-    private String image;
+    private MultipartFile image;
 
     @NotBlank(message = "전화번호는 필수입니다.")
     @Size(min = 10, max = 15, message = "전화번호는 최소 10자 이상, 15자 이하로 입력해주세요.")
@@ -50,7 +50,7 @@ public class StoreReqCreateDto {
     @Size(max = 50, message = "주소는 최대 50자입니다.")
     private String address;
 
-    public P_storeReq toEntity(P_user user) {
+    public P_storeReq toEntity(P_user user, String image) {
         return P_storeReq.builder()
                 .requestedBy(user)
                 .name(name)

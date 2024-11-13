@@ -2,25 +2,28 @@
 package com.sparta.temueats.review.service;
 
 import com.sparta.temueats.review.dto.request.CreateReviewRequestDto;
-import com.sparta.temueats.review.dto.response.CreateResponseDto;
-import com.sparta.temueats.review.dto.response.MyReviewReadResponseList;
-import com.sparta.temueats.review.dto.response.MyReviewResponse;
+import com.sparta.temueats.review.dto.response.*;
 import com.sparta.temueats.review.entity.P_review;
 import com.sparta.temueats.review.repository.ReviewRepository;
+import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.repository.UserRepository;
+import com.sparta.temueats.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final UserRepository userRepository;
-
+    //private final UserRepository userRepository;
+    private final UserService userService;
 
     public CreateResponseDto createReview(Long storeId, CreateReviewRequestDto createReviewRequestDto) {
         //가게 존재여부 확인
@@ -45,9 +48,11 @@ public class ReviewService {
         return createResponseDto;
     }
 
-    public MyReviewReadResponseList myReviewRead(Long userId) {
-        P_user user=userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("해당 아이디는 존재하지 않습니다."));
+    public MyReviewReadResponseList getMyReviews(Long userId) {
+        //userService로 유저정보 가져오기
+        P_user user=userService.getUserById(userId);
         String nickname=user.getNickname();
+
         //userReview목록조회
         List<P_review> myReviewList =reviewRepository.findByUserId(userId);
         List<MyReviewResponse> myReviewResponseList = new ArrayList<>();
@@ -69,8 +74,50 @@ public class ReviewService {
                 .myReviewResponseList(myReviewResponseList)
                 .nickname(nickname)
                 .code(1)
-                .message("리뷰목록 조회 성공")
+                .message("나의 리뷰목록 조회 성공")
                 .build();
+
+    }
+
+    public StoreReviewResponseList getStoreReviews(UUID storeId) {
+        P_store store=reviewRepository.findStoreByStoreId(storeId).
+                orElseThrow(()->new IllegalArgumentException("가게가 존재하지 않습니다."));
+
+        List<P_review> reviewList=reviewRepository.findByStoreId(storeId);
+        List<StoreReviewResponse> storeReviewResponseList = new ArrayList<>();
+        for(P_review review : reviewList){
+            StoreReviewResponse storeReviewResponse= StoreReviewResponse.builder()
+                    .reviewId(review.getReviewId())
+                    .content(review.getContent())
+                    .nickname(review.getStore().getName())
+                    .createdAt(review.getCreatedAt())
+                    .updatedAt(review.getUpdatedAt())
+                    .build();
+
+            storeReviewResponseList.add(storeReviewResponse);
+        }
+
+        return StoreReviewResponseList.builder()
+                .storeReviewResponses(storeReviewResponseList)
+                .code(1)
+                .message("가게 리뷰목록 조회 성공")
+                .build();
+    }
+
+    @Transactional
+    public DeleteReviewResponse deleteReviews(UUID reviewId,Long userId) {
+        //리뷰 불러오기
+        P_review review=reviewRepository.findById(reviewId)
+                .orElseThrow(()->new IllegalArgumentException("리뷰가 존재하지 않습니다."));
+       //user일치 확인
+        if(!review.getUser().getId().equals(userId)){
+            return new DeleteReviewResponse(-1,"권한이 없습니다.");
+        }
+
+        review.changeUseYn();
+        reviewRepository.save(review);
+
+        return new DeleteReviewResponse(1,"리뷰 삭제가 완료 되었습니다.");
 
     }
 }

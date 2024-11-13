@@ -3,8 +3,6 @@ package com.sparta.temueats.store.util;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import com.sparta.temueats.user.repository.UserRepository;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

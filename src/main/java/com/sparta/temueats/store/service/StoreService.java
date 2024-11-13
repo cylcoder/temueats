@@ -1,11 +1,13 @@
 package com.sparta.temueats.store.service;
 
 import com.sparta.temueats.global.ResponseDto;
-import com.sparta.temueats.global.ex.CustomApiException;
-import com.sparta.temueats.store.dto.AddFavStoreRequestDto;
-import com.sparta.temueats.store.dto.FavStoreListResponseDto;
-import com.sparta.temueats.store.dto.StoreResDto;
-import com.sparta.temueats.store.dto.StoreUpdateDto;
+import com.sparta.temueats.menu.dto.MenuResDto;
+import com.sparta.temueats.menu.repository.MenuRepository;
+import com.sparta.temueats.rating.repository.RatingRepository;
+import com.sparta.temueats.review.dto.response.ReviewResDto;
+import com.sparta.temueats.review.entity.P_review;
+import com.sparta.temueats.review.repository.ReviewRepository;
+import com.sparta.temueats.store.dto.*;
 import com.sparta.temueats.store.entity.P_favStore;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.repository.FavStoreRepository;
@@ -21,6 +23,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.sparta.temueats.global.ResponseDto.FAILURE;
+import static com.sparta.temueats.global.ResponseDto.SUCCESS;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,20 +34,82 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final FavStoreRepository favStoreRepository;
     private final UserService userService;
+    private final ReviewRepository reviewRepository;
+    private final MenuRepository menuRepository;
+    private final RatingRepository ratingRepository;
 
-    public void update(StoreUpdateDto storeUpdateDto, P_user user) {
-        storeRepository.findById(storeUpdateDto.getStoreId())
-                .orElseThrow(() -> new CustomApiException("존재하지 않는 음식점입니다."))
-                .update(storeUpdateDto, user);
+    public ResponseDto<Object> update(StoreUpdateDto storeUpdateDto, HttpServletRequest req) {
+        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
+        if (userOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
+        }
 
+        Optional<P_store> storeOptional = storeRepository.findById(storeUpdateDto.getStoreId());
+        if (storeOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "존재하지 않는 가게입니다.");
+        }
+
+        P_store store = storeOptional.get();
+        store.update(storeUpdateDto, userOptional.get());
+        return new ResponseDto<>(SUCCESS, "가게 정보 수정 성공");
     }
 
-    public List<StoreResDto> findByName(String name) {
-        return storeRepository.findByNameContaining(name);
+    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName, HttpServletRequest req) {
+        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
+        if (userOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
+        }
+
+        List<StoreResDto> stores = storeRepository.findByStoreNameContaining(storeName, userOptional.get().getId());
+
+        if (stores.isEmpty()) {
+            return new ResponseDto<>(SUCCESS, storeName + "와(과) 일치하는 검색결과가 없습니다.");
+        }
+
+        return new ResponseDto<>(SUCCESS, "가게 검색 성공", stores);
     }
 
-    public Optional<P_store> findById(UUID storeId) {
+    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName, HttpServletRequest req) {
+        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
+        if (userOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
+        }
+
+        List<StoreResDto> stores = storeRepository.findByMenuNameContaining(menuName, userOptional.get().getId());
+
+        if (stores.isEmpty()) {
+            return new ResponseDto<>(SUCCESS, menuName + "와(과) 일치하는 검색결과가 없습니다.");
+        }
+
+        return new ResponseDto<>(SUCCESS, "가게 검색 성공", stores);
+    }
+
+    public Optional<P_store> findEntityById(UUID storeId) {
         return storeRepository.findById(storeId);
+    }
+
+    public ResponseDto<StoreDetailResDto> findDetailById(UUID storeId, HttpServletRequest req) {
+        Optional<P_user> userOptional = userService.validateTokenAndGetUser(req);
+        if (userOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다.");
+        }
+
+        Optional<P_store> storeOptional = storeRepository.findById(storeId);
+        if (storeOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "존재하지 않는 가게 번호입니다.");
+        }
+
+        P_user user = userOptional.get();
+        P_store store = storeOptional.get();
+
+        StoreDetailResDto storeDetailResDto = new StoreDetailResDto(store);
+        List<P_review> reviews = reviewRepository.findByStoreId(storeId);
+        storeDetailResDto.setReviewCount(reviews.size());
+        storeDetailResDto.setIsFavorite(favStoreRepository.findByUserAndStore(user, store).isPresent());
+        storeDetailResDto.setMenu(menuRepository.findByStore(store).stream().map(MenuResDto::new).toList());
+        storeDetailResDto.setReviews(reviews.stream().map(ReviewResDto::new).toList());
+        storeDetailResDto.setRating(ratingRepository.findByStoreAndVisibleYn(store, true).getScore());
+        return new ResponseDto<>(SUCCESS, "가게 상세 조회 성공", storeDetailResDto);
     }
 
     // 가게 즐겨찾기 추가/삭제
@@ -54,7 +121,7 @@ public class StoreService {
             return new ResponseDto<>(-1, "유효하지 않은 토큰이거나 존재하지 않는 사용자입니다", null);
         }
         // 가게 검증
-        P_store store = findById(requestDto.getStoreId()).orElse(null);
+        P_store store = findEntityById(requestDto.getStoreId()).orElse(null);
         if(store == null) {
             return new ResponseDto<>(-1, "존재하지 않는 가게입니다", null);
         }
@@ -93,4 +160,5 @@ public class StoreService {
 
         return new ResponseDto(1, "즐겨찾기 가게 목록 조회 성공", stores);
     }
+
 }

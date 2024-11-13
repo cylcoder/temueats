@@ -3,7 +3,7 @@ spring:
     name: temueats
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/temueats
+    url: jdbc:postgresql://13.125.168.6:5432/temueats
     username:
     password:
     driver-class-name: org.postgresql.Driver
