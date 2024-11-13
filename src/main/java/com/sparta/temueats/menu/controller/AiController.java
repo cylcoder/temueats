@@ -19,8 +19,8 @@ public class AiController {
     private final AiService aiService;
 
     @PostMapping("/request")
-    public ResponseDto<String> request(@RequestBody Map<String, String> aiReqMap, HttpServletRequest httpReq) {
-        return aiService.request(aiReqMap, httpReq);
+    public ResponseDto<String> request(@RequestBody Map<String, String> aiReqMap) {
+        return aiService.request(aiReqMap);
     }
 
 }
