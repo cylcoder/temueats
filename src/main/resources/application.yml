@@ -3,7 +3,7 @@ spring:
     name: temueats
 
   datasource:
-    url: jdbc:postgresql://13.125.168.6:5432/temueats
+    url: jdbc:postgresql://43.201.49.245:5432/temueats
     username:
     password:
     driver-class-name: org.postgresql.Driver
@@ -16,14 +16,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   jwt:
     secret:
       key: 7KCA64qU7Jik64qY7JWE66mU66as7Lm064W47JmA7LSI7L2U652865a866W866i57JeI7Iq164uI64uk7ZaJ67O17ZW07JqU
 
-
+ai:
+  api:
+    url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyB3UJ2I5JAduS0hXGD2wYM32qu3pgoA-zY"
