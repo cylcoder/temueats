@@ -2,6 +2,7 @@ package com.sparta.temueats.order.entity;
 
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.global.BaseEntity;
+import com.sparta.temueats.payment.entity.P_payment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -47,6 +48,10 @@ public class P_order extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     private List<P_cart> cartList;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    private P_payment payment;
+
     @Column(nullable = false)
     private Long customerId;
 
@@ -79,4 +84,5 @@ public class P_order extends BaseEntity {
     public void updateStatus(OrderState status) {
         this.orderState = status;
     }
+
 }
