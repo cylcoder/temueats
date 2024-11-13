@@ -1,6 +1,7 @@
 package com.sparta.temueats.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.security.UserDetailsImpl;
 import com.sparta.temueats.security.util.JwtUtil;
 import com.sparta.temueats.user.dto.LoginRequestDto;
@@ -12,8 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.core.AuthenticationException;import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 
@@ -58,11 +58,35 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         jwtUtil.addAccessTokenToHeader(accessToken, response);  // 액세스 토큰을 헤더에 추가
         jwtUtil.addRefreshTokenToCookie(refreshToken, response);  // 리프레시 토큰을 쿠키에 추가
+
+        ResponseDto responseDto = new ResponseDto(1, "로그인 성공", null);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        logger.info("로그인 실패");
-        response.setStatus(401);
+        String errorMsg;
+
+        if (failed instanceof org.springframework.security.authentication.BadCredentialsException) {
+            errorMsg = "이메일이나 비밀번호가 틀렸습니다";
+            sendErrorResponse(response, ResponseDto.FAILURE, errorMsg);
+        } else {
+            errorMsg = "인증 실패";
+            sendErrorResponse(response, ResponseDto.FAILURE, errorMsg);
+        }
+
+        logger.info("로그인 실패: ");
     }
+
+    private void sendErrorResponse(HttpServletResponse response, Integer code, String msg) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        ResponseDto<Object> responseDto = new ResponseDto<>(code, msg);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
+    }
+
 }
