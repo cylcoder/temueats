@@ -2,7 +2,7 @@ package com.sparta.temueats.review.controller;
 
 
 import com.sparta.temueats.global.ResponseDto;
-import com.sparta.temueats.review.dto.request.DeleteCommentRequest;
+import com.sparta.temueats.review.dto.request.DeleteCommnetRequest;
 import com.sparta.temueats.review.dto.request.CreateCommentRequest;
 import com.sparta.temueats.review.dto.request.DeleteCommentResponse;
 import com.sparta.temueats.review.dto.response.CreateCommentResponse;
