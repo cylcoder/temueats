@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.sparta.temueats.global.ResponseDto.FAILURE;
 import static com.sparta.temueats.global.ResponseDto.SUCCESS;
@@ -73,16 +74,23 @@ public class MenuService {
 
 
     public ResponseDto<MenuResDto> update(MenuUpdateDto menuUpdateDto) {
-
-        P_user user = userService.getUser();
-
         Optional<P_menu> menuOptional = menuRepository.findById(menuUpdateDto.getMenuId());
         if (menuOptional.isEmpty()) {
             return new ResponseDto<>(FAILURE, "유효하지 않은 메뉴 번호입니다.");
         }
 
-        P_menu menu = menuOptional.get().update(menuUpdateDto, user);
+        P_menu menu = menuOptional.get().update(menuUpdateDto, userService.getUser());
         return new ResponseDto<>(SUCCESS,"메뉴 수정 성공", new MenuResDto(menu));
     }
 
+    public ResponseDto<Object> findById(UUID menuId) {
+        Optional<P_menu> menuOptional = menuRepository.findById(menuId);
+
+        if (menuOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "유효하지 않은 메뉴 번호입니다.");
+        }
+
+        menuOptional.get().delete();
+        return new ResponseDto<>(SUCCESS, "메뉴 삭제 성공");
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.sparta.temueats.store.util.AuthUtils.AuthStatus.AUTHORIZED;
 import static com.sparta.temueats.user.entity.UserRoleEnum.*;
@@ -59,6 +60,16 @@ public class MenuController {
         ValidUtils.throwIfHasErrors(res, "메뉴 수정 실패");
 
         return menuService.update(menuUpdateDto);
+    }
+
+    @DeleteMapping("/{menuId}")
+    public ResponseDto<Object> delete(@PathVariable UUID menuId) {
+        AuthUtils.AuthStatus authStatus = authUtils.validate(List.of(OWNER, MANAGER, MASTER));
+        if (!authStatus.equals(AUTHORIZED)) {
+            return new ResponseDto<>(ResponseDto.FAILURE, authStatus.getMsg());
+        }
+
+        return menuService.findById(menuId);
     }
 
 }
