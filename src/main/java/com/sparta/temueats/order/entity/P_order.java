@@ -1,6 +1,5 @@
 package com.sparta.temueats.order.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.global.BaseEntity;
 import com.sparta.temueats.payment.entity.P_payment;
@@ -90,5 +89,15 @@ public class P_order extends BaseEntity {
     // 연관관계 편의 메소드
     public void setPayment(P_payment payment) {
         this.payment = payment;
+    }
+
+    //OrderState상태 변경
+    public void changeOrderState(OrderState orderState) {
+        this.orderState = orderState;
+    }
+
+    //cancleYn변경
+    public void changeCancleYn() {
+        this.cancelYn = false;
     }
 }

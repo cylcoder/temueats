@@ -7,8 +7,9 @@ public enum OrderState {
     SUCCESS("고객 전달 완료"),
     FAIL("주문 실패");
 
-
+    private final String status;
     OrderState(String status) {
-
+        this.status = status;
     }
+    public String getStatus() {return status;}
 }

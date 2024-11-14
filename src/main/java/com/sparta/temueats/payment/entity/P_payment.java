@@ -35,4 +35,8 @@ public class P_payment extends BaseEntity {
         this.price = price;
         this.order = order;
     }
+
+    public void changePaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 }
