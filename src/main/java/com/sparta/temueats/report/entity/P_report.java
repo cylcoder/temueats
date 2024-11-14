@@ -2,6 +2,7 @@ package com.sparta.temueats.report.entity;
 
 import com.sparta.temueats.global.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,5 +27,10 @@ public class P_report extends BaseEntity {
     @Column
     private LocalDateTime resolvedDate;
 
-
+    @Builder
+    public P_report(String reportDetail, boolean resolvedYn, LocalDateTime resolvedDate) {
+        this.reportDetail = reportDetail;
+        this.resolvedYn = resolvedYn;
+        this.resolvedDate = resolvedDate;
+    }
 }
