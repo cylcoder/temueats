@@ -8,9 +8,13 @@ import com.sparta.temueats.user.dto.LoginRequestDto;
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,6 +23,8 @@ import java.io.IOException;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+
     private final JwtUtil jwtUtil;
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
@@ -28,7 +34,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
+        // 카카오 로그인 경로일 경우 필터 건너뜀
+        if (request.getRequestURI().equals("/api/members/auth/kakao-login")) {
+            return null;
+        }
         try {
             LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
             return getAuthenticationManager().authenticate(
@@ -56,8 +65,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = jwtUtil.createAccessToken(email, role.name());
         String refreshToken = jwtUtil.createRefreshToken(email);
 
-        jwtUtil.addAccessTokenToHeader(accessToken, response);  // 액세스 토큰을 헤더에 추가
-        jwtUtil.addRefreshTokenToCookie(refreshToken, response);  // 리프레시 토큰을 쿠키에 추가
+        // 엑세스 토큰, 리프레시 토큰 추가
+        HttpHeaders headers = jwtUtil.createAccessTokenHeader(accessToken);
+        ResponseCookie refreshCookie = jwtUtil.createRefreshTokenCookie(refreshToken);
+
+        // 헤더, 쿠키 응답에 추가
+        response.setHeader("Authorization", headers.getFirst("Authorization"));
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         ResponseDto responseDto = new ResponseDto(1, "로그인 성공", null);
         response.setContentType("application/json");
