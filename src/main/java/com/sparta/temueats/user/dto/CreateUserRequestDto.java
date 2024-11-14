@@ -44,6 +44,6 @@ public class CreateUserRequestDto {
     @NotBlank
     private String address;
 
-
+    private Long kakaoId;
 
 }

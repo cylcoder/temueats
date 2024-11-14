@@ -33,7 +33,6 @@ public class KakaoService {
 
     public ResponseEntity<ResponseDto> processKakaoLogin(String code) throws ParseException {
 
-        System.out.println("processKakaoLogin entered");
         // 토큰 가져오기
         Map<String, String> tokens = getKakaoTokens(code);
         String kakaoAccessToken = tokens.get("access_token");
@@ -51,7 +50,7 @@ public class KakaoService {
         // 로그인 처리
         String accessToken = jwtUtil.createAccessToken(user.getEmail(), user.getRole().name());
         String refreshToken = jwtUtil.createRefreshToken(user.getEmail());
-
+        System.out.println("accessToken: " + accessToken + " refreshToken: " + refreshToken);
         LoginResponseDto loginResponse = new LoginResponseDto(user.getEmail(), user.getNickname(), user.getRole().name());
 
         ResponseDto response = new ResponseDto(ResponseDto.SUCCESS, "로그인이 성공적으로 완료되었습니다", loginResponse);
@@ -65,8 +64,8 @@ public class KakaoService {
                 .body(response);
     }
 
+    // 카카오 토큰 가져오기
     private Map<String, String> getKakaoTokens(String code) {
-        System.out.println("getKakaoTokens entered, " + code);
         String url = "https://kauth.kakao.com/oauth/token";
 
         HttpHeaders headers = new HttpHeaders();
@@ -122,7 +121,6 @@ public class KakaoService {
             phone = "0" + phone.substring(2);
         }
 
-        // 원하는 형식으로 조합
         if (phone.length() == 11) {
             phone = phone.replaceFirst("(\\d{3})(\\d{4})(\\d+)", "$1-$2-$3");
         } else if (phone.length() == 10) {

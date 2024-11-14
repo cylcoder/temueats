@@ -1,6 +1,5 @@
 package com.sparta.temueats.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.user.dto.CreateUserRequestDto;
 import com.sparta.temueats.user.dto.UpdateMypageRequestDto;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/members")

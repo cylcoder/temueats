@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class UserService {
@@ -36,7 +38,8 @@ public class UserService {
     public ResponseDto createUser(CreateUserRequestDto request) {
 
         Point latLngPoint = geometryFactory.createPoint(new Coordinate(request.getLng(), request.getLat()));
-
+        String socialProvider = "NONE";
+        String password = request.getPassword();
         // 이메일 중복확인
         if(userRepository.findByEmail(request.getEmail()).isPresent()) {
             return new ResponseDto<>(-1, "중복된 이메일입니다", null);
@@ -45,9 +48,19 @@ public class UserService {
         if(userRepository.findByNickname(request.getNickname()).isPresent()) {
             return new ResponseDto<>(-1, "중복된 닉네임입니다", null);
         }
+        // 카카오 회원가입일 경우
+        if(request.getKakaoId() != null) {
+            socialProvider = "KAKAO";
+            // 비밀번호 랜덤 생성
+            password = UUID.randomUUID().toString();
+        }
+        // 일반 회원가입인데 비밀번호가 없는 경우
+        if(request.getKakaoId() == null && password == null) {
+            return new ResponseDto<>(-1, "비밀번호가 없습니다", null);
+        }
 
         // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        String encodedPassword = passwordEncoder.encode(password);
 
         P_user user = P_user.builder()
                 .email(request.getEmail())
@@ -60,6 +73,8 @@ public class UserService {
                 .imageProfile(request.getImageProfile())
                 .latLng(latLngPoint)
                 .address(request.getAddress())
+                .kakaoId(request.getKakaoId())
+                .socialProvider(socialProvider)
                 .build();
 
         userRepository.save(user);
