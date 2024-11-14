@@ -57,6 +57,13 @@ public class ReportService {
         P_store store=storeRepository.findById(createStoreReportReq.getStoreId()).orElseThrow(()->
                 new CustomApiException("해당 가게는 존재하지 않습니다.")
         );
+        P_report newReport=reportRepository.save(
+                P_report.builder()
+                        .reportDetail(createStoreReportReq.getContent())
+                        .resolvedYn(false)
+                        .resolvedDate(null)
+                        .build()
+        );
         StoreInfoRes storeInfoRes= StoreInfoRes.builder()
                 .storeName(store.getName())
                 .content(createStoreReportReq.getContent())
