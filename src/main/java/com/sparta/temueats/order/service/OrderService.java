@@ -46,7 +46,7 @@ public class OrderService {
             if (payment.getPaymentStatus() == PaymentStatus.PAID&&order.isCancelYn()) {
                 order.changeCancleYn();
             }else if(order.getOrderState()==OrderState.FAIL){//취소 메서드 발생시
-                payment.changePaymentStatus(PaymentStatus.CANCELED);
+                payment.setStatus(PaymentStatus.CANCELED);
             }
             //변경내용 저장
             orderRepository.save(order);
