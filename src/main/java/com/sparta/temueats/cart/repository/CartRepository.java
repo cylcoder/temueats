@@ -22,4 +22,6 @@ public interface CartRepository extends JpaRepository<P_cart, UUID> {
 
     @Query("select c from P_cart c where c.selectYn = true AND c.user.id = :userId AND c.deletedYn = false")
     List<P_cart> findAllBySelectAndUserId(Long userId);
+
+
 }
