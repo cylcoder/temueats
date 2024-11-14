@@ -14,17 +14,21 @@ import com.sparta.temueats.store.repository.FavStoreRepository;
 import com.sparta.temueats.store.repository.StoreRepository;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.sparta.temueats.global.ResponseDto.FAILURE;
 import static com.sparta.temueats.global.ResponseDto.SUCCESS;
+import static java.util.Collections.reverse;
+import static java.util.Collections.reverseOrder;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +43,6 @@ public class StoreService {
     private final RatingRepository ratingRepository;
 
     public ResponseDto<Object> update(StoreUpdateDto storeUpdateDto) {
-
         P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(storeUpdateDto.getStoreId());
@@ -52,11 +55,21 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 정보 수정 성공");
     }
 
-    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(String storeName) {
-        P_user user = userService.getUser();
+    public ResponseDto<List<StoreResDto>> findByStoreNameContaining(
+            String storeName, String order, String orderBy, int page, int size) {
+        Long userId = userService.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
 
+        List<StoreResDto> stores;
+        if ("createdAt".equals(orderBy)) {
+            stores = storeRepository.findByStoreNameContainingOrderByCreatedAtDesc(storeName, userId, pageable);
+        } else {
+            stores = storeRepository.findByStoreNameContainingOrderByUpdatedAtDesc(storeName, userId, pageable);
+        }
 
-        List<StoreResDto> stores = storeRepository.findByStoreNameContaining(storeName, user.getId());
+        if ("asc".equals(order)) {
+            reverse(stores);
+        }
 
         if (stores.isEmpty()) {
             return new ResponseDto<>(SUCCESS, storeName + "와(과) 일치하는 검색결과가 없습니다.");
@@ -65,11 +78,21 @@ public class StoreService {
         return new ResponseDto<>(SUCCESS, "가게 검색 성공", stores);
     }
 
-    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(String menuName) {
+    public ResponseDto<List<StoreResDto>> findByMenuNameContaining(
+            String menuName, String order, String sortBy, int page, int size) {
+        Long userId = userService.getUser().getId();
+        Pageable pageable = PageRequest.of(page, size);
 
-        P_user user = userService.getUser();
+        List<StoreResDto> stores;
+        if ("createdAt".equals(sortBy)) {
+            stores = storeRepository.findByMenuNameContainingOrderByCreatedAtDesc(menuName, userId, pageable);
+        } else {
+            stores = storeRepository.findByMenuNameContainingOrderByUpdatedAtDesc(menuName, userId, pageable);
+        }
 
-        List<StoreResDto> stores = storeRepository.findByMenuNameContaining(menuName, user.getId());
+        if ("asc".equals(order)) {
+            reverse(stores);
+        }
 
         if (stores.isEmpty()) {
             return new ResponseDto<>(SUCCESS, menuName + "와(과) 일치하는 검색결과가 없습니다.");
@@ -83,7 +106,6 @@ public class StoreService {
     }
 
     public ResponseDto<StoreDetailResDto> findDetailById(UUID storeId) {
-
         P_user user = userService.getUser();
 
         Optional<P_store> storeOptional = storeRepository.findById(storeId);
@@ -101,6 +123,16 @@ public class StoreService {
         storeDetailResDto.setReviews(reviews.stream().map(ReviewResDto::new).toList());
         storeDetailResDto.setRating(ratingRepository.findByStoreAndVisibleYn(store, true).getScore());
         return new ResponseDto<>(SUCCESS, "가게 상세 조회 성공", storeDetailResDto);
+    }
+
+    public ResponseDto<Object> delete(UUID storeId) {
+        Optional<P_store> storeOptional = storeRepository.findById(storeId);
+        if (storeOptional.isEmpty()) {
+            return new ResponseDto<>(FAILURE, "존재하지 않는 가게 번호입니다.");
+        }
+
+        storeOptional.get().delete();
+        return new ResponseDto<>(SUCCESS, "가게 삭제 성공");
     }
 
     // 가게 즐겨찾기 추가/삭제
