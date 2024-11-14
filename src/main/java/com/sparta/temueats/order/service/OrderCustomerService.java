@@ -85,14 +85,11 @@ public class OrderCustomerService {
                 int discount = coupon.getDiscountAmount();
                 Long finalTotal = total - discount;
 
-                log.info("쿠폰이 잘 담겨져 오는지 확인 discount = "+ discount);
                 couponService.useCoupon(coupon.getId(), order);
 
                 // 4-1 쿠폰 할인 금액 및 최종 금액을 적용하여 다시 저장
                 order.updateDiscountPrice(discount);
-                log.info("order에 discountPrice가 잘 담겨있는지 확인 = "+ order.getDiscountPrice());
                 order.updateAmount(finalTotal);
-                log.info("order에 finalTotal가 잘 담겨있는지 확인 = "+ order.getAmount());
 
             }
         }
