@@ -11,6 +11,7 @@ import com.sparta.temueats.order.dto.OrderGetResponseDto;
 import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.order.repository.OrderRepository;
+import com.sparta.temueats.payment.entity.PaymentStatus;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +34,16 @@ public class OrderCustomerService {
     private final CartRepository cartRepository;
     private final CouponRepository couponRepository;
     private final CouponService couponService;
+    private final UserRepository userRepository;
 
+    @Transactional
     public void createDeliveryOrders(DeliveryOrderCreateRequestDto deliveryOrderCreateRequestDto, P_user user) {
+        // 0. 상태가 STANDBY 인 주문이 존재하면, 주문 생성 불가
+        List<P_order> IsIngOrder = orderRepository.findAllByUserIdIsIng(user.getId(), OrderState.STANDBY);
+        if (!IsIngOrder.isEmpty()) {
+            throw new CustomApiException("현재 진행중인 주문이 있습니다. 해당 주문에 대한 결제를 먼저 진행해주세요.");
+        }
+
         // 1. 주문 생성 시 장바구니에서 선택된 물품들 가져오기
         List<P_cart> allBySelect = cartRepository.findAllBySelectAndUserId(user.getId());
 
@@ -66,20 +76,25 @@ public class OrderCustomerService {
         order = orderRepository.save(order);
 
 
-        // 4. 쿠폰 있는 지 확인하고 사용
-        List<P_coupon> coupons = couponRepository.findAllByOwnerAndStatus(user, true);
+        // 4. 쿠폰 입력이 존재하면, 입력된 쿠폰이 해당 유저의 쿠폰인지 검증하고 사용
+        if (deliveryOrderCreateRequestDto.getCouponId() != null) {
+            P_coupon coupon = couponRepository.findById(deliveryOrderCreateRequestDto.getCouponId()).orElseThrow(() ->
+                    new CustomApiException("해당 쿠폰 아이디를 조회할 수 없습니다."));
 
-        if (!coupons.isEmpty()) {
-            P_coupon coupon = coupons.get(0);
-            int discount = coupon.getDiscountAmount();
-            Long finalTotal = total - discount;
+            if (coupon.getOwner().getId().equals(user.getId())) {
+                int discount = coupon.getDiscountAmount();
+                Long finalTotal = total - discount;
 
-            couponService.useCoupon(coupon.getId(), order);
+                log.info("쿠폰이 잘 담겨져 오는지 확인 discount = "+ discount);
+                couponService.useCoupon(coupon.getId(), order);
 
-            // 4-1 쿠폰 할인 금액 및 최종 금액을 적용하여 다시 저장
-            order.updateDiscountPrice(discount);
-            order.updateAmount(finalTotal);
+                // 4-1 쿠폰 할인 금액 및 최종 금액을 적용하여 다시 저장
+                order.updateDiscountPrice(discount);
+                log.info("order에 discountPrice가 잘 담겨있는지 확인 = "+ order.getDiscountPrice());
+                order.updateAmount(finalTotal);
+                log.info("order에 finalTotal가 잘 담겨있는지 확인 = "+ order.getAmount());
 
+            }
         }
     }
 
@@ -112,10 +127,17 @@ public class OrderCustomerService {
 
         // 2-2. 쿠폰 적용 취소하기
         Optional<P_coupon> usedCoupon = couponRepository.findCouponByOrderId(order.getOrderId());
-        couponService.cancelCoupon(usedCoupon.get().getId());
+        if (usedCoupon.isPresent()) {
+            couponService.cancelCoupon(usedCoupon.get().getId());
+        }
 
         // 3. 결제 상태를 canceled 로 설정하고 취소일시, 취소자에 정보 추가
-        // todo 결제 기능 개발 후 추가
+        order.getPayment().setStatus(PaymentStatus.CANCELED);
+
+        P_user user = userRepository.findById(order.getCustomerId()).orElseThrow(() ->
+                new CustomApiException("해당 유저를 찾을 수 없습니다."));
+        order.getPayment().setUpdatedAt(LocalDateTime.now());
+        order.getPayment().setUpdatedBy(user.getEmail());
 
     }
 }
