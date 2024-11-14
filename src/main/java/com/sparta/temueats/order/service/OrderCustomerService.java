@@ -11,6 +11,7 @@ import com.sparta.temueats.order.dto.OrderGetResponseDto;
 import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.order.repository.OrderRepository;
+import com.sparta.temueats.payment.entity.PaymentStatus;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +34,7 @@ public class OrderCustomerService {
     private final CartRepository cartRepository;
     private final CouponRepository couponRepository;
     private final CouponService couponService;
+    private final UserRepository userRepository;
 
     public void createDeliveryOrders(DeliveryOrderCreateRequestDto deliveryOrderCreateRequestDto, P_user user) {
         // 1. 주문 생성 시 장바구니에서 선택된 물품들 가져오기
@@ -112,10 +115,17 @@ public class OrderCustomerService {
 
         // 2-2. 쿠폰 적용 취소하기
         Optional<P_coupon> usedCoupon = couponRepository.findCouponByOrderId(order.getOrderId());
-        couponService.cancelCoupon(usedCoupon.get().getId());
+        if (usedCoupon.isPresent()) {
+            couponService.cancelCoupon(usedCoupon.get().getId());
+        }
 
         // 3. 결제 상태를 canceled 로 설정하고 취소일시, 취소자에 정보 추가
-        // todo 결제 기능 개발 후 추가
+        order.getPayment().setStatus(PaymentStatus.CANCELED);
+
+        P_user user = userRepository.findById(order.getCustomerId()).orElseThrow(() ->
+                new CustomApiException("해당 유저를 찾을 수 없습니다."));
+        order.getPayment().setUpdatedAt(LocalDateTime.now());
+        order.getPayment().setUpdatedBy(user.getEmail());
 
     }
 }
