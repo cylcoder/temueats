@@ -17,7 +17,7 @@ import java.util.UUID;
 public class P_payment extends BaseEntity {
     @Id
     @GeneratedValue(generator = "UUID")
-    private UUID paymentID;
+    private UUID paymentId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

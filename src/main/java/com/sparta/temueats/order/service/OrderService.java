@@ -45,4 +45,6 @@ public class OrderService {
         return new OrderGetResponseDto(order);
     }
 
+    // 결제 상태가 PAID 로 변경되고 주문 상태도 SUCCESS 로 변경하고, 5분 타이머 시작하는 로직 추가 (결제 상태 수정에서 사용)
+
 }
