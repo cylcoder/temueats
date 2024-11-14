@@ -36,7 +36,8 @@ public class P_payment extends BaseEntity {
         this.order = order;
     }
 
-    public void changePaymentStatus(PaymentStatus paymentStatus) {
+
+    public void setStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 }

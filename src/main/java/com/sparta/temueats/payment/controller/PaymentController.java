@@ -2,11 +2,11 @@ package com.sparta.temueats.payment.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.payment.dto.PaymentGetResponseDto;
+import com.sparta.temueats.payment.dto.PaymentModifyRequestDto;
 import com.sparta.temueats.payment.service.PaymentService;
 import com.sparta.temueats.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -28,5 +28,12 @@ public class PaymentController {
     public ResponseDto<?> getPaymentResponseDto(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         PaymentGetResponseDto paymentGetResponseDto = paymentService.getPayments(userDetails.getUser());
         return new ResponseDto<>(1, "결제 조회에 성공했습니다.", paymentGetResponseDto);
+    }
+
+    @PutMapping("/payments/{paymentId}")
+    public ResponseDto<?> modifyPaymentResponseDto(@RequestBody PaymentModifyRequestDto paymentmodifyRequestDto,
+                                                   @PathVariable UUID paymentId) {
+        paymentService.modifyPayment(paymentmodifyRequestDto, paymentId);
+        return new ResponseDto<>(1, "결제가 완료되었습니다.", null);
     }
 }
