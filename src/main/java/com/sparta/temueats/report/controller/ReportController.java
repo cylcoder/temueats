@@ -3,8 +3,11 @@ package com.sparta.temueats.report.controller;
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.report.dto.request.CreateReviewReportReq;
 import com.sparta.temueats.report.dto.response.CreateReviewReportRes;
+import com.sparta.temueats.report.dto.response.CreateStoreReportRes;
 import com.sparta.temueats.report.dto.response.ReviewInfoRes;
+import com.sparta.temueats.report.dto.response.StoreInfoRes;
 import com.sparta.temueats.report.service.ReportService;
+import com.sparta.temueats.review.dto.request.CreateStoreReportReq;
 import com.sparta.temueats.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +31,17 @@ public class ReportController {
         return new ResponseDto<>(createReviewReportRes.getCode(),
                 createReviewReportRes.getMessage(),
                 createReviewReportRes.getReviewInfoRes());
+    }
+
+    @PostMapping("/stores")
+    public ResponseDto<StoreInfoRes> createStoreReport(
+            @RequestBody CreateStoreReportReq createStoreReportReq,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        CreateStoreReportRes createStoreReportRes=reportService.createStoreReport(createStoreReportReq,userDetails.getUser());
+
+        return new ResponseDto<>(createStoreReportRes.getCode(),
+                createStoreReportRes.getMessage(),
+                createStoreReportRes.getStoreInfoRes());
     }
 
 }
