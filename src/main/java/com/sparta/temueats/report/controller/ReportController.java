@@ -3,6 +3,7 @@ package com.sparta.temueats.report.controller;
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.report.dto.request.CreateReviewReportReq;
 import com.sparta.temueats.report.dto.request.ReportStoreInfoReq;
+import com.sparta.temueats.report.dto.request.ResolvedReportReq;
 import com.sparta.temueats.report.dto.response.*;
 import com.sparta.temueats.report.service.ReportService;
 import com.sparta.temueats.review.dto.request.CreateStoreReportReq;
@@ -24,7 +25,7 @@ public class ReportController {
     public ResponseDto<ReviewInfoRes> createReviewReport(
             @RequestBody CreateReviewReportReq createReviewReportReq ,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        CreateReviewReportRes createReviewReportRes=reportService.createReviewReport(createReviewReportReq,userDetails.getUser());
+        CreateReviewReportRes createReviewReportRes=reportService.createReviewReport(createReviewReportReq,userDetails.getUser().getId());
 
         return new ResponseDto<>(createReviewReportRes.getCode(),
                 createReviewReportRes.getMessage(),
@@ -35,7 +36,7 @@ public class ReportController {
     public ResponseDto<StoreInfoRes> createStoreReport(
             @RequestBody CreateStoreReportReq createStoreReportReq,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        CreateStoreReportRes createStoreReportRes=reportService.createStoreReport(createStoreReportReq,userDetails.getUser());
+        CreateStoreReportRes createStoreReportRes=reportService.createStoreReport(createStoreReportReq,userDetails.getUser().getId());
 
         return new ResponseDto<>(createStoreReportRes.getCode(),
                 createStoreReportRes.getMessage(),
@@ -43,7 +44,7 @@ public class ReportController {
     }
 
     @GetMapping()
-    public ResponseDto<List<ReportStoreInfoRes>> getStoreReport(
+    public ResponseDto<List<ReportStoreInfoRes>> getReport(
             @RequestParam(name="page",defaultValue = "1") String page,
             @RequestParam(name="size",defaultValue = "10") String size,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -51,10 +52,21 @@ public class ReportController {
                 .userId(userDetails.getUser().getId())
                 .pageRequest(PageRequest.of(Integer.parseInt(page)-1,Integer.parseInt(size)))
                 .build();
-        ReportStoreInfoResList reportStoreInfoResList =reportService.getStoreReport(reportStoreInfoReq);
+        ReportStoreInfoResList reportStoreInfoResList =reportService.getReport(reportStoreInfoReq);
 
         return new ResponseDto<>(reportStoreInfoResList.getCode(),
                 reportStoreInfoResList.getMessage(),
                 reportStoreInfoResList.getReportStoreInfoResList());
     }
+
+    @PutMapping()
+    public ResponseDto<ResolvedReportRes> resolvedReport(
+            @RequestBody ResolvedReportReq resolvedReportReq,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        ResolvedReportRes resolvedReportRes=reportService.resolvedReport(resolvedReportReq,userDetails.getUser().getId());
+        return new ResponseDto<>(resolvedReportRes.getCode(), resolvedReportRes.getMessage(),null);
+    }
+
+
 }
