@@ -43,7 +43,7 @@ public class ReportController {
     }
 
     @GetMapping()
-    public ResponseDto<List<ReportStoreInfoRes>> getReport(
+    public ResponseDto<List<ReportStoreInfoRes>> getStoreReport(
             @RequestParam(name="page",defaultValue = "1") String page,
             @RequestParam(name="size",defaultValue = "10") String size,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -51,7 +51,7 @@ public class ReportController {
                 .userId(userDetails.getUser().getId())
                 .pageRequest(PageRequest.of(Integer.parseInt(page)-1,Integer.parseInt(size)))
                 .build();
-        ReportStoreInfoResList reportStoreInfoResList =reportService.getReport(reportStoreInfoReq);
+        ReportStoreInfoResList reportStoreInfoResList =reportService.getStoreReport(reportStoreInfoReq);
 
         return new ResponseDto<>(reportStoreInfoResList.getCode(),
                 reportStoreInfoResList.getMessage(),

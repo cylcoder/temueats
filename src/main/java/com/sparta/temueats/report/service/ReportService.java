@@ -84,7 +84,7 @@ public class ReportService {
                 .build();
     }
 
-    public ReportStoreInfoResList getReport(ReportStoreInfoReq reportStoreInfoReq) {
+    public ReportStoreInfoResList getStoreReport(ReportStoreInfoReq reportStoreInfoReq) {
         P_user user=userService.findUserById(reportStoreInfoReq.getUserId());
         Pageable pageable = PageRequest.of(reportStoreInfoReq.getPageRequest().getPageNumber(),
                 reportStoreInfoReq.getPageRequest().getPageSize());
@@ -123,6 +123,7 @@ public class ReportService {
             ReportStoreInfoRes reportStoreInfoRes= ReportStoreInfoRes.builder()
                     .reportId(report.getReportId())
                     .content(report.getReportDetail())
+                    .storeName(report.getStoreName())
                     .createdBy(report.getCreatedBy())
                     .createdAt(report.getCreatedAt())
                     .updatedAt(report.getUpdatedAt())
