@@ -26,3 +26,7 @@ spring:
   jwt:
     secret:
       key: 7KCA64qU7Jik64qY7JWE66mU66as7Lm064W47JmA7LSI7L2U652865a866W866i57JeI7Iq164uI64uk7ZaJ67O17ZW07JqU
+
+  kakao:
+    api:
+      key: 644ac6096d5a2d9b7df7289e65d18985

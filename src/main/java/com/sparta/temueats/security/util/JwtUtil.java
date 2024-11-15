@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -73,19 +75,21 @@ public class JwtUtil {
     }
 
 
-    // 액세스 토큰을 헤더에 추가
-    public void addAccessTokenToHeader(String accessToken, HttpServletResponse response) {
-        response.setHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + accessToken);
+    // 엑세스 토큰이 담긴 헤더
+    public HttpHeaders createAccessTokenHeader(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + accessToken);
+        return headers;
     }
 
-    // 리프레시 토큰을 HttpOnly 쿠키에 추가
-    public void addRefreshTokenToCookie(String refreshToken, HttpServletResponse response) {
-        Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE, refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true); // HTTPS에서만 전송되도록 설정
-        cookie.setPath("/");
-        cookie.setMaxAge(7 * 24 * 60 * 60);
-        response.addCookie(cookie);
+    // 리프레시 토큰이 담긴 쿠키
+    public ResponseCookie createRefreshTokenCookie(String refreshToken) {
+        return ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true) // HTTPS 환경에서만 전송
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60) // 일주일간 유효
+                .build();
     }
 
     // 토큰 검증
