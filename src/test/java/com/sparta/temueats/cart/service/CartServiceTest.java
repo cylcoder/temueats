@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.sparta.temueats.dummy.DummyTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -49,7 +50,7 @@ class CartServiceTest {
     @BeforeEach
     void setUp() {
         // mock 객체 설정
-        user = mockUserSetting();
+        user = mockCustomerUserSetting();
         menu = mockMenuSetting();
         cartUpdateRequestDto.setQuantity(3L);
     }
@@ -96,7 +97,7 @@ class CartServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         P_store differentStore = P_store.builder()
                 .storeId(UUID.randomUUID())
-                .user(mockUserSetting())
+                .user(mockCustomerUserSetting())
                 .name("맛있는피자가게")
                 .image("img_url")
                 .number("031-2222-2222")
@@ -122,7 +123,7 @@ class CartServiceTest {
         P_cart existingCart = P_cart.builder()
                 .quantity(3L)
                 .selectYn(false)
-                .user(mockUserSetting())
+                .user(mockCustomerUserSetting())
                 .menu(differentStoreMenu)
                 .deletedYn(false)
                 .build();
@@ -146,61 +147,6 @@ class CartServiceTest {
                 .user(user)
                 .quantity(3L)
                 .selectYn(false)
-                .deletedYn(false)
-                .build();
-    }
-
-
-    private P_user mockUserSetting() {
-        GeometryFactory geometryFactory = new GeometryFactory();
-        return P_user.builder()
-                .email("CustomerTest@test.com")
-                .password("1234")
-                .phone("010-1234-5678")
-                .nickname("고객 테스트")
-                .birth(Date.valueOf("2002-12-26"))
-                .use_yn(true)
-                .role(UserRoleEnum.CUSTOMER)
-                .imageProfile("img_url")
-                .latLng(geometryFactory.createPoint(new Coordinate(123, 123)))
-                .address("11층 11호")
-                .build();
-    }
-
-    private P_menu mockMenuSetting() {
-        return P_menu.builder()
-                .store(mockStoreSetting())
-                .name("맛있는 김치찌개")
-                .description("얼큰한 맛이 끝내주는 김치찌개입니다.")
-                .price(8000)
-                .image("img_url")
-                .category(Category.KOREAN)
-                .sellState(SellState.SALE)
-                .signatureYn(true)
-                .build();
-    }
-
-    private P_store mockStoreSetting() {
-        GeometryFactory geometryFactory = new GeometryFactory();
-        return P_store.builder()
-                .user(mockUserSetting())
-                .name("얼큰가게")
-                .image("img_url")
-                .number("031-1111-1111")
-                .state(StoreState.OPENED)
-                .leastPrice(10000)
-                .category(Category.KOREAN)
-                .latLng(geometryFactory.createPoint(new Coordinate(124, 124)))
-                .address("고등로 15")
-                .build();
-    }
-
-    private P_cart mockCartSetting() {
-        return P_cart.builder()
-                .quantity(3L)
-                .selectYn(false)
-                .user(mockUserSetting())
-                .menu(mockMenuSetting())
                 .deletedYn(false)
                 .build();
     }

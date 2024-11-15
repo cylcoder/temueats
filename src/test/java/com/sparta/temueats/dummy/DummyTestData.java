@@ -4,6 +4,8 @@ import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.coupon.entity.P_coupon;
 import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.menu.entity.P_menu;
+import com.sparta.temueats.order.entity.OrderState;
+import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.SellState;
 import com.sparta.temueats.store.entity.StoreState;
@@ -16,6 +18,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -105,6 +108,22 @@ public class DummyTestData {
                 .owner(mockCustomerUserSetting())
                 .issuer(mockCustomerUserSetting())
                 .order(null)
+                .build();
+    }
+
+    public static P_order mockOrderSetting() {
+        return P_order.builder()
+                .orderUId(UUID.randomUUID())
+                .amount(20000L)
+                .IsDelivery(true)
+                .orderState(OrderState.STANDBY)
+                .discountPrice(2000L)
+                .customerRequest("맛있게 해주세요!")
+                .cancelYn(true)
+                .cartList(List.of(mockCartSetting()))
+                .payment(null)
+                .customerId(1L)
+                .ownerId(2L)
                 .build();
     }
 

@@ -60,7 +60,7 @@ public class P_order extends BaseEntity {
 
 
     @Builder
-    public P_order(UUID orderUId,Long amount, boolean IsDelivery, OrderState orderState, Long discountPrice, String customerRequest, boolean cancelYn, List<P_cart> cartList, Long customerId, Long ownerId) {
+    public P_order(UUID orderUId,Long amount, boolean IsDelivery, OrderState orderState, Long discountPrice, String customerRequest, boolean cancelYn, List<P_cart> cartList, P_payment payment, Long customerId, Long ownerId) {
         this.orderUId = orderUId;
         this.amount = amount;
         this.IsDelivery = IsDelivery;
@@ -69,6 +69,7 @@ public class P_order extends BaseEntity {
         this.customerRequest = customerRequest;
         this.cancelYn = cancelYn;
         this.cartList = cartList;
+        this.payment = payment;
         this.customerId = customerId;
         this.ownerId = ownerId;
 
