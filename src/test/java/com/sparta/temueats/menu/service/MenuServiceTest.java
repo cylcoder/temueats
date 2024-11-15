@@ -32,9 +32,6 @@ class MenuServiceTest {
     @Mock
     private StoreRepository storeRepository;
 
-    @Mock
-    private UserService userService;
-
     @InjectMocks
     private MenuService menuService;
 
