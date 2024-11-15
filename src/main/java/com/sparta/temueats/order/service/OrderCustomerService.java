@@ -57,7 +57,7 @@ public class OrderCustomerService {
         Long leastPrice = 0L;
         Long deliveryPrice = 0L;
         for (P_cart cart : allBySelect) {
-            total += cart.getMenu().getPrice().longValue();
+            total += cart.getMenu().getPrice().longValue() * cart.getQuantity();
             ownerId = cart.getMenu().getStore().getUser().getId();
             leastPrice = Long.valueOf(cart.getMenu().getStore().getLeastPrice());
             deliveryPrice = Long.valueOf(cart.getMenu().getStore().getDeliveryPrice());
