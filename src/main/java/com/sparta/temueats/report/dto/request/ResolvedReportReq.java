@@ -7,9 +7,6 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-public class CreateReviewReportReq {
-    private UUID reviewId;
-    private String storeName;
-    private String content;
-
+public class ResolvedReportReq {
+    private UUID reportId;
 }

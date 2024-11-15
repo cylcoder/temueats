@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface StoreReqRepository extends JpaRepository<P_storeReq, UUID> {
 
+    P_storeReq findByRequestedBy_Id(Long id);
 }
