@@ -10,7 +10,6 @@ import com.sparta.temueats.store.dto.StoreReqResDto;
 import com.sparta.temueats.store.dto.StoreReqUpdateDto;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.P_storeReq;
-import com.sparta.temueats.store.entity.StoreState;
 import com.sparta.temueats.store.repository.StoreRepository;
 import com.sparta.temueats.store.repository.StoreReqRepository;
 import com.sparta.temueats.user.entity.P_user;
@@ -25,7 +24,7 @@ import java.util.UUID;
 
 import static com.sparta.temueats.global.ResponseDto.FAILURE;
 import static com.sparta.temueats.global.ResponseDto.SUCCESS;
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+import static com.sparta.temueats.store.entity.StoreState.CLOSED;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +45,6 @@ public class StoreReqService {
         }
 
         P_storeReq storeReq = storeReqCreateDto.toEntity(user);
-//        storeReq.setCreatedBy(user.getNickname());
         storeReqRepository.save(storeReq);
         return new ResponseDto<>(SUCCESS, "가게 등록 요청 성공", new StoreReqResDto(storeReq));
     }
@@ -125,7 +123,7 @@ public class StoreReqService {
                 .category(storeReq.getCategory())
                 .latLng(storeReq.getLatLng())
                 .address(storeReq.getAddress())
-                .state(StoreState.CLOSED)
+                .state(CLOSED)
                 .build();
     }
 
