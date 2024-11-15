@@ -32,9 +32,14 @@ public class OrderOwnerService {
     private final UserRepository userRepository;
 
     public void createTakeOutOrders(TakeOutOrderCreateRequestDto takeOutOrderCreateRequestDto, P_user user) {
+        // 0. 상태가 STANDBY 인 주문이 존재하면, 주문 생성 불가
+        List<P_order> IsIngOrder = orderRepository.findAllByUserIdIsIng(user.getId(), OrderState.STANDBY);
+        if (!IsIngOrder.isEmpty()) {
+            throw new CustomApiException("현재 진행중인 주문이 있습니다. 해당 주문에 대한 결제를 먼저 진행해주세요.");
+        }
+
         // 1. 주문 생성 시 장바구니에서 선택된 물품들 가져오기
         List<P_cart> allBySelect = cartRepository.findAllBySelectAndUserId(user.getId());
-
 
         if (allBySelect.isEmpty()) {
             throw new CustomApiException("장바구니에서 주문할 메뉴를 하나 이상 선택해주세요.");

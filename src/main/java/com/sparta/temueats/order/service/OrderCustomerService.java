@@ -54,10 +54,22 @@ public class OrderCustomerService {
         // 2. 가져와서 가격 취합 후 db에 저장
         Long total = 0L;
         Long ownerId = 0L;
+        Long leastPrice = 0L;
+        Long deliveryPrice = 0L;
         for (P_cart cart : allBySelect) {
             total += cart.getMenu().getPrice().longValue();
             ownerId = cart.getMenu().getStore().getUser().getId();
+            leastPrice = Long.valueOf(cart.getMenu().getStore().getLeastPrice());
+            deliveryPrice = Long.valueOf(cart.getMenu().getStore().getDeliveryPrice());
         }
+
+        // +) 주문 금액이 가게의 leastPrice 미만이면 예외
+        if (total < leastPrice) {
+            throw new CustomApiException("가게의 최소 주문 금액을 확인해주세요.");
+        }
+
+        // +) 주문 생성 직전 가격에 deliveryPrice 추가
+        total += deliveryPrice;
 
         // 3. 주문 객체 생성 및 저장
         P_order order = P_order.builder()
