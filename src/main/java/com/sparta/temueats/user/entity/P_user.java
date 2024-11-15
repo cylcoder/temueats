@@ -62,6 +62,12 @@ public class P_user extends BaseEntity {
     @Size(max = 50, message = "주소는 최대 50자 이하이어야 합니다.")
     private String address;
 
+    @Column(unique = true)
+    private Long kakaoId;  // 카카오 로그인 사용자를 구분할 ID
+
+    @Column(nullable = false)
+    private String socialProvider = "NONE"; // NONE, KAKAO 등
+
 
     public void updateUserInfo(UpdateMypageRequestDto request, GeometryFactory geometryFactory) {
         this.latLng = geometryFactory.createPoint(new Coordinate(request.getLng(), request.getLat()));
