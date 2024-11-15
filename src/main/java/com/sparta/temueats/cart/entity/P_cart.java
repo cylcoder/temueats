@@ -69,4 +69,5 @@ public class P_cart extends BaseEntity {
     public void changeSelect() {
         this.selectYn = !selectYn;
     }
+
 }
