@@ -44,7 +44,6 @@ public class CartService {
             return new CartUpdateResponseDto(cart3);
         }
 
-        // + 가게가
 
         // 2-1. 장바구니에 같은 메뉴 id가 있는 경우
         P_cart cart = cartRepository.findByMenuIdByUserId(menu.getMenuId(), user.getId());
