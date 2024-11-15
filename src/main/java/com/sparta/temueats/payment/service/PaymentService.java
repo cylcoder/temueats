@@ -5,6 +5,7 @@ import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.order.repository.OrderRepository;
+import com.sparta.temueats.order.service.OrderService;
 import com.sparta.temueats.payment.dto.PaymentGetResponseDto;
 import com.sparta.temueats.payment.dto.PaymentModifyRequestDto;
 import com.sparta.temueats.payment.entity.P_payment;
@@ -30,6 +31,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
+    private final OrderService orderService;
 
     public void createPayments(P_user user) {
 
@@ -72,8 +74,9 @@ public class PaymentService {
         // 2. request 가 1이면 PAID, 0 이면 FAIL
         if (paymentmodifyRequestDto.getPaymentStatus() == 1) {
             updatePaymentStatus(payment, PaymentStatus.PAID);
-            // todo 여기에 주문 상태 변경 로직 추가
-            //
+            //5분 후 결제 메서드 추가
+            orderService.checkPayment(payment.getPaymentId());
+
         } else if (paymentmodifyRequestDto.getPaymentStatus() == 0) {
             updatePaymentStatus(payment, PaymentStatus.FAIL);
             throw new CustomApiException("결제가 실패 되었습니다.");

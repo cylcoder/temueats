@@ -33,16 +33,15 @@ public class OrderService {
     }
 
     // 결제 상태가 PAID 로 변경되고 주문 상태도 SUCCESS 로 변경하고, 5분 타이머 시작하는 로직 추가 (결제 상태 수정에서 사용)
-    @Transactional
     public void checkPayment(UUID paymentId) {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
         executorService.schedule(() -> {
             //결제,주문 불러오기
             P_order order = orderRepository.findByPaymentId(paymentId).orElseThrow(() ->
                     new CustomApiException("해당 주문을 찾을 수 없습니다."));
-            P_payment payment  = paymentRepository.findById(paymentId).orElseThrow(()->
+            P_payment payment=paymentRepository.findById(paymentId).orElseThrow(()->
                     new CustomApiException("해당 결제를 찾을 수 없습니다."));
-            //상태 확인 후 변경 5분동안 취소 없는 상태
+            //상태 확인 후 변경 (5분동안 취소 없는 상태)
             if (payment.getPaymentStatus() == PaymentStatus.PAID&&order.isCancelYn()) {
                 order.changeCancleYn();
             }else if(order.getOrderState()==OrderState.FAIL){//취소 메서드 발생시
