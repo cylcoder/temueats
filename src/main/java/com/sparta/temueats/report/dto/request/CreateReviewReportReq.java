@@ -9,6 +9,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CreateReviewReportReq {
     private UUID reviewId;
+    private String storeName;
     private String content;
 
 }
