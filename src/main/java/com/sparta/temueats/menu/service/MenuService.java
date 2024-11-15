@@ -10,7 +10,6 @@ import com.sparta.temueats.menu.repository.MenuRepository;
 import com.sparta.temueats.s3.service.FileService;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.repository.StoreRepository;
-import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
