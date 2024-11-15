@@ -43,6 +43,10 @@ dependencies {
 
     implementation 'org.json:json:20231013'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // test
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+
 }
 
 tasks.named('test') {

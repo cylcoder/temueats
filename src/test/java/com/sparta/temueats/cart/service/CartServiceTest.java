@@ -21,7 +21,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -158,7 +158,7 @@ class CartServiceTest {
                 .password("1234")
                 .phone("010-1234-5678")
                 .nickname("고객 테스트")
-                .birth(Date.valueOf("2002-12-26"))
+                .birth(LocalDate.parse("2002-12-26"))
                 .use_yn(true)
                 .role(UserRoleEnum.CUSTOMER)
                 .imageProfile("img_url")

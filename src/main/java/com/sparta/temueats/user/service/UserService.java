@@ -78,7 +78,7 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        return new ResponseDto<>(1, "회원가입이 완료되었습니다", null);
+        return new ResponseDto<>(1, "회원가입이 완료되었습니다", null);
 
     }
 
