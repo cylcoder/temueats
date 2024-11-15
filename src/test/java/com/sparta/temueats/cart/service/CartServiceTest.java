@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.sparta.temueats.dummy.DummyTestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -138,7 +139,6 @@ class CartServiceTest {
         assertEquals("서로 다른 가게 메뉴를 함께 담을 수 없습니다.", exception.getMessage());
 
     }
-
 
     private P_cart mockCartResponse() {
         return P_cart.builder()
