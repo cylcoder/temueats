@@ -6,15 +6,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @Getter
 @ToString
+@Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateUserRequestDto {
 
@@ -31,7 +30,7 @@ public class CreateUserRequestDto {
     @Pattern(regexp = "^(010|011|016|017|018|019)-\\d{3,4}-\\d{4}$")
     private String phone;
 
-    private Date birth;
+    private LocalDate birth;
 
     private String imageProfile;
 

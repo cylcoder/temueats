@@ -9,7 +9,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity(name="P_USER")
 @NoArgsConstructor
@@ -43,7 +43,7 @@ public class P_user extends BaseEntity {
 
     @Past(message = "생년월일은 과거 날짜여야 합니다.")
     @Temporal(TemporalType.DATE)
-    private Date birth;
+    private LocalDate birth;
 
     @NotNull
     private boolean use_yn;
