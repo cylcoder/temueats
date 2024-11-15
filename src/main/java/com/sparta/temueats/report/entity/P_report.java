@@ -37,10 +37,16 @@ public class P_report extends BaseEntity {
     private P_user user;
 
     @Builder
-    public P_report(String reportDetail,String storeName ,boolean resolvedYn, LocalDateTime resolvedDate) {
+    public P_report(String reportDetail,String storeName ,boolean resolvedYn, LocalDateTime resolvedDate,P_user user) {
         this.reportDetail = reportDetail;
         this.storeName = storeName;
         this.resolvedYn = resolvedYn;
         this.resolvedDate = resolvedDate;
+        this.user = user;
+    }
+
+    public void changeResolved(){
+        this.resolvedYn = true;
+        this.resolvedDate=LocalDateTime.now();
     }
 }
