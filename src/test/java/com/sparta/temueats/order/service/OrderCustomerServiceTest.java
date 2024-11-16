@@ -18,9 +18,11 @@ import com.sparta.temueats.user.entity.P_user;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -33,7 +35,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class OrderCustomerServiceTest {
 
     @InjectMocks
@@ -83,7 +85,6 @@ class OrderCustomerServiceTest {
 
         when(orderRepository.findAllByUserIdIsIng(user.getId(), OrderState.STANDBY)).thenReturn(List.of());
         when(cartRepository.findAllBySelectAndUserId(user.getId())).thenReturn(List.of(cartItem));
-        when(couponRepository.findById(coupon.getId())).thenReturn(Optional.of(coupon));
         when(orderRepository.save(any(P_order.class))).thenReturn(new P_order());
 
 
