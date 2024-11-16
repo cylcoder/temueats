@@ -51,7 +51,6 @@ public class PaymentService {
         // 3. 해당 user 의 장바구니 물품들 전부 삭제
         List<P_cart> cartList = cartRepository.findAllByUserId(user.getId());
         cartRepository.deleteAll(cartList);
-
     }
 
     public PaymentGetResponseDto getPayments(P_user user) {
