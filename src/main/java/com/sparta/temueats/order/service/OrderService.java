@@ -42,7 +42,7 @@ public class OrderService {
             P_payment payment=paymentRepository.findById(paymentId).orElseThrow(()->
                     new CustomApiException("해당 결제를 찾을 수 없습니다."));
             //상태 확인 후 변경 (5분동안 취소 없는 상태)
-            if (payment.getPaymentStatus() == PaymentStatus.PAID&&order.isCancelYn()) {
+            if (payment.getPaymentStatus() == PaymentStatus.PAID && order.isCancelYn()) {
                 order.changeCancleYn();
             }else if(order.getOrderState()==OrderState.FAIL){//취소 메서드 발생시
                 payment.setStatus(PaymentStatus.CANCELED);

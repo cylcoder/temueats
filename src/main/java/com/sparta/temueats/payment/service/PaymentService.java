@@ -3,6 +3,7 @@ package com.sparta.temueats.payment.service;
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
 import com.sparta.temueats.global.ex.CustomApiException;
+import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.order.repository.OrderRepository;
 import com.sparta.temueats.order.service.OrderService;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Provider;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,33 +38,44 @@ public class PaymentService {
     public void createPayments(P_user user) {
 
         // 1. User 의 주문 내역 찾아오기
-        P_order order = orderRepository.findByUserId(user.getId());
+        List<P_order> order = orderRepository.findByUserId(user.getId());
 
         // 2. Payment 가격과 결제 상태 넣어서 생성
-        P_payment saved = paymentRepository.save(P_payment.builder()
-                .paymentStatus(PaymentStatus.READY)
-                .price(order.getAmount())
-                .order(order)
-                .build());
-
-        // order 의 payment 쪽에도 넣어줘야 함.
-        order.setPayment(saved);
+        List<P_payment> paymentList = new ArrayList<>();
+        for (P_order pOrder : order) {
+            P_payment saved = paymentRepository.save(P_payment.builder()
+                    .paymentStatus(PaymentStatus.READY)
+                    .price(pOrder.getAmount())
+                    .order(pOrder)
+                    .build());
+            paymentList.add(saved);
+            // order 의 payment 쪽에도 넣어줘야 함.
+            pOrder.setPayment(saved);
+        }
 
         // 3. 해당 user 의 장바구니 물품들 전부 삭제
         List<P_cart> cartList = cartRepository.findAllByUserId(user.getId());
         cartRepository.deleteAll(cartList);
     }
 
-    public PaymentGetResponseDto getPayments(P_user user) {
+    public List<PaymentGetResponseDto> getPayments(P_user user) {
         // 1. User 의 주문 내역 찾아오기
-        P_order order = orderRepository.findByUserId(user.getId());
+        List<P_order> order = orderRepository.findByUserId(user.getId());
 
-        // 2. 해당 주문의 결재 내역 조회
-        P_payment payment = paymentRepository.findById(order.getPayment().getPaymentId()).orElseThrow(() ->
-                new CustomApiException("결제 조회에 실패했습니다."));
+        // 2. 해당 주문의 결제 내역 조회
+        List<P_payment> paymentList = new ArrayList<>();
+        List<PaymentGetResponseDto> paymentGetResponseDtoList = new ArrayList<>();
+        for (P_order pOrder : order) {
+            P_payment payment = paymentRepository.findById(pOrder.getPayment().getPaymentId()).orElseThrow(() ->
+                    new CustomApiException("결제 조회에 실패했습니다."));
+            paymentList.add(payment);
+            PaymentGetResponseDto paymentGetResponseDto = new PaymentGetResponseDto(payment);
+            paymentGetResponseDtoList.add(paymentGetResponseDto);
+        }
+
 
         // 2. 해당 주문의 결제 내역 리턴
-        return new PaymentGetResponseDto(payment);
+        return paymentGetResponseDtoList;
     }
 
     public void modifyPayment(PaymentModifyRequestDto paymentmodifyRequestDto, UUID paymentId) {
@@ -72,6 +85,7 @@ public class PaymentService {
 
         // 2. request 가 1이면 PAID, 0 이면 FAIL
         if (paymentmodifyRequestDto.getPaymentStatus() == 1) {
+            payment.getOrder().changeOrderState(OrderState.PROGRESS);
             updatePaymentStatus(payment, PaymentStatus.PAID);
             //5분 후 결제 메서드 추가
             orderService.checkPayment(payment.getPaymentId());

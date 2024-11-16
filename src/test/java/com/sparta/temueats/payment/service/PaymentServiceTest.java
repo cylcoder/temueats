@@ -2,6 +2,7 @@ package com.sparta.temueats.payment.service;
 
 import com.sparta.temueats.cart.entity.P_cart;
 import com.sparta.temueats.cart.repository.CartRepository;
+import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.order.repository.OrderRepository;
 import com.sparta.temueats.payment.entity.P_payment;
@@ -44,8 +45,9 @@ class PaymentServiceTest {
         P_cart cart = mockCartSetting();
 
         List<P_cart> cartList = List.of(cart);
+        List<P_order> orderList = List.of(order);
 
-        when(orderRepository.findByUserId(user.getId())).thenReturn(order);
+        when(orderRepository.findByUserId(user.getId())).thenReturn(orderList);
         when(paymentRepository.save(any(P_payment.class))).thenReturn(payment);
         when(cartRepository.findAllByUserId(user.getId())).thenReturn(cartList);
 
