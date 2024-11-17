@@ -45,11 +45,13 @@ public class P_review extends BaseEntity {
     private P_reviewComment reviewComment;
 
     @Builder
-    public P_review(String content, int score, boolean useYn, boolean reportYn) {
+    public P_review(String content, int score, boolean useYn, boolean reportYn, P_user user,P_store store) {
         this.content = content;
         this.score = score;
         this.useYn = useYn;
         this.reportYn = reportYn;
+        this.user = user;
+        this.store = store;
     }
 
     public void changeUseYn(){
