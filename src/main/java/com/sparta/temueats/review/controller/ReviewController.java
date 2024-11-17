@@ -3,12 +3,12 @@ package com.sparta.temueats.review.controller;
 
 import com.sparta.temueats.global.ResponseDto;
 import com.sparta.temueats.review.dto.request.CreateReviewRequestDto;
-import com.sparta.temueats.review.dto.request.DeleteReviewRequest;
 import com.sparta.temueats.review.dto.request.MyReviewRequestDto;
-import com.sparta.temueats.review.dto.request.StoreReviewRequest;
 import com.sparta.temueats.review.dto.response.*;
 import com.sparta.temueats.review.service.ReviewService;
+import com.sparta.temueats.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +22,10 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/{store_id}")
-    public ResponseDto<CreateResponseDto> createReview(@PathVariable Long storeId,
-                                                      @RequestBody CreateReviewRequestDto createReviewRequestDto){
-        CreateResponseDto createResponseDto=reviewService.createReview(storeId,createReviewRequestDto);
+    public ResponseDto<CreateResponseDto> createReview(@PathVariable UUID store_id,
+                                                       @RequestBody CreateReviewRequestDto createReviewRequestDto,
+                                                       @AuthenticationPrincipal UserDetailsImpl userDetails){
+        CreateResponseDto createResponseDto=reviewService.createReview(store_id,userDetails.getUser().getId(),createReviewRequestDto);
 
         return new ResponseDto<>(createResponseDto.getCode(),createResponseDto.getMessage(),null);
 
@@ -52,8 +53,8 @@ public class ReviewController {
 
     @DeleteMapping("/{review_id}")
     public ResponseDto<DeleteReviewResponse> deleteReviews(@PathVariable UUID review_id,
-            @RequestBody DeleteReviewRequest deleteReviewRequest){
-        DeleteReviewResponse deleteReviewResponse=reviewService.deleteReviews(review_id,deleteReviewRequest.getUserId());
+                                                           @AuthenticationPrincipal UserDetailsImpl userDetails){
+        DeleteReviewResponse deleteReviewResponse=reviewService.deleteReviews(review_id,userDetails.getUser().getId());
 
         return new ResponseDto<>(deleteReviewResponse.getCode(),
                 deleteReviewResponse.getMessage(),

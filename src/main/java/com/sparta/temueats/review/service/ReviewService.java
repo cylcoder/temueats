@@ -1,11 +1,13 @@
 
 package com.sparta.temueats.review.service;
 
+import com.sparta.temueats.global.ex.CustomApiException;
 import com.sparta.temueats.review.dto.request.CreateReviewRequestDto;
 import com.sparta.temueats.review.dto.response.*;
 import com.sparta.temueats.review.entity.P_review;
 import com.sparta.temueats.review.repository.ReviewRepository;
 import com.sparta.temueats.store.entity.P_store;
+import com.sparta.temueats.store.repository.StoreRepository;
 import com.sparta.temueats.user.entity.P_user;
 import com.sparta.temueats.user.repository.UserRepository;
 import com.sparta.temueats.user.service.UserService;
@@ -22,12 +24,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    //private final UserRepository userRepository;
+    private final StoreRepository storeRepository;
     private final UserService userService;
 
-    public CreateResponseDto createReview(Long storeId, CreateReviewRequestDto createReviewRequestDto) {
+    public CreateResponseDto createReview(UUID storeId, Long userId ,CreateReviewRequestDto createReviewRequestDto) {
         //가게 존재여부 확인
-        //본인이 이용한 가게 확인
+        P_store store= storeRepository.findById(storeId).orElseThrow(()->
+                new CustomApiException("해당 가게가 존재하지 않습니다."));
+        //본인이 이용한 가게 확인..어떻게..?
+        P_user user=userService.findUserById(userId);
 
 
         P_review saveReview=reviewRepository.save(
@@ -36,6 +41,8 @@ public class ReviewService {
                         .score(createReviewRequestDto.getScore())
                         .content(createReviewRequestDto.getContent())
                         .reportYn(true)
+                        .user(user)
+                        .store(store)
                         .build()
         );
 
@@ -109,6 +116,7 @@ public class ReviewService {
         //리뷰 불러오기
         P_review review=reviewRepository.findById(reviewId)
                 .orElseThrow(()->new IllegalArgumentException("리뷰가 존재하지 않습니다."));
+
        //user일치 확인
         if(!review.getUser().getId().equals(userId)){
             return new DeleteReviewResponse(-1,"권한이 없습니다.");
