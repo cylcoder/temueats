@@ -70,6 +70,8 @@
 
 [API명세서](https://www.notion.so/6547132e93e440dc8adb9986a37e9f50?pvs=21)
 
+![screencapture-localhost-8080-swagger-ui-index-html-2024-11-18-14_16_22](https://github.com/user-attachments/assets/b98d582a-2019-49cb-8200-4de4e8cd9c4c)
+
 ## 🛠 개발 환경
 
 ![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
