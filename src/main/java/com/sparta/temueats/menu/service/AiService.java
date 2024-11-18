@@ -23,7 +23,7 @@ import static com.sparta.temueats.global.ResponseDto.SUCCESS;
 @RequiredArgsConstructor
 public class AiService {
 
-//    @Value("${ai.api.url}")
+    @Value("${ai.api.url}")
     private String url;
 
     public static final String CONSTRAINT = "답변을 최대한 간결하게 50자 이하로";
