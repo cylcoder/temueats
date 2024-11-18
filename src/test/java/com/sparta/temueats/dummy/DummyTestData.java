@@ -6,8 +6,11 @@ import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
+
+import com.sparta.temueats.review.entity.P_review;
 import com.sparta.temueats.payment.entity.P_payment;
 import com.sparta.temueats.payment.entity.PaymentStatus;
+
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.SellState;
 import com.sparta.temueats.store.entity.StoreState;
@@ -126,6 +129,16 @@ public class DummyTestData {
                 .payment(null)
                 .customerId(1L)
                 .ownerId(2L)
+                .build();
+    }
+    public static P_review mockReviewSetting() {
+        return P_review.builder()
+                .useYn(true)
+                .score(5)
+                .content("먹어봤던것중최고에요")
+                .reportYn(true)
+                .user(mockCustomerUserSetting())
+                .store(mockStoreSetting())
                 .build();
     }
 

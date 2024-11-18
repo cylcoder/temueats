@@ -62,6 +62,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/members/auth/signup").permitAll() // 회원가입
                         .requestMatchers( "/api/members/auth/login").permitAll() // 로그인 요청 제외
                         .requestMatchers("/api/members/auth/kakao-login").permitAll() // 카카오 로그인
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll() // swagger
                         .anyRequest().authenticated() // 그 외 모든 요청에 대해 인증처리
         );
 

@@ -8,6 +8,8 @@ import com.sparta.temueats.order.service.OrderCustomerService;
 import com.sparta.temueats.order.service.OrderOwnerService;
 import com.sparta.temueats.order.service.OrderService;
 import com.sparta.temueats.security.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name="주문 생성/조회/수정/삭제")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -27,10 +30,7 @@ public class OrderController {
     private final OrderCustomerService orderCustomerService;
     private final OrderOwnerService orderOwnerService;
 
-    // todo customer 접근 가능 권한 설정
-    // todo owner 접근 가능 권한 설정
-
-    // 주문 생성 (Customer)
+    @Operation(summary = "주문 생성 (CUSTOMER)")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MASTER')")
     @PostMapping("/orders/customer")
     public ResponseDto<?> orderCreateResponseCustomerDto(@RequestBody @Valid DeliveryOrderCreateRequestDto deliveryOrderCreateRequestDto, BindingResult bindingResult,
@@ -39,7 +39,7 @@ public class OrderController {
         return new ResponseDto<>(1, "주문이 정상적으로 생성되었습니다.", null);
     }
 
-    // 주문 생성 (Owner)
+    @Operation(summary = "주문 생성 (OWNER)")
     @PreAuthorize("hasAnyAuthority('OWNER', 'MASTER')")
     @PostMapping("/orders/owner")
     public ResponseDto<?> orderCreateResponseOwnerDto(@RequestBody @Valid TakeOutOrderCreateRequestDto takeOutOrderCreateRequestDto, BindingResult bindingResult,
@@ -48,7 +48,7 @@ public class OrderController {
         return new ResponseDto<>(1, "주문이 정상적으로 생성되었습니다.", null);
     }
 
-    // 주문 목록 조회 (Customer)
+    @Operation(summary = "주문 목록 조회 (CUSTOMER)")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MASTER')")
      @GetMapping("/orders/customer")
     public ResponseDto<?> orderGetCustomerResponseListDto(@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -56,7 +56,7 @@ public class OrderController {
          return new ResponseDto<>(1, "주문 목록 조회에 성공했습니다.", customerOrders);
      }
 
-    // 주문 목록 조회 (Owner)
+    @Operation(summary = "주문 목록 조회 (OWNER)")
     @PreAuthorize("hasAnyAuthority('OWNER', 'MASTER')")
      @GetMapping("/orders/owner")
     public ResponseDto<?> orderGetOwnerResponseListDto(@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -64,7 +64,7 @@ public class OrderController {
         return new ResponseDto<>(1, "주문 목록 조회에 성공했습니다.", ownerOrders);
      }
 
-    // 주문 상세 조회 (Customer)
+    @Operation(summary = "주문 상세 조회 (CUSTOMER)")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MASTER')")
     @GetMapping("/orders/customer/{orderId}")
     public ResponseDto<?> orderGetCustomerResponseDto(@PathVariable UUID orderId) {
@@ -72,7 +72,7 @@ public class OrderController {
         return new ResponseDto<>(1, "주문 상세 조회에 성공했습니다.", customerOrder);
     }
 
-    // 주문 상세 조회 (Owner)
+    @Operation(summary = "주문 상세 조회 (OWNER)")
     @PreAuthorize("hasAnyAuthority('OWNER', 'MASTER')")
     @GetMapping("/orders/owner/{orderId}")
     public ResponseDto<?> orderGetOwnerResponseDto(@PathVariable UUID orderId) {
@@ -81,7 +81,7 @@ public class OrderController {
     }
 
 
-    // 주문 취소 (Customer)
+    @Operation(summary = "주문 취소 (CUSTOMER)")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MASTER')")
     @PutMapping("/orders/{orderId}/customer")
     public ResponseDto<?> orderCancelCustomerResponseDto(@PathVariable UUID orderId) {
@@ -89,7 +89,7 @@ public class OrderController {
         return new ResponseDto<>(1, "주문이 취소되었습니다.", null);
     }
 
-    // 주문 취소 (Owner)
+    @Operation(summary = "주문 취소 (OWNER)")
     @PreAuthorize("hasAnyAuthority('OWNER', 'MASTER')")
     @PutMapping("/orders/{orderId}/owner")
     public ResponseDto<?> orderCancelOwnerResponseDto(@PathVariable UUID orderId) {
