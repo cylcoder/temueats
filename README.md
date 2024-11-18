@@ -85,6 +85,9 @@
 ![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
 
+## 📃 시스템 아키텍처
+
+
 ## 📑 ERD
 
 ![team15-erd.png](docs%2Fimages%2Fteam15-erd.png)
@@ -95,11 +98,6 @@
 - Layered Architecture
 
 ```
-├── README.md
-├── build.gradle
-├── gradlew
-├── gradlew.bat
-├── settings.gradle
 └── src
     ├── main
     │   ├── java
@@ -122,20 +120,10 @@
     │   │               │       └── CartService.java
     │   │               ├── coupon
     │   │               │   ├── controller
-    │   │               │   │   └── CouponController.java
     │   │               │   ├── dto
-    │   │               │   │   ├── CouponListResponseDto.java
-    │   │               │   │   ├── CouponRequestDto.java
-    │   │               │   │   ├── UnusableCouponListResponseDto.java
-    │   │               │   │   └── UsableCouponListResponseDto.java
     │   │               │   ├── entity
-    │   │               │   │   └── P_coupon.java
     │   │               │   ├── repository
-    │   │               │   │   └── CouponRepository.java
     │   │               │   └── service
-    │   │               │       └── CouponService.java
-    │   │               ├── dummy
-    │   │               │   └── initData.java
     │   │               ├── global
     │   │               │   ├── BaseEntity.java
     │   │               │   ├── ResponseDto.java
@@ -150,184 +138,75 @@
     │   │               │           └── ErrorRepository.java
     │   │               ├── menu
     │   │               │   ├── config
-    │   │               │   │   └── AppConfig.java
     │   │               │   ├── controller
-    │   │               │   │   ├── AiController.java
-    │   │               │   │   └── MenuController.java
     │   │               │   ├── dto
-    │   │               │   │   ├── MenuCreateDto.java
-    │   │               │   │   ├── MenuCreateWithImageDto.java
-    │   │               │   │   ├── MenuResDto.java
-    │   │               │   │   └── MenuUpdateDto.java
     │   │               │   ├── entity
-    │   │               │   │   ├── Category.java
-    │   │               │   │   ├── P_aiLog.java
-    │   │               │   │   └── P_menu.java
     │   │               │   ├── repository
-    │   │               │   │   ├── AiRepository.java
-    │   │               │   │   └── MenuRepository.java
     │   │               │   └── service
-    │   │               │       ├── AiService.java
-    │   │               │       └── MenuService.java
     │   │               ├── order
     │   │               │   ├── controller
-    │   │               │   │   └── OrderController.java
     │   │               │   ├── dto
-    │   │               │   │   ├── DeliveryOrderCreateRequestDto.java
-    │   │               │   │   ├── OrderGetResponseDto.java
-    │   │               │   │   └── TakeOutOrderCreateRequestDto.java
     │   │               │   ├── entity
-    │   │               │   │   ├── OrderState.java
-    │   │               │   │   └── P_order.java
     │   │               │   ├── repository
-    │   │               │   │   └── OrderRepository.java
     │   │               │   └── service
-    │   │               │       ├── OrderCustomerService.java
-    │   │               │       ├── OrderOwnerService.java
-    │   │               │       └── OrderService.java
     │   │               ├── payment
     │   │               │   ├── controller
-    │   │               │   │   └── PaymentController.java
     │   │               │   ├── dto
-    │   │               │   │   ├── PaymentGetResponseDto.java
-    │   │               │   │   └── PaymentModifyRequestDto.java
     │   │               │   ├── entity
-    │   │               │   │   ├── P_payment.java
-    │   │               │   │   └── PaymentStatus.java
     │   │               │   ├── repository
-    │   │               │   │   └── PaymentRepository.java
     │   │               │   └── service
-    │   │               │       └── PaymentService.java
     │   │               ├── rating
+    │   │               │   ├── controller
+    │   │               │   ├── dto
+    │   │               │   │   └── response
     │   │               │   ├── entity
-    │   │               │   │   └── P_rating.java
-    │   │               │   └── repository
-    │   │               │       └── RatingRepository.java
+    │   │               │   ├── repository
+    │   │               │   └── service
     │   │               ├── report
     │   │               │   ├── controller
-    │   │               │   │   └── ReportController.java
     │   │               │   ├── dto
     │   │               │   │   ├── request
-    │   │               │   │   │   ├── CreateReviewReportReq.java
-    │   │               │   │   │   ├── ReportStoreInfoReq.java
-    │   │               │   │   │   └── ResolvedReportReq.java
     │   │               │   │   └── response
-    │   │               │   │       ├── CreateReviewReportRes.java
-    │   │               │   │       ├── CreateStoreReportRes.java
-    │   │               │   │       ├── ReportStoreInfoRes.java
-    │   │               │   │       ├── ReportStoreInfoResList.java
-    │   │               │   │       ├── ResolvedReportRes.java
-    │   │               │   │       ├── ReviewInfoRes.java
-    │   │               │   │       └── StoreInfoRes.java
     │   │               │   ├── entity
-    │   │               │   │   └── P_report.java
     │   │               │   ├── repository
-    │   │               │   │   └── ReportRepository.java
     │   │               │   └── service
-    │   │               │       └── ReportService.java
     │   │               ├── review
     │   │               │   ├── controller
-    │   │               │   │   ├── ReviewCommentController.java
-    │   │               │   │   └── ReviewController.java
     │   │               │   ├── dto
     │   │               │   │   ├── request
-    │   │               │   │   │   ├── CreateCommentRequest.java
-    │   │               │   │   │   ├── CreateReviewRequestDto.java
-    │   │               │   │   │   ├── CreateStoreReportReq.java
-    │   │               │   │   │   ├── DeleteCommentRequest.java
-    │   │               │   │   │   ├── DeleteCommentResponse.java
-    │   │               │   │   │   ├── DeleteReviewRequest.java
-    │   │               │   │   │   ├── MyReviewRequestDto.java
-    │   │               │   │   │   └── StoreReviewRequest.java
     │   │               │   │   └── response
-    │   │               │   │       ├── CreateCommentResponse.java
-    │   │               │   │       ├── CreateResponseDto.java
-    │   │               │   │       ├── DeleteReviewResponse.java
-    │   │               │   │       ├── MyReviewReadResponseList.java
-    │   │               │   │       ├── MyReviewResponse.java
-    │   │               │   │       ├── ReviewResDto.java
-    │   │               │   │       ├── StoreReviewResponse.java
-    │   │               │   │       └── StoreReviewResponseList.java
     │   │               │   ├── entity
-    │   │               │   │   ├── P_review.java
-    │   │               │   │   └── P_reviewComment.java
     │   │               │   ├── repository
-    │   │               │   │   ├── ReviewCommentRepository.java
-    │   │               │   │   └── ReviewRepository.java
     │   │               │   └── service
-    │   │               │       ├── ReviewCommentService.java
-    │   │               │       └── ReviewService.java
     │   │               ├── s3
     │   │               │   ├── config
-    │   │               │   │   └── S3Config.java
     │   │               │   ├── controller
-    │   │               │   │   └── FileController.java
     │   │               │   └── service
-    │   │               │       └── FileService.java
     │   │               ├── security
     │   │               │   ├── Controller
-    │   │               │   │   └── TokenController.java
     │   │               │   ├── UserDetailsImpl.java
     │   │               │   ├── UserDetailsServiceImpl.java
     │   │               │   ├── config
-    │   │               │   │   └── WebSecurityConfig.java
     │   │               │   ├── filter
-    │   │               │   │   ├── JwtAuthenticationFilter.java
-    │   │               │   │   └── JwtAuthorizationFilter.java
     │   │               │   └── util
     │   │               │       └── JwtUtil.java
     │   │               ├── store
     │   │               │   ├── controller
-    │   │               │   │   ├── StoreController.java
-    │   │               │   │   └── StoreReqController.java
     │   │               │   ├── dto
-    │   │               │   │   ├── AddFavStoreRequestDto.java
-    │   │               │   │   ├── FavStoreListResponseDto.java
-    │   │               │   │   ├── StoreDetailResDto.java
-    │   │               │   │   ├── StoreReqCreateDto.java
-    │   │               │   │   ├── StoreReqCreateWithImageDto.java
-    │   │               │   │   ├── StoreReqResDto.java
-    │   │               │   │   ├── StoreReqUpdateDto.java
-    │   │               │   │   ├── StoreResDto.java
-    │   │               │   │   └── StoreUpdateDto.java
     │   │               │   ├── entity
-    │   │               │   │   ├── P_favStore.java
-    │   │               │   │   ├── P_store.java
-    │   │               │   │   ├── P_storeReq.java
-    │   │               │   │   ├── SellState.java
-    │   │               │   │   ├── StoreReqState.java
-    │   │               │   │   └── StoreState.java
     │   │               │   ├── repository
-    │   │               │   │   ├── FavStoreRepository.java
-    │   │               │   │   ├── StoreRepository.java
-    │   │               │   │   └── StoreReqRepository.java
     │   │               │   ├── service
-    │   │               │   │   └── StoreReqService.java
     │   │               │   └── util
     │   │               │       ├── AuthUtils.java
     │   │               │       ├── GeoUtils.java
     │   │               │       └── ValidUtils.java
     │   │               └── user
     │   │                   ├── config
-    │   │                   │   └── PasswordConfig.java
     │   │                   ├── controller
-    │   │                   │   └── UserController.java
     │   │                   ├── dto
-    │   │                   │   ├── CreateUserRequestDto.java
-    │   │                   │   ├── KakaoUserDto.java
-    │   │                   │   ├── LoginRequestDto.java
-    │   │                   │   ├── LoginResponseDto.java
-    │   │                   │   ├── MypageResponseDto.java
-    │   │                   │   ├── UpdateMypageRequestDto.java
-    │   │                   │   └── UpdateRoleRequestDto.java
     │   │                   ├── entity
-    │   │                   │   ├── P_user.java
-    │   │                   │   └── UserRoleEnum.java
     │   │                   ├── repository
-    │   │                   │   └── UserRepository.java
     │   │                   └── service
-    │   │                       ├── KakaoService.java
-    │   │                       └── UserService.java
     │   └── resources
     │       └── application.yml
     └── test
@@ -338,16 +217,20 @@
                         ├── TemueatsApplicationTests.java
                         ├── cart
                         │   └── service
-                        │       └── CartServiceTest.java
                         ├── coupon
                         │   └── service
-                        │       └── CouponServiceTest.java
+                        ├── menu
+                        │   └── service
+                        ├── order
+                        │   └── service
+                        ├── payment
+                        │   └── service
+                        ├── review
+                        │   └── service
                         ├── store
                         │   └── service
-                        │       └── StoreReqServiceTest.java
                         └── user
                             └── service
-                                └── UserServiceTest.java
 
 ```
 
