@@ -4,10 +4,12 @@ import com.sparta.temueats.rating.entity.P_rating;
 import com.sparta.temueats.store.entity.P_store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface RatingRepository extends JpaRepository<P_rating, UUID> {
 
     P_rating findByStoreAndVisibleYn(P_store store, boolean visibleYn);
 
+    P_rating findByStore_StoreId(UUID storeId);
 }

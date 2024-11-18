@@ -20,8 +20,8 @@ public interface OrderRepository extends JpaRepository<P_order, UUID> {
     List<P_order> findAllByOwnerId(Long userId);
 
 
-    @Query("select o from P_order o where o.customerId = :userId OR o.ownerId = :userId")
-    P_order findByUserId(Long userId);
+    @Query("select o from P_order o where (o.customerId = :userId OR o.ownerId = :userId) AND o.deletedYn = false")
+    List<P_order> findByUserId(Long userId);
 
 
     // paymentId로 P_order를 찾는 JPQL 쿼리 작성

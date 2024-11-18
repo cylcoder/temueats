@@ -31,7 +31,28 @@ public class P_rating extends BaseEntity {
     @Column(nullable = false)
     private Double score;
 
+    @Column
+    private int sum;
+
     @Column(nullable = false)
     private boolean visibleYn;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int count;
+
+    @Builder
+    public P_rating(P_store store, Double score, boolean visibleYn, int sum,int count) {
+        this.store = store;
+        this.score = score;
+        this.sum =sum;
+        this.count =count;
+        this.visibleYn = visibleYn;
+    }
+
+    public void changeSum(int sum){
+        this.sum = this.sum + sum;
+        this.count = this.count + 1;
+        this.score = (double) (this.sum/this.count);
+    }
 
 }

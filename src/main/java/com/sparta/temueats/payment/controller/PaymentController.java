@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,8 +27,8 @@ public class PaymentController {
 
     @GetMapping("/payments")
     public ResponseDto<?> getPaymentResponseDto(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        PaymentGetResponseDto paymentGetResponseDto = paymentService.getPayments(userDetails.getUser());
-        return new ResponseDto<>(1, "결제 조회에 성공했습니다.", paymentGetResponseDto);
+        List<PaymentGetResponseDto> paymentGetResponseDtoList = paymentService.getPayments(userDetails.getUser());
+        return new ResponseDto<>(1, "결제 목록 조회에 성공했습니다.", paymentGetResponseDtoList);
     }
 
     @PutMapping("/payments/{paymentId}")

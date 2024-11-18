@@ -1,12 +1,12 @@
 package com.sparta.temueats.payment.dto;
 
-import com.sparta.temueats.order.entity.P_order;
 import com.sparta.temueats.payment.entity.P_payment;
 import com.sparta.temueats.payment.entity.PaymentStatus;
-import com.sparta.temueats.payment.service.PaymentService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -21,6 +21,4 @@ public class PaymentGetResponseDto {
         this.paymentStatus = payment.getPaymentStatus();
         this.price = payment.getPrice();
     }
-
-
 }
