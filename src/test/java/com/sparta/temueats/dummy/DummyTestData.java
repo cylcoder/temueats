@@ -6,6 +6,8 @@ import com.sparta.temueats.menu.entity.Category;
 import com.sparta.temueats.menu.entity.P_menu;
 import com.sparta.temueats.order.entity.OrderState;
 import com.sparta.temueats.order.entity.P_order;
+import com.sparta.temueats.payment.entity.P_payment;
+import com.sparta.temueats.payment.entity.PaymentStatus;
 import com.sparta.temueats.store.entity.P_store;
 import com.sparta.temueats.store.entity.SellState;
 import com.sparta.temueats.store.entity.StoreState;
@@ -124,6 +126,14 @@ public class DummyTestData {
                 .payment(null)
                 .customerId(1L)
                 .ownerId(2L)
+                .build();
+    }
+
+    public static P_payment mockPaymentSetting() {
+        return P_payment.builder()
+                .paymentStatus(PaymentStatus.READY)
+                .price(16000L)
+                .order(mockOrderSetting())
                 .build();
     }
 
