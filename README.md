@@ -6,7 +6,8 @@
 
 ## ❓ 프로젝트 목적
 
-- 기획자, 웹디자이너, 프론트 엔지니어의 기능/비기능적인 요구사항을 구체화하여 모놀리식 프로젝트로 구
+- 기획자, 웹디자이너, 프론트 엔지니어의 기능/비기능적인 요구사항을 구체화하여 모놀리식 프로젝트로 구현
+- 대용량 처리 프로젝트 이전에 기본 기능을 구현해보며 기초 학습을 진행함
 
 ---
 
@@ -27,7 +28,7 @@
 <tr>
 <td align="center">
 <a href="https://github.com/cylcoder">
-<img src="https://picsum.photos/100/100" width="100px;" alt="프로필이미지"/>
+<img src="docs/images/changyeon.jpg" width="100px;" alt="프로필이미지"/>
 <br />
 <sub><b>[팀장] 이창연</b></sub>
 <br />
@@ -35,8 +36,8 @@
 </a>
 </td>
 <td align="center">
-<a href="[https://github.com/le-monaaa크](https://github.com/le-monaaa%ED%81%AC)">
-<img src="https://picsum.photos/100/100" width="100px;" alt="프로필이미지"/>
+<a href="[https://github.com/le-monaaa](https://github.com/le-monaaa%ED%81%AC)">
+<img src="docs/images/yubin.jpeg" width="100px;" alt="프로필이미지"/>
 <br />
 <sub><b>이유빈</b></sub>
 <br />
@@ -45,7 +46,7 @@
 </td>
 <td align="center">
 <a href="https://github.com/drinkgalaxy">
-<img src="https://picsum.photos/100/100" width="100px;" alt="프로필이미지"/>
+<img src="docs/images/hyunjin.jpg" width="100px;" alt="프로필이미지"/>
 <br />
 <sub><b>이현진</b></sub>
 <br />
@@ -54,7 +55,7 @@
 </td>
 <td align="center">
 <a href="https://github.com/jeendale">
-<img src="https://picsum.photos/100/100" width="100px;" alt="프로필이미지"/>
+<img src="docs/images/hyungu.jpg" width="100px;" alt="프로필이미지"/>
 <br />
 <sub><b>지현구</b></sub>
 <br />
@@ -78,7 +79,9 @@
 ![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![Kakao API](https://img.shields.io/badge/Kakao%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)
-![Open API](https://img.shields.io/badge/Open%20API-005571?style=for-the-badge&logo=swagger&logoColor=white)
+![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
 
 ## 📑 ERD
 
@@ -363,41 +366,54 @@
     ```bash
     - CREATE EXTENSION IF NOT EXISTS postgis; 
     ```
-1. properties.yml 설정
-    ```yml
-    spring:
-    application:
-      name: temueats
+  1. properties.yml 설정
+      ```yml
+      spring:
+          application:
+            name: temueats
     
-    datasource:
-        url: jdbc:postgresql://localhost:5432/temueats
-        username: {DB 사용자명}
-        password: {DB 사용자 패스워드}
+      datasource:
+          url: jdbc:postgresql://localhost:5432/temueats
+          username: "your-username"
+          password: "your-password"
     
-        driver-class-name: org.postgresql.Driver
-        hikari:
-            maximum-pool-size: 10
-            connection-timeout: 30000
-            idle-timeout: 600000
-            max-lifetime: 1800000
+          driver-class-name: org.postgresql.Driver
+          hikari:
+              maximum-pool-size: 10
+              connection-timeout: 30000
+              idle-timeout: 600000
+              max-lifetime: 1800000
     
-    jpa:
-        hibernate:
-          ddl-auto: update
-        show-sql: false
-        properties:
-            hibernate:
-              format_sql: false
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
+      jpa:
+          hibernate:
+            ddl-auto: update
+          show-sql: false
+          properties:
+              hibernate:
+                format_sql: false
+          database-platform: org.hibernate.dialect.PostgreSQLDialect
     
-    jwt:
-        secret:
-          key: 7KCA64qU7Jik64qY7JWE66mU66as7Lm064W47JmA7LSI7L2U652865a866W866i57JeI7Iq164uI64uk7ZaJ67O17ZW07JqU
+      jwt:
+          secret:
+            key: 7KCA64qU7Jik64qY7JWE66mU66as7Lm064W47JmA7LSI7L2U652865a866W866i57JeI7Iq164uI64uk7ZaJ67O17ZW07JqU
     
-    kakao:
-        api:
-          key: 644ac6096d5a2d9b7df7289e65d18985
-    ```
+      kakao:
+          api:
+            key: 644ac6096d5a2d9b7df7289e65d18985
+     cloud:
+      aws:
+          s3:
+            bucket: "your-bucket-name"
+          credentials:
+              access-key: "your-access-key"
+              secret-key: "your-secret-key"
+          region:
+            static: "us-west-2"
+    
+      ai:
+          api:
+            url: "your-ai-api-url"
+      ```
 
 2. build
   - Mac
