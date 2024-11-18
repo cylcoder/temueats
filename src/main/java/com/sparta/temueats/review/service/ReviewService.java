@@ -2,6 +2,7 @@
 package com.sparta.temueats.review.service;
 
 import com.sparta.temueats.global.ex.CustomApiException;
+import com.sparta.temueats.rating.service.RatingService;
 import com.sparta.temueats.review.dto.request.CreateReviewRequestDto;
 import com.sparta.temueats.review.dto.response.*;
 import com.sparta.temueats.review.entity.P_review;
@@ -26,6 +27,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
     private final UserService userService;
+    private final RatingService ratingService;
 
     public CreateResponseDto createReview(UUID storeId, Long userId ,CreateReviewRequestDto createReviewRequestDto) {
         //가게 존재여부 확인
@@ -45,6 +47,7 @@ public class ReviewService {
                         .store(store)
                         .build()
         );
+        ratingService.saveRating(storeId,saveReview.getScore());
 
         CreateResponseDto createResponseDto= CreateResponseDto.builder()
                 .code(1)
