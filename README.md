@@ -87,6 +87,7 @@
 
 ## 📃 시스템 아키텍처
 
+![team15-architecture.png](docs%2Fimages%2Fteam15-architecture.png)
 
 ## 📑 ERD
 
