@@ -32,26 +32,26 @@
 <br />
 <sub><b>[팀장] 이창연</b></sub>
 <br />
-<span>가게, 메뉴, AI 추천</span>
 </a>
+<span>가게, 메뉴, AI 추천</span>
 </td>
 <td align="center">
-<a href="[https://github.com/le-monaaa](https://github.com/le-monaaa%ED%81%AC)">
+<a href="https://github.com/le-monaaa">
 <img src="docs/images/yubin.jpeg" width="100px;" alt="프로필이미지"/>
 <br />
 <sub><b>이유빈</b></sub>
 <br />
-<span>유저, 즐겨찾기, 쿠폰</span>
 </a>
+<span>유저, 즐겨찾기, 쿠폰</span>
 </td>
 <td align="center">
 <a href="https://github.com/drinkgalaxy">
 <img src="docs/images/hyunjin.jpg" width="100px;" alt="프로필이미지"/>
 <br />
 <sub><b>이현진</b></sub>
+</a>
 <br />
 <span>주문, 결제, 장바구니</span>
-</a>
 </td>
 <td align="center">
 <a href="https://github.com/jeendale">
@@ -59,8 +59,8 @@
 <br />
 <sub><b>지현구</b></sub>
 <br />
-<span>리뷰, 평점, 신고</span>
 </a>
+<span>리뷰, 평점, 신고</span>
 </td>
 </tr>
 </tbody>
@@ -366,54 +366,54 @@
     ```bash
     - CREATE EXTENSION IF NOT EXISTS postgis; 
     ```
-  1. properties.yml 설정
-      ```yml
-      spring:
-          application:
-            name: temueats
+1. properties.yml 설정
+    ```yml
+    spring:
+        application:
+          name: temueats
     
-      datasource:
-          url: jdbc:postgresql://localhost:5432/temueats
-          username: "your-username"
-          password: "your-password"
+    datasource:
+        url: jdbc:postgresql://localhost:5432/temueats
+        username: "your-username"
+        password: "your-password"
     
-          driver-class-name: org.postgresql.Driver
-          hikari:
-              maximum-pool-size: 10
-              connection-timeout: 30000
-              idle-timeout: 600000
-              max-lifetime: 1800000
+        driver-class-name: org.postgresql.Driver
+        hikari:
+            maximum-pool-size: 10
+            connection-timeout: 30000
+            idle-timeout: 600000
+            max-lifetime: 1800000
     
-      jpa:
-          hibernate:
-            ddl-auto: update
-          show-sql: false
-          properties:
-              hibernate:
-                format_sql: false
-          database-platform: org.hibernate.dialect.PostgreSQLDialect
+    jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: false
+        properties:
+            hibernate:
+              format_sql: false
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
     
-      jwt:
-          secret:
-            key: 7KCA64qU7Jik64qY7JWE66mU66as7Lm064W47JmA7LSI7L2U652865a866W866i57JeI7Iq164uI64uk7ZaJ67O17ZW07JqU
+    jwt:
+        secret:
+          key: 7KCA64qU7Jik64qY7JWE66mU66as7Lm064W47JmA7LSI7L2U652865a866W866i57JeI7Iq164uI64uk7ZaJ67O17ZW07JqU
     
-      kakao:
-          api:
-            key: 644ac6096d5a2d9b7df7289e65d18985
-     cloud:
-      aws:
-          s3:
-            bucket: "your-bucket-name"
-          credentials:
-              access-key: "your-access-key"
-              secret-key: "your-secret-key"
-          region:
-            static: "us-west-2"
+    kakao:
+        api:
+          key: 644ac6096d5a2d9b7df7289e65d18985
+   cloud:
+    aws:
+        s3:
+          bucket: "your-bucket-name"
+        credentials:
+            access-key: "your-access-key"
+            secret-key: "your-secret-key"
+        region:
+          static: "us-west-2"
     
-      ai:
-          api:
-            url: "your-ai-api-url"
-      ```
+    ai:
+        api:
+          url: "your-ai-api-url"
+    ```
 
 2. build
   - Mac
