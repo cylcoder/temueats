@@ -3,6 +3,8 @@ package com.sparta.temueats.security.Controller;
 import com.sparta.temueats.security.util.JwtUtil;
 import com.sparta.temueats.user.entity.UserRoleEnum;
 import com.sparta.temueats.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name="jwt token 관리")
 @RestController
 @RequestMapping("/api/token")
 public class TokenController {
@@ -24,6 +27,7 @@ public class TokenController {
         this.userService = userService;
     }
 
+    @Operation(summary = "jwt refresh token 생성")
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = jwtUtil.getTokenFromHeader(request, "Refresh-Token");
