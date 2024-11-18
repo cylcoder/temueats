@@ -9,6 +9,8 @@ import com.sparta.temueats.store.service.StoreReqService;
 import com.sparta.temueats.store.util.AuthUtils;
 import com.sparta.temueats.store.util.AuthUtils.AuthStatus;
 import com.sparta.temueats.store.util.ValidUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,7 @@ import java.util.UUID;
 import static com.sparta.temueats.store.util.AuthUtils.AuthStatus.AUTHORIZED;
 import static com.sparta.temueats.user.entity.UserRoleEnum.*;
 
+@Tag(name = "가게 등록 요청/수정/취소")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/stores/req")
@@ -28,6 +31,7 @@ public class StoreReqController {
     private final StoreReqService storeReqService;
     private final AuthUtils authUtils;
 
+    @Operation(summary = "가게 등록 요청 (프론트엔드가 이미지 관리하는 경우)")
     @PostMapping
     public ResponseDto<StoreReqResDto> save(
             @Valid StoreReqCreateDto storeReqCreateDto,
@@ -42,7 +46,8 @@ public class StoreReqController {
 
         return storeReqService.save(storeReqCreateDto);
     }
-    
+
+    @Operation(summary = "가게 등록 요청 (백엔드가 이미지 관리하는 경우)")
     @PostMapping("/with-image")
     public ResponseDto<StoreReqResDto> save(
             @Valid @ModelAttribute StoreReqCreateWithImageDto storeReqCreateWithImageDto,
@@ -58,6 +63,7 @@ public class StoreReqController {
         return storeReqService.save(storeReqCreateWithImageDto);
     }
 
+    @Operation(summary = "가게 등록 요청 상태 변경")
     @PutMapping
     public ResponseDto<Object> update(@RequestBody StoreReqUpdateDto storeReqUpdateDto) {
         AuthStatus authStatus = authUtils.validate(List.of(MANAGER));
@@ -68,6 +74,7 @@ public class StoreReqController {
         return storeReqService.update(storeReqUpdateDto);
     }
 
+    @Operation(summary = "가게 등록 요청 취소")
     @DeleteMapping("/{storeReqId}")
     public ResponseDto<Object> delete(@PathVariable UUID storeReqId) {
         AuthStatus authStatus = authUtils.validate(List.of(OWNER, MANAGER, MASTER));
