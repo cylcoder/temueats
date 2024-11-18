@@ -30,17 +30,3 @@ spring:
   kakao:
     api:
       key: 644ac6096d5a2d9b7df7289e65d18985
-
-cloud:
-  aws:
-    credentials:
-      access-key:
-      secret-key:
-    s3:
-      bucket: "temueats"
-    region:
-      static: "ap-northeast-2"
-
-ai:
-  api:
-    url:
