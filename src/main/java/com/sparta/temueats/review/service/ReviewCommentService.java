@@ -29,7 +29,7 @@ public class ReviewCommentService {
                 orElseThrow(() -> new IllegalArgumentException("리뷰가 존재하지 않습니다."));
         P_user user=userService.findUserById(userId);
         checkUser(user);
-        if(user.getRole().equals(UserRoleEnum.OWNER)){
+        if(!user.getRole().equals(UserRoleEnum.OWNER)){
             return new CreateCommentResponse(-1,"사장님만 작성할 수 있습니다.");
         }
         reviewCommentRepository.save(P_reviewComment.builder()
