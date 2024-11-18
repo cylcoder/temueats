@@ -30,7 +30,7 @@ public class MenuController {
     private final MenuService menuService;
     private final AuthUtils authUtils;
 
-    @Operation(summary = "메뉴 소개 저장 (?)")
+    @Operation(summary = "가게 메뉴 등록 (프론트엔드가 이미지 관리하는 경우)")
     @PostMapping
     public ResponseDto<MenuResDto> save(
             @RequestBody @Valid MenuCreateDto menuCreateDto,
@@ -46,7 +46,7 @@ public class MenuController {
         return menuService.save(menuCreateDto);
     }
 
-    @Operation(summary = "가게 메뉴 등록")
+    @Operation(summary = "가게 메뉴 등록 (백엔드가 이미지 관리하는 경우)")
     @PostMapping("/with-image")
     public ResponseDto<MenuResDto> save(
             @Valid @ModelAttribute MenuCreateWithImageDto menuCreateWithImageDto,

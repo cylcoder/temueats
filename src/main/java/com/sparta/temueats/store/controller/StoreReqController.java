@@ -31,7 +31,7 @@ public class StoreReqController {
     private final StoreReqService storeReqService;
     private final AuthUtils authUtils;
 
-    @Operation(summary = "가게 등록 요청")
+    @Operation(summary = "가게 등록 요청 (프론트엔드가 이미지 관리하는 경우)")
     @PostMapping
     public ResponseDto<StoreReqResDto> save(
             @Valid StoreReqCreateDto storeReqCreateDto,
@@ -47,7 +47,7 @@ public class StoreReqController {
         return storeReqService.save(storeReqCreateDto);
     }
 
-    @Operation(summary = "가게 등록 요청 (이미지) (?)")
+    @Operation(summary = "가게 등록 요청 (백엔드가 이미지 관리하는 경우)")
     @PostMapping("/with-image")
     public ResponseDto<StoreReqResDto> save(
             @Valid @ModelAttribute StoreReqCreateWithImageDto storeReqCreateWithImageDto,
